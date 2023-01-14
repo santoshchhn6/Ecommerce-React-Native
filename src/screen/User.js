@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const Category = () => {
+const Account = () => {
   return (
     <View style={styles.container}>
-      <Text>Category</Text>
+      <Text>User</Text>
     </View>
   );
 };
 
-export default Category;
+export default Account;
 
 const styles = StyleSheet.create({
   container: {

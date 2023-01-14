@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import Account from "./src/screen/Account";
+import User from "./src/screen/User";
 import Cart from "./src/screen/Cart";
 import Category from "./src/screen/Category";
 import Home from "./src/screen/Home";
@@ -31,7 +31,7 @@ export default function App() {
               iconName = "grid";
             } else if (route.name === "Cart") {
               iconName = "bag";
-            } else if (route.name === "Acount") {
+            } else if (route.name === "User") {
               iconName = "user";
             }
             return (
@@ -62,8 +62,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Acount"
-          component={Account}
+          name="User"
+          component={User}
           options={{
             tabBarButton: (props) => <CustomTabBarButton {...props} />,
           }}
@@ -83,5 +83,6 @@ const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
     backgroundColor: COLORS.transparent,
+    borderTopWidth: 0,
   },
 });
