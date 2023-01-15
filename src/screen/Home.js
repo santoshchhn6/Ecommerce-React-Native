@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -9,25 +10,25 @@ import {
 } from "react-native";
 import { COLORS } from "../constant/colors";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
-import { categories } from "../data/data";
+import { categories, popular_product } from "../data/data";
 
 const Home = () => {
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        {/* Search */}
-        <View style={styles.search}>
-          <TextInput style={styles.input} placeholder="Search" />
-          <TouchableOpacity>
-            <EvilIcons
-              style={styles.icon}
-              name="search"
-              size={30}
-              color={COLORS.dark}
-            />
-          </TouchableOpacity>
-        </View>
+      {/* Search */}
+      <View style={styles.search}>
+        <TextInput style={styles.input} placeholder="Search" />
+        <TouchableOpacity>
+          <EvilIcons
+            style={styles.icon}
+            name="search"
+            size={30}
+            color={COLORS.dark}
+          />
+        </TouchableOpacity>
+      </View>
 
+      <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
         {/* Banner */}
         <View style={styles.banner}>
           <Image
@@ -60,7 +61,27 @@ const Home = () => {
             })}
           </ScrollView>
         </View>
-      </View>
+
+        {/* Popular products */}
+        <View style={styles.popular_products_container}>
+          <Text style={styles.header_text}>Popular Products</Text>
+          <View style={styles.popular_products}>
+            {popular_product.map((e, i) => {
+              let { title, img, price } = e;
+              return (
+                <View style={styles.popular_product}>
+                  <Image
+                    style={styles.popular_product_img}
+                    source={{ uri: img }}
+                  />
+                  <Text style={styles.popular_product_title}>{title}</Text>
+                  <Text style={styles.text}>Rs. {price}</Text>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -74,15 +95,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    marginTop: 40,
     width: "95%",
-    alignItems: "center",
-    // borderColor: COLORS.secondaryColor,
+    // borderColor: COLORS.dark,
     // borderWidth: 2,
+    overflow: "hidden",
   },
 
   search: {
-    width: "100%",
+    marginTop: 40,
+    width: "95%",
     height: 40,
     flexDirection: "row",
     justifyContent: "center",
@@ -115,26 +136,18 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
-    // borderColor: COLORS.dark,
-    // borderWidth: 2,
+
     marginBottom: 10,
   },
   category: {
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 2,
     marginRight: 10,
     alignItems: "center",
-    // backgroundColor: COLORS.secondaryColor,
-
-    // shadowColor: "#52006A",
-    // elevation: 10,
   },
   category_img_container: {
     width: 60,
     height: 60,
     borderRadius: 30,
     borderColor: COLORS.border,
-    // borderWidth: 1,
     overflow: "hidden",
 
     shadowColor: COLORS.dark,
@@ -149,5 +162,50 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLORS.lightGray,
+  },
+  header_text: {
+    color: COLORS.gray,
+    fontSize: 18,
+  },
+  popular_products_container: {
+    width: "100%",
+    // borderColor: COLORS.secondaryColor,
+    // borderWidth: 1,
+  },
+  popular_products: {
+    marginTop: 10,
+    width: "100%",
+    // borderColor: COLORS.dark,
+    // borderWidth: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+
+  popular_product: {
+    width: "45%",
+    aspectRatio: 1,
+    margin: 5,
+    borderRadius: 10,
+    overflow: "hidden",
+    padding: 5,
+    borderColor: COLORS.border,
+    borderWidth: 1,
+
+    shadowColor: COLORS.dark,
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 4,
+    backgroundColor: "white",
+  },
+  popular_product_img: {
+    flex: 1,
+  },
+  popular_product_title: {
+    height: 18,
+    color: COLORS.gray,
+    // borderColor: COLORS.gray,
+    // borderWidth: 1,
   },
 });
