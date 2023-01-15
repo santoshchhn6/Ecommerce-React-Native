@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: COLORS.transparent,
     borderTopWidth: 0,
+    elevation: 0,
   },
 });

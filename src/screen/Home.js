@@ -1,32 +1,13 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../constant/colors";
-import EvilIcons from "react-native-vector-icons/EvilIcons";
 import { categories, popular_product } from "../data/data";
+import Search from "../components/Search";
 
 const Home = () => {
   return (
     <View style={styles.container}>
       {/* Search */}
-      <View style={styles.search}>
-        <TextInput style={styles.input} placeholder="Search" />
-        <TouchableOpacity>
-          <EvilIcons
-            style={styles.icon}
-            name="search"
-            size={30}
-            color={COLORS.dark}
-          />
-        </TouchableOpacity>
-      </View>
+      <Search />
 
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
         {/* Banner */}
@@ -67,9 +48,9 @@ const Home = () => {
           <Text style={styles.header_text}>Popular Products</Text>
           <View style={styles.popular_products}>
             {popular_product.map((e, i) => {
-              let { title, img, price } = e;
+              let { id, title, img, price } = e;
               return (
-                <View style={styles.popular_product}>
+                <View key={id} style={styles.popular_product}>
                   <Image
                     style={styles.popular_product_img}
                     source={{ uri: img }}
@@ -101,26 +82,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  search: {
-    marginTop: 40,
-    width: "95%",
-    height: 40,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: COLORS.dark,
-    borderWidth: 2,
-    borderRadius: 20,
-    paddingLeft: 10,
-    marginBottom: 10,
-  },
-  input: {
-    width: "85%",
-    padding: 10,
-  },
-  icon: {
-    marginRight: 5,
-  },
   banner: {
     width: "100%",
     aspectRatio: 3 / 2,
@@ -169,6 +130,8 @@ const styles = StyleSheet.create({
   },
   popular_products_container: {
     width: "100%",
+    marginBottom: 50,
+
     // borderColor: COLORS.secondaryColor,
     // borderWidth: 1,
   },
@@ -179,12 +142,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
 
   popular_product: {
-    width: "45%",
-    aspectRatio: 1,
+    width: "47%",
+    aspectRatio: 0.9,
     margin: 5,
     borderRadius: 10,
     overflow: "hidden",
@@ -201,6 +164,8 @@ const styles = StyleSheet.create({
   },
   popular_product_img: {
     flex: 1,
+    borderRadius: 5,
+    resizeMode: "contain",
   },
   popular_product_title: {
     height: 18,

@@ -55,6 +55,13 @@ const styles = StyleSheet.create({
     top: -22,
     justifyContent: "center",
     alignItems: "center",
+
+    shadowColor: COLORS.primaryColor,
+    // shadowOpacity: 0.8,
+    // shadowOffset: { width: 2, height: 2 },
+    // shadowRadius: 15,
+    elevation: 10,
+    backgroundColor: COLORS.primaryColor,
   },
   inactiveBtn: {
     flex: 1,
