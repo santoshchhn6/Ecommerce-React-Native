@@ -10,9 +10,13 @@ import {
 } from "react-native";
 import { COLORS } from "../constant/colors";
 import { cart } from "../data/data";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import Rating from "../components/Rating";
+import { useState } from "react";
+import CustomButton from "../components/CustomButton";
+import Counter from "../components/Counter";
 
 const Cart = () => {
+  const [qty, setQty] = useState(0);
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -30,9 +34,7 @@ const Cart = () => {
                   <View style={styles.cartItem_info}>
                     <Text style={styles.cartItem_title}>{title}</Text>
                     <View>
-                      <View style={styles.rating}>
-                        <AntDesign name="star" size={20} color={COLORS.green} />
-                      </View>
+                      <Rating rate={rating} />
                       <Text style={styles.cartItem_price}>₹{price}</Text>
                       <Text style={styles.cartItem_instock}>
                         instock:{instock}
@@ -41,24 +43,10 @@ const Cart = () => {
                   </View>
                 </View>
                 <View style={styles.cartItem_buy_container}>
-                  <View style={styles.cartItem_quantity}>
-                    <TouchableOpacity style={[styles.btn, styles.btn_qtt]}>
-                      <Text>-</Text>
-                    </TouchableOpacity>
-                    <View style={styles.text_container}>
-                      <Text style={styles.text_qtt}>{quantity}</Text>
-                    </View>
-                    <TouchableOpacity style={[styles.btn, styles.btn_qtt]}>
-                      <Text>+</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <Counter style={{ width: "40%" }} quantity={quantity} />
                   <View style={styles.cartItem_btn_container}>
-                    <TouchableOpacity style={[styles.btn, styles.btn_buy]}>
-                      <Text>Remove</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn, styles.btn_buy]}>
-                      <Text>Save for later</Text>
-                    </TouchableOpacity>
+                    <CustomButton title="Remove" />
+                    <CustomButton title="Save for later" />
                   </View>
                 </View>
               </View>
@@ -134,9 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   cartItem_title: {},
-  rating: {
-    flexDirection: "row",
-  },
+
   cartItem_price: {
     fontSize: 20,
     fontWeight: "bold",
@@ -155,22 +141,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
-  btn: {
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    padding: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    color: COLORS.lightGray,
-
-    shadowColor: COLORS.dark,
-    elevation: 3,
-    backgroundColor: COLORS.white,
-  },
-  btn_qtt: {
-    // backgroundColor: COLORS.primaryColor,
-    // width: 20,
-  },
   text_container: {
     // backgroundColor: COLORS.secondaryColor,
     width: 30,
@@ -185,9 +155,5 @@ const styles = StyleSheet.create({
     width: "60%",
     flexDirection: "row",
     justifyContent: "space-evenly",
-  },
-  btn_buy: {
-    // width: "100%",
-    // color: COLORS.dark,
   },
 });
