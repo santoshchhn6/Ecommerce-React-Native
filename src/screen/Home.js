@@ -26,11 +26,10 @@ const Home = () => {
             {categories.map((c, i) => {
               let { category, img } = c;
               return (
-                <View style={styles.category}>
+                <View key={i} style={styles.category}>
                   <View style={styles.category_img_container}>
                     <Image
                       style={styles.category_img}
-                      key={i}
                       source={{
                         uri: img,
                       }}

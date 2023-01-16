@@ -8,4 +8,5 @@ export const COLORS = {
   border: "rgba(0, 0, 0, 0.2)",
   gray: "rgb(75, 75, 75)",
   lightGray: "rgb(120, 120, 120)",
+  green: "rgb(24, 165, 11)",
 };
