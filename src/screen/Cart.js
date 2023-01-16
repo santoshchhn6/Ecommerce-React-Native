@@ -20,7 +20,7 @@ const Cart = () => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Text style={styles.cartHeader}>My Cart</Text>
+        <Text style={styles.heading}>My Cart</Text>
         <FlatList
           style={styles.cartItems}
           contentContainerStyle={styles.flatList}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     overflow: "hidden",
   },
-  cartHeader: {
+  heading: {
     fontSize: 22,
     fontWeight: "bold",
     color: COLORS.gray,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   cartItems: {
     width: "100%",
-    marginBottom: 50,
+    marginBottom: 80,
     // borderColor: COLORS.secondaryColor,
     // borderWidth: 1,
   },

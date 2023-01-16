@@ -157,7 +157,7 @@ export const cart = [
     img: "https://d2xamzlzrdbdbn.cloudfront.net/products/59cdf9b4-de3c-4842-aff4-698d520e50a022241223.jpg",
     price: "49,999",
     rating: 3,
-    quantity: 2.4,
+    quantity: 4,
     instock: true,
   },
   {

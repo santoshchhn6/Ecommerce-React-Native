@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   },
   category_img: {
     flex: 1,
+    // resizeMode: "contain",
   },
   text: {
     color: COLORS.lightGray,
