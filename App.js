@@ -1,74 +1,18 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import User from "./src/screen/User";
-import Cart from "./src/screen/Cart";
-import Category from "./src/screen/Category";
-import Home from "./src/screen/Home";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import { createStackNavigator } from "@react-navigation/stack";
+import { StyleSheet } from "react-native";
 import { COLORS } from "./src/constant/colors";
-import CustomTabBarButton from "./src/components/CustomTabBarButton";
-
-const Tab = createBottomTabNavigator();
+import Main from "./src/screen/Main";
+import SearchProduct from "./src/screen/SearchProduct";
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarStyle: styles.tabBar,
-          tabBarShowLabel: false,
-          tabBarActiveTintColor: COLORS.white,
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Category") {
-              iconName = "grid";
-            } else if (route.name === "Cart") {
-              iconName = "bag";
-            } else if (route.name === "User") {
-              iconName = "user";
-            }
-            return (
-              <SimpleLineIcons name={iconName} size={size} color={color} />
-            );
-          },
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          }}
-        />
-        <Tab.Screen
-          name="Category"
-          component={Category}
-          options={{
-            tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          }}
-        />
-        <Tab.Screen
-          name="Cart"
-          component={Cart}
-          options={{
-            tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          }}
-        />
-        <Tab.Screen
-          name="User"
-          component={User}
-          options={{
-            tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          }}
-        />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ header: () => null }}>
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="SearchProduct" component={SearchProduct} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
@@ -79,11 +23,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bgColor,
     alignItems: "center",
     justifyContent: "center",
-  },
-  tabBar: {
-    position: "absolute",
-    backgroundColor: COLORS.transparent,
-    borderTopWidth: 0,
-    elevation: 0,
   },
 });

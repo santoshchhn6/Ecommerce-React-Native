@@ -1,13 +1,22 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Search from "../components/Search";
 import { COLORS } from "../constant/colors";
 import { categories } from "../data/data";
 
-const Category = () => {
+const Category = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Search */}
-      <Search />
+      <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
+        <Search />
+      </TouchableOpacity>
 
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
         <View style={styles.Categories}>

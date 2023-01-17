@@ -1,13 +1,23 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { COLORS } from "../constant/colors";
 import { categories, popular_product } from "../data/data";
 import Search from "../components/Search";
+import ProductList from "../components/ProductList";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Search */}
-      <Search />
+      <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
+        <Search />
+      </TouchableOpacity>
 
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
         {/* Banner */}
@@ -43,24 +53,7 @@ const Home = () => {
         </View>
 
         {/* Popular products */}
-        <View style={styles.popular_products_container}>
-          <Text style={styles.header_text}>Popular Products</Text>
-          <View style={styles.popular_products}>
-            {popular_product.map((e, i) => {
-              let { id, title, img, price } = e;
-              return (
-                <View key={id} style={styles.popular_product}>
-                  <Image
-                    style={styles.popular_product_img}
-                    source={{ uri: img }}
-                  />
-                  <Text style={styles.popular_product_title}>{title}</Text>
-                  <Text style={styles.text}>Rs. {price}</Text>
-                </View>
-              );
-            })}
-          </View>
-        </View>
+        <ProductList heading="Popular Products" products={popular_product} />
       </ScrollView>
     </View>
   );
@@ -123,54 +116,5 @@ const styles = StyleSheet.create({
   },
   text: {
     color: COLORS.lightGray,
-  },
-  header_text: {
-    color: COLORS.gray,
-    fontSize: 18,
-  },
-  popular_products_container: {
-    width: "100%",
-    marginBottom: 50,
-
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
-  },
-  popular_products: {
-    marginTop: 10,
-    width: "100%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-
-  popular_product: {
-    width: "47%",
-    aspectRatio: 0.9,
-    margin: 5,
-    borderRadius: 10,
-    overflow: "hidden",
-    padding: 5,
-    borderColor: COLORS.border,
-    borderWidth: 1,
-
-    shadowColor: COLORS.dark,
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 4,
-    backgroundColor: "white",
-  },
-  popular_product_img: {
-    flex: 1,
-    borderRadius: 5,
-    resizeMode: "contain",
-  },
-  popular_product_title: {
-    height: 18,
-    color: COLORS.gray,
-    // borderColor: COLORS.gray,
-    // borderWidth: 1,
   },
 });
