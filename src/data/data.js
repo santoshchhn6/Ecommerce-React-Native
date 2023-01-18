@@ -176,10 +176,11 @@ export const product = [
     id: 1,
     title: "Samsung Galaxy s22 ultra",
     img: "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
-    color: [],
-    size: [],
+    colors: ["#fff", "#232424", "#7a2550", "#1b857f"],
+    sizes: ["1 foot", "2 foot", "2 foot"],
     rating: 4,
     price: 118999,
+    instock: true,
     detail: [
       ["RAM", "12 GB RAM"],
       ["STORAGE", "256 GB"],
@@ -194,14 +195,16 @@ export const product = [
 
 export const reviews = [
   {
+    id: 1,
     product_id: 1,
-    user_id: 1,
+    username: "santosh9",
     rating: 3,
     review: "Very good",
   },
   {
+    id: 2,
     product_id: 1,
-    user_id: 2,
+    username: "mewmew34",
     rating: 4,
     review: "Nice Product",
   },

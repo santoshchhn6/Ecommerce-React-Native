@@ -9,7 +9,7 @@ export const COLORS = {
   border2: "rgba(165, 3, 3, 0.589)",
   gray: "rgb(75, 75, 75)",
   lightGray: "rgb(120, 120, 120)",
-  lightBlue: "rgb(187, 205, 233)",
+  lightBlue: "rgb(209, 216, 226)",
   green: "rgb(24, 165, 11)",
   red: "hsl(0, 90%, 42%)",
 };

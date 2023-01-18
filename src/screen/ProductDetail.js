@@ -14,10 +14,14 @@ import Counter from "../components/Counter";
 import CustomButton from "../components/CustomButton";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Table from "../components/Table";
+import Reviews from "../components/Reviews";
+import ColorPallet from "../components/ColorPallet";
+import Size from "../components/Size";
 
 const ProductDetail = () => {
   const [liked, setLiked] = useState(false);
-  const { title, img, price, rating, detail } = product[0];
+  const { title, img, price, rating, detail, instock, sizes, colors } =
+    product[0];
   return (
     <View style={styles.container}>
       <ScrollView
@@ -40,10 +44,20 @@ const ProductDetail = () => {
             </TouchableOpacity>
           </Panel>
           <Panel>
-            <Text style={styles.text}>{title}</Text>
+            <Text style={styles.text2}>{title}</Text>
 
-            <Text style={styles.text2}>Color :</Text>
-            <Text style={styles.text2}>Size :</Text>
+            {colors && (
+              <View style={styles.colors}>
+                <Text style={styles.text2}>Color :</Text>
+                <ColorPallet colors={colors} />
+              </View>
+            )}
+            {sizes && (
+              <View style={styles.colors}>
+                <Text style={styles.text2}>Size :</Text>
+                <Size sizes={sizes} />
+              </View>
+            )}
 
             <Rating rate={rating} />
             <Text style={styles.price}>Rs.{price}</Text>
@@ -51,7 +65,25 @@ const ProductDetail = () => {
           <Panel>
             <View style={[styles.row, { marginBottom: 10 }]}>
               <Counter quantity={1} />
-              <Text style={styles.stock}>InStock</Text>
+              {instock ? (
+                <Text
+                  style={{
+                    color: COLORS.green,
+                    fontSize: 18,
+                  }}
+                >
+                  InStock
+                </Text>
+              ) : (
+                <Text
+                  style={{
+                    color: COLORS.red,
+                    fontSize: 18,
+                  }}
+                >
+                  OutOfStock
+                </Text>
+              )}
             </View>
             <View style={styles.row}>
               <CustomButton
@@ -66,8 +98,15 @@ const ProductDetail = () => {
               />
             </View>
           </Panel>
-          <Panel style={styles.table}>
-            <Table data={detail} />
+
+          {detail && (
+            <Panel style={styles.padding0}>
+              <Table data={detail} />
+            </Panel>
+          )}
+
+          <Panel style={styles.padding0}>
+            <Reviews />
           </Panel>
         </View>
       </ScrollView>
@@ -100,6 +139,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
     // overflow: "hidden",
+  },
+
+  colors: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
   },
 
   row: {
@@ -141,6 +186,7 @@ const styles = StyleSheet.create({
   text2: {
     color: COLORS.gray,
     fontSize: 18,
+    marginBottom: 5,
   },
   stock: {
     color: COLORS.green,
@@ -150,6 +196,7 @@ const styles = StyleSheet.create({
     color: COLORS.dark,
     fontSize: 24,
     fontWeight: "bold",
+    marginVertical: 5,
   },
   panel: {
     // borderRadius: 10,
@@ -192,5 +239,8 @@ const styles = StyleSheet.create({
   img: {
     flex: 1,
     resizeMode: "contain",
+  },
+  padding0: {
+    paddingHorizontal: 0,
   },
 });

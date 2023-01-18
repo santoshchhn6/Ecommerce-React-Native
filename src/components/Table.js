@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 18,
     color: COLORS.gray,
+    marginLeft: 5,
   },
   table: {
     marginTop: 5,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: "row",
-    padding: 5,
+    padding: 8,
 
     // borderWidth: 1,
     // borderColor: "green",
