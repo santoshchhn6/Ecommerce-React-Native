@@ -4,13 +4,20 @@ import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import { popular_product } from "../data/data";
 
-const SearchProduct = () => {
+const SearchProduct = ({ navigation }) => {
+  const handleProductPress = () => {
+    navigation.navigate("ProductDetail");
+  };
   return (
     <View style={styles.container}>
       <Search enabled />
       <ScrollView style={styles.wrapper}>
         {/* Popular products */}
-        <ProductList heading="Popular Products" products={popular_product} />
+        <ProductList
+          onPress={handleProductPress}
+          heading="Popular Products"
+          products={popular_product}
+        />
       </ScrollView>
     </View>
   );

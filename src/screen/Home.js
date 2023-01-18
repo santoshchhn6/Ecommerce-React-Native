@@ -12,6 +12,9 @@ import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 
 const Home = ({ navigation }) => {
+  const handleProductPress = () => {
+    navigation.navigate("ProductDetail");
+  };
   return (
     <View style={styles.container}>
       {/* Search */}
@@ -53,7 +56,7 @@ const Home = ({ navigation }) => {
         </View>
 
         {/* Popular products */}
-        <ProductList heading="Popular Products" products={popular_product} />
+        <ProductList onPress={handleProductPress} heading="Popular Products" products={popular_product} />
       </ScrollView>
     </View>
   );

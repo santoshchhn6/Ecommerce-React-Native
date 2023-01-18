@@ -18,7 +18,7 @@ const CustomButton = (props) => {
             color={COLORS.gray}
           />
         )}
-        <Text style={styles.text}>{props.title}</Text>
+        <Text style={[styles.text, { ...props.textStyle }]}>{props.title}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -170,3 +170,39 @@ export const cart = [
     instock: true,
   },
 ];
+
+export const product = [
+  {
+    id: 1,
+    title: "Samsung Galaxy s22 ultra",
+    img: "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
+    color: [],
+    size: [],
+    rating: 4,
+    price: 118999,
+    detail: [
+      ["RAM", "12 GB RAM"],
+      ["STORAGE", "256 GB"],
+      ["PROCESSOR", "Octa Core 2.99 Ghz"],
+      ["Rear Camera", "108MP + 12MP + 10MP + 10MP"],
+      ["Front Camera", "40MP"],
+      ["Display", "6.8 inch Dynamic AMOLED 2X Display"],
+      ["Battery", "5000 mAh"],
+    ],
+  },
+];
+
+export const reviews = [
+  {
+    product_id: 1,
+    user_id: 1,
+    rating: 3,
+    review: "Very good",
+  },
+  {
+    product_id: 1,
+    user_id: 2,
+    rating: 4,
+    review: "Nice Product",
+  },
+];

@@ -6,7 +6,10 @@ export const COLORS = {
   primaryColor: "rgb(0, 119, 255)",
   secondaryColor: "rgb(255, 94, 0)",
   border: "rgba(0, 0, 0, 0.2)",
+  border2: "rgba(165, 3, 3, 0.589)",
   gray: "rgb(75, 75, 75)",
   lightGray: "rgb(120, 120, 120)",
+  lightBlue: "rgb(187, 205, 233)",
   green: "rgb(24, 165, 11)",
+  red: "hsl(0, 90%, 42%)",
 };

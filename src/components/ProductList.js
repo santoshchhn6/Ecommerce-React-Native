@@ -1,8 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "../constant/colors";
 
-const ProductList = ({ heading, products }) => {
+const ProductList = ({ heading, products, onPress }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>{heading}</Text>
@@ -10,11 +10,11 @@ const ProductList = ({ heading, products }) => {
         {products.map((e, i) => {
           let { id, title, img, price } = e;
           return (
-            <View key={id} style={styles.product}>
+            <TouchableOpacity onPress={onPress} key={id} style={styles.product}>
               <Image style={styles.img} source={{ uri: img }} />
               <Text style={styles.title}>{title}</Text>
               <Text style={styles.text}>Rs. {price}</Text>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>
