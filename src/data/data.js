@@ -175,7 +175,11 @@ export const product = [
   {
     id: 1,
     title: "Samsung Galaxy s22 ultra",
-    img: "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
+    images: [
+      "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
+      "https://m.media-amazon.com/images/I/51TUyA8hXWL._SX522_.jpg",
+      "https://m.media-amazon.com/images/I/71Mo2pzT4XL._SX522_.jpg",
+    ],
     colors: ["#fff", "#232424", "#7a2550", "#1b857f"],
     sizes: ["1 foot", "2 foot", "2 foot"],
     rating: 4,

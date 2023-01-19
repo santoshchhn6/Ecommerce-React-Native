@@ -17,10 +17,11 @@ import Table from "../components/Table";
 import Reviews from "../components/Reviews";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
+import SlideCard from "../components/SlideCard";
 
 const ProductDetail = () => {
   const [liked, setLiked] = useState(false);
-  const { title, img, price, rating, detail, instock, sizes, colors } =
+  const { title, images, price, rating, detail, instock, sizes, colors } =
     product[0];
   return (
     <View style={styles.container}>
@@ -31,7 +32,7 @@ const ProductDetail = () => {
       >
         <View style={styles.wrapper}>
           <Panel style={styles.img_container}>
-            <Image style={styles.img} source={{ uri: img }} />
+            <SlideCard data={images} />
             <TouchableOpacity
               style={styles.wish_icon_container}
               onPress={() => setLiked(!liked)}
