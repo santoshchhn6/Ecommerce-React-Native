@@ -23,10 +23,16 @@ const Category = ({ navigation }) => {
           {categories.map((e, i) => {
             let { category, img } = e;
             return (
-              <View key={i} style={styles.category}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("SearchProduct", { category })
+                }
+                key={i}
+                style={styles.category}
+              >
                 <Image style={styles.category_img} source={{ uri: img }} />
                 <Text style={styles.category_title}>{category}</Text>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>

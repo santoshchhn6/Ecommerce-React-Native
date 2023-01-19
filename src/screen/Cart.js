@@ -2,6 +2,7 @@ import {
   Button,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   Touchable,
@@ -11,48 +12,58 @@ import {
 import { COLORS } from "../constant/colors";
 import { cart } from "../data/data";
 import Rating from "../components/Rating";
-import { useState } from "react";
 import CustomButton from "../components/CustomButton";
 import Counter from "../components/Counter";
+import PriceDetail from "../components/PriceDetail";
+import toRupee from "../js/toRupee";
 
 const Cart = () => {
-  const [qty, setQty] = useState(0);
+  let totalPrice = 0;
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Text style={styles.heading}>My Cart</Text>
-        <FlatList
-          style={styles.cartItems}
-          contentContainerStyle={styles.flatList}
-          data={cart}
-          renderItem={({ item }) => {
-            let { id, title, img, price, instock, quantity, rating } = item;
-            return (
-              <View key={id} style={styles.cartItem}>
-                <View style={styles.cartItem_info_container}>
-                  <Image style={styles.cartItem_img} source={{ uri: img }} />
-                  <View style={styles.cartItem_info}>
-                    <Text style={styles.cartItem_title}>{title}</Text>
-                    <View>
-                      <Rating rate={rating} />
-                      <Text style={styles.cartItem_price}>₹{price}</Text>
-                      <Text style={styles.cartItem_instock}>
-                        instock:{instock}
-                      </Text>
+        <ScrollView>
+          <View style={styles.cartItems}>
+            {cart.map((item) => {
+              let { id, title, img, price, instock, quantity, rating } = item;
+              totalPrice += price * quantity;
+              return (
+                <View key={id} style={styles.cartItem}>
+                  <View style={styles.cartItem_info_container}>
+                    <Image style={styles.cartItem_img} source={{ uri: img }} />
+                    <View style={styles.cartItem_info}>
+                      <Text style={styles.cartItem_title}>{title}</Text>
+                      <View>
+                        <Rating rate={rating} />
+                        <Text style={styles.cartItem_price}>
+                          {toRupee(price)}
+                        </Text>
+                        <Text style={styles.cartItem_instock}>
+                          instock:{instock}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.cartItem_buy_container}>
+                    <Counter style={{ width: "40%" }} quantity={quantity} />
+                    <View style={styles.cartItem_btn_container}>
+                      <CustomButton title="Remove" />
+                      <CustomButton title="Save for later" />
                     </View>
                   </View>
                 </View>
-                <View style={styles.cartItem_buy_container}>
-                  <Counter style={{ width: "40%" }} quantity={quantity} />
-                  <View style={styles.cartItem_btn_container}>
-                    <CustomButton title="Remove" />
-                    <CustomButton title="Save for later" />
-                  </View>
-                </View>
-              </View>
-            );
-          }}
-        />
+              );
+            })}
+          </View>
+          <PriceDetail price={totalPrice} />
+
+          <CustomButton
+            style={styles.btn}
+            textStyle={styles.btn_txt}
+            title="Place Order"
+          />
+        </ScrollView>
       </View>
     </View>
   );
@@ -72,6 +83,7 @@ const styles = StyleSheet.create({
     // borderColor: COLORS.dark,
     // borderWidth: 1,
     overflow: "hidden",
+    marginBottom: 120,
   },
   heading: {
     fontSize: 22,
@@ -79,12 +91,10 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     marginBottom: 10,
   },
-  flatList: {
-    // alignItems: "center",
-  },
+
   cartItems: {
     width: "100%",
-    marginBottom: 80,
+    // marginBottom: 80,
     // borderColor: COLORS.secondaryColor,
     // borderWidth: 1,
   },
@@ -155,5 +165,17 @@ const styles = StyleSheet.create({
     width: "60%",
     flexDirection: "row",
     justifyContent: "space-evenly",
+  },
+  btn: {
+    marginVertical: 10,
+    height: 50,
+    backgroundColor: COLORS.secondaryColor,
+    borderColor: COLORS.secondaryColor,
+    shadowColor: COLORS.secondaryColor,
+  },
+  btn_txt: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: COLORS.white,
   },
 });

@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "../constant/colors";
+import toRupee from "../js/toRupee";
 
 const ProductList = ({ heading, products, onPress }) => {
   return (
@@ -8,12 +9,13 @@ const ProductList = ({ heading, products, onPress }) => {
       <Text style={styles.heading}>{heading}</Text>
       <View style={styles.products}>
         {products.map((e, i) => {
-          let { id, title, img, price } = e;
+          const { id, title, img, price } = e;
+
           return (
             <TouchableOpacity onPress={onPress} key={id} style={styles.product}>
               <Image style={styles.img} source={{ uri: img }} />
               <Text style={styles.title}>{title}</Text>
-              <Text style={styles.text}>Rs. {price}</Text>
+              <Text style={styles.text}>{toRupee(price)}</Text>
             </TouchableOpacity>
           );
         })}
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.gray,
     marginVertical: 5,
+    marginLeft: 5,
   },
   products: {
     marginTop: 10,

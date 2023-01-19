@@ -6,6 +6,7 @@ import Feather from "react-native-vector-icons/Feather";
 const CustomButton = (props) => {
   return (
     <TouchableOpacity
+      key={props.key}
       onPress={props.onPress}
       style={[styles.btn, { ...props.style }]}
     >

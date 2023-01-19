@@ -18,7 +18,11 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Search */}
-      <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("SearchProduct", { category: "All" })
+        }
+      >
         <Search />
       </TouchableOpacity>
 
@@ -39,7 +43,13 @@ const Home = ({ navigation }) => {
             {categories.map((c, i) => {
               let { category, img } = c;
               return (
-                <View key={i} style={styles.category}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("SearchProduct", { category })
+                  }
+                  key={i}
+                  style={styles.category}
+                >
                   <View style={styles.category_img_container}>
                     <Image
                       style={styles.category_img}
@@ -49,14 +59,18 @@ const Home = ({ navigation }) => {
                     />
                   </View>
                   <Text style={styles.text}>{category}</Text>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
         </View>
 
         {/* Popular products */}
-        <ProductList onPress={handleProductPress} heading="Popular Products" products={popular_product} />
+        <ProductList
+          onPress={handleProductPress}
+          heading="Popular Products"
+          products={popular_product}
+        />
       </ScrollView>
     </View>
   );

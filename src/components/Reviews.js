@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { reviews } from "../data/data";
 import Rating from "./Rating";
@@ -9,12 +9,9 @@ const Reviews = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Reviews</Text>
-      <FlatList
-        style={styles.reviews}
-        contentContainerStyle={styles.reviews_list}
-        data={reviews}
-        renderItem={({ item }) => (
-          <Card key={item.id} style={styles.review}>
+      <View style={styles.reviews_list}>
+        {reviews.map((item, i) => (
+          <Card key={i} style={styles.review}>
             <View style={styles.user_container}>
               <Image
                 style={styles.user_img}
@@ -29,8 +26,8 @@ const Reviews = () => {
             <Rating rate={item.rating} />
             <Text style={styles.text}>{item.review}</Text>
           </Card>
-        )}
-      />
+        ))}
+      </View>
     </View>
   );
 };

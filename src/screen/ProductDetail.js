@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     marginLeft: 5,
-    borderColor: COLORS.border2,
     backgroundColor: COLORS.secondaryColor,
+    borderColor: COLORS.secondaryColor,
     shadowColor: COLORS.secondaryColor,
   },
   btn_buy_text: {

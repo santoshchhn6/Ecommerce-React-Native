@@ -4,7 +4,14 @@ import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import { popular_product } from "../data/data";
 
-const SearchProduct = ({ navigation }) => {
+const SearchProduct = ({ route, navigation }) => {
+  const { category } = route.params;
+  const products =
+    category !== "All"
+      ? popular_product.filter(
+          (p) => p.category.toLocaleLowerCase() === category.toLocaleLowerCase()
+        )
+      : popular_product;
   const handleProductPress = () => {
     navigation.navigate("ProductDetail");
   };
@@ -15,8 +22,8 @@ const SearchProduct = ({ navigation }) => {
         {/* Popular products */}
         <ProductList
           onPress={handleProductPress}
-          heading="Popular Products"
-          products={popular_product}
+          heading={category}
+          products={products}
         />
       </ScrollView>
     </View>
