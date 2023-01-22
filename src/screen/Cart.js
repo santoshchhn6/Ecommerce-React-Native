@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     // borderColor: COLORS.dark,
     // borderWidth: 1,
     overflow: "hidden",
-    marginBottom: 120,
+    marginBottom: 50,
   },
   heading: {
     fontSize: 22,
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondaryColor,
     borderColor: COLORS.secondaryColor,
     shadowColor: COLORS.secondaryColor,
+    marginBottom: 50,
   },
   btn_txt: {
     fontSize: 20,
