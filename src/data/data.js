@@ -222,6 +222,26 @@ export const reviews = [
   },
 ];
 
+export const user_reviews = [
+  {
+    id: 1,
+    product_id: 1,
+    product_title: "Apple Iphone 14 pro",
+    product_img: "https://static.toiimg.com/photo/msid-92880927/92880927.jpg",
+    rating: 3,
+    review: "Very good",
+  },
+  {
+    id: 2,
+    product_id: 1,
+    product_title: "ADIDAS ExcelCourt M Basketball Shoes",
+    product_img:
+      "https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/y/n/z/-original-imaggk3gwsrhczyd.jpeg?q=70",
+    rating: 4,
+    review: "Nice Product",
+  },
+];
+
 export const orders = [
   {
     id: 1,
@@ -242,5 +262,26 @@ export const orders = [
     rating: 3,
     quantity: 2,
     instock: true,
+  },
+];
+
+export const wishlist = [
+  {
+    id: 1,
+    title: "Apple Iphone 14 pro",
+    img: "https://static.toiimg.com/photo/msid-92880927/92880927.jpg",
+    price: 139900,
+  },
+  {
+    id: 2,
+    title: "Samsung Galaxy s22 ultra",
+    img: "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
+    price: 118999,
+  },
+  {
+    id: 3,
+    title: "boAt Rockerz",
+    img: "https://dukandwar.com/wp-content/uploads/2020/06/boAt-Rockerz-450-Wireless-Bluetooth-Headset-Luscious-Black.jpg",
+    price: 1199,
   },
 ];

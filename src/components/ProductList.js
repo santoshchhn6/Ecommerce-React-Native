@@ -6,7 +6,7 @@ import toRupee from "../js/toRupee";
 const ProductList = ({ heading, products, onPress }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>{heading}</Text>
+      {heading && <Text style={styles.heading}>{heading}</Text>}
       <View style={styles.products}>
         {products.map((e, i) => {
           const { id, title, img, price } = e;

@@ -10,23 +10,27 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-import { cart } from "../data/data";
+import { cart, orders } from "../data/data";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
 import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
+import ColorPallet from "../components/ColorPallet";
+import Size from "../components/Size";
+import AddressDetail from "../components/AddressDetail";
 
-const Cart = ({ navigation }) => {
+const OrderSummary = () => {
   let totalPrice = 0;
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Text style={styles.heading}>My Cart</Text>
         <ScrollView>
+          <AddressDetail />
           <View style={styles.cartItems}>
-            {cart.map((item) => {
-              let { id, title, img, price, instock, quantity, rating } = item;
+            {orders.map((item) => {
+              let { id, title, img, price, quantity, rating, sizes, colors } =
+                item;
               totalPrice += price * quantity;
               return (
                 <View key={id} style={styles.cartItem}>
@@ -34,22 +38,26 @@ const Cart = ({ navigation }) => {
                     <Image style={styles.cartItem_img} source={{ uri: img }} />
                     <View style={styles.cartItem_info}>
                       <Text style={styles.cartItem_title}>{title}</Text>
+                      {sizes && (
+                        <View style={styles.colors}>
+                          <Text style={styles.text2}>Size :</Text>
+                          <Size sizes={sizes} />
+                        </View>
+                      )}
+                      {colors && (
+                        <View style={styles.colors}>
+                          <Text style={styles.text2}>Color :</Text>
+                          <ColorPallet colors={colors} />
+                        </View>
+                      )}
+                      <Text style={styles.text2}>Quantity: {quantity}</Text>
                       <View>
                         <Rating rate={rating} />
                         <Text style={styles.cartItem_price}>
                           {toRupee(price)}
                         </Text>
-                        <Text style={styles.cartItem_instock}>
-                          instock:{instock}
-                        </Text>
+                        <TouchableOpacity></TouchableOpacity>
                       </View>
-                    </View>
-                  </View>
-                  <View style={styles.cartItem_buy_container}>
-                    <Counter style={{ width: "40%" }} quantity={quantity} />
-                    <View style={styles.cartItem_btn_container}>
-                      <CustomButton title="Remove" />
-                      <CustomButton title="Save for later" />
                     </View>
                   </View>
                 </View>
@@ -57,12 +65,11 @@ const Cart = ({ navigation }) => {
             })}
           </View>
           <PriceDetail price={totalPrice} />
-
           <CustomButton
-            onPress={() => navigation.navigate("OrderSummary")}
+            // onPress={() => navigation.navigate("OrderSummary")}
             style={styles.btn}
             textStyle={styles.btn_txt}
-            title="Place Order"
+            title="Continue"
           />
         </ScrollView>
       </View>
@@ -70,7 +77,7 @@ const Cart = ({ navigation }) => {
   );
 };
 
-export default Cart;
+export default OrderSummary;
 
 const styles = StyleSheet.create({
   container: {
@@ -79,12 +86,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    marginTop: 50,
     width: "95%",
     // borderColor: COLORS.dark,
     // borderWidth: 1,
     overflow: "hidden",
-    marginBottom: 80,
   },
   heading: {
     fontSize: 22,
@@ -132,40 +137,34 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "space-between",
   },
-  cartItem_title: {},
+  cartItem_title: {
+    fontSize: 15,
+    marginBottom: 5,
+  },
 
   cartItem_price: {
     fontSize: 20,
     fontWeight: "bold",
   },
-  cartItem_instock: {
-    color: COLORS.green,
+  text: {
+    color: COLORS.red,
+    fontWeight: "bold",
   },
-  cartItem_buy_container: {
-    flexDirection: "row",
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
+  text2: {
+    color: COLORS.gray,
+    fontSize: 18,
     marginBottom: 5,
   },
-  cartItem_quantity: {
-    width: "40%",
-    flexDirection: "row",
-    justifyContent: "center",
+  text3: {
+    color: COLORS.gray,
+    fontSize: 16,
+    marginLeft: 10,
+    marginBottom: 5,
   },
-  text_container: {
-    // backgroundColor: COLORS.secondaryColor,
-    width: 30,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 5,
-    justifyContent: "center",
+  colors: {
+    flexDirection: "row",
     alignItems: "center",
-  },
-  text_qtt: {},
-  cartItem_btn_container: {
-    width: "60%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    marginBottom: 5,
   },
   btn: {
     marginVertical: 10,

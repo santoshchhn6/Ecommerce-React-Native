@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "./src/constant/colors";
 import Login from "./src/screen/Login";
 import Main from "./src/screen/Main";
+import OrderSummary from "./src/screen/OrderSummary";
 import ProductDetail from "./src/screen/ProductDetail";
 import Register from "./src/screen/Register";
 import SearchProduct from "./src/screen/SearchProduct";
@@ -23,6 +24,7 @@ export default function App() {
         />
         <Stack.Screen name="SearchProduct" component={SearchProduct} />
         <Stack.Screen name="ProductDetail" component={ProductDetail} />
+        <Stack.Screen name="OrderSummary" component={OrderSummary} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>

@@ -12,8 +12,18 @@ const User = ({ navigation }) => {
           title="Orders"
           icon="package"
         />
-        <CustomButton style={styles.btn} title="Wishlist" icon="heart" />
-        <CustomButton style={styles.btn} title="My Reviews" icon="edit" />
+        <CustomButton
+          onPress={() => navigation.navigate("Wishlist")}
+          style={styles.btn}
+          title="Wishlist"
+          icon="heart"
+        />
+        <CustomButton
+          onPress={() => navigation.navigate("My Reviews")}
+          style={styles.btn}
+          title="My Reviews"
+          icon="edit"
+        />
         <CustomButton
           onPress={() => navigation.navigate("EditProfile")}
           style={styles.btn}
@@ -27,6 +37,7 @@ const User = ({ navigation }) => {
           icon="map-pin"
         />
         <CustomButton
+          onPress={() => navigation.navigate("Home")}
           style={styles.btn}
           title="Logout"
           icon="arrow-right-circle"

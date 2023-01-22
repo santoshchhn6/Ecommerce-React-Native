@@ -6,6 +6,8 @@ import DeactivateAccount from "./DeactivateAccount";
 import SavedAddress from "./SavedAddress";
 import EditProfile from "./EditProfile";
 import Orders from "./Orders";
+import Wishlist from "./Wishlist";
+import UserReview from "./UserReview";
 const Stack = createStackNavigator();
 const Account = () => {
   return (
@@ -19,6 +21,8 @@ const Account = () => {
       <Stack.Screen name="SavedAddress" component={SavedAddress} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Orders" component={Orders} />
+      <Stack.Screen name="Wishlist" component={Wishlist} />
+      <Stack.Screen name="My Reviews" component={UserReview} />
     </Stack.Navigator>
   );
 };
