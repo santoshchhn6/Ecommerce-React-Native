@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
-import User from "./User";
 import Cart from "./Cart";
 import Category from "./Category";
 import Home from "./Home";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { COLORS } from "../constant/colors";
 import CustomTabBarButton from "../components/CustomTabBarButton";
+import Account from "./Account";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +14,7 @@ export default function Main() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        headerShown: false,
+        // headerShown: false,
         tabBarStyle: styles.tabBar,
         tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.white,
@@ -26,7 +26,7 @@ export default function Main() {
             iconName = "grid";
           } else if (route.name === "Cart") {
             iconName = "bag";
-          } else if (route.name === "User") {
+          } else if (route.name === "Account") {
             iconName = "user";
           }
           return <SimpleLineIcons name={iconName} size={size} color={color} />;
@@ -38,6 +38,7 @@ export default function Main() {
         component={Home}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -45,6 +46,7 @@ export default function Main() {
         component={Category}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -52,11 +54,12 @@ export default function Main() {
         component={Cart}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="User"
-        component={User}
+        name="Account"
+        component={Account}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
         }}

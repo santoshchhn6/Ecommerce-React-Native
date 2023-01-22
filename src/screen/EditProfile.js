@@ -1,22 +1,24 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
 
-const Register = () => {
+const EditProfile = ({ navigation }) => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  const PHONE_REGEX = /^\d{10}$/;
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm();
-
-  const pwd = watch("password");
 
   const onSignInPressed = (data) => {
     console.log(data);
@@ -67,62 +69,27 @@ const Register = () => {
               pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
             }}
           />
-          <CustomInput
-            multiline
-            name="address"
-            control={control}
-            placeholder="Address"
-            rules={{ required: "Address is Required" }}
-          />
-          <CustomInput
-            keyboardType="phone-pad"
-            name="phone"
-            control={control}
-            placeholder="Phone Number"
-            rules={{
-              required: "Phone Number is Required",
-              pattern: {
-                value: PHONE_REGEX,
-                message: "Phone Number is invalid",
-              },
-            }}
-          />
-          <CustomInput
-            secureTextEntry
-            name="password"
-            control={control}
-            placeholder="Password"
-            rules={{
-              required: "Password is Required",
-              minLength: {
-                value: 8,
-                message: "Password should be minimum of 8 character long.",
-              },
-            }}
-          />
-          <CustomInput
-            secureTextEntry
-            name="confirmPassword"
-            control={control}
-            placeholder="Confirm Password"
-            rules={{
-              required: "Confirm Password is Required",
-              validate: (value) => value === pwd || "Password do not match.",
-            }}
-          />
+
           <CustomButton
             style={styles.btn}
             textStyle={styles.btn_txt}
-            title="Register"
+            title="Submit"
             onPress={handleSubmit(onSignInPressed)}
           />
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("DeactivateAccount")}
+            style={styles.text_container}
+          >
+            <Text style={styles.text}>Deactivate Account</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </View>
   );
 };
 
-export default Register;
+export default EditProfile;
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +100,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
+    // alignItems: "center",
   },
   btn: {
     marginTop: 15,
@@ -145,5 +113,13 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 18,
     fontWeight: "bold",
+  },
+  text_container: {
+    alignItems: "center",
+  },
+  text: {
+    marginTop: 10,
+    fontWeight: "bold",
+    color: COLORS.dark,
   },
 });

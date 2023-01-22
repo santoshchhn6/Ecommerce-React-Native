@@ -6,7 +6,6 @@ import { useForm, Controller } from "react-hook-form";
 const CustomInput = (props) => {
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.label}>{props.label}</Text> */}
       <Controller
         rules={props.rules ? props.rules : {}}
         control={props.control}
@@ -41,9 +40,6 @@ export default CustomInput;
 
 const styles = StyleSheet.create({
   container: {
-    // borderWidth: 1,
-    // borderColor: "red",
-    // backgroundColor: COLORS.white,
     marginVertical: 10,
   },
   label: {
@@ -52,10 +48,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   input: {
-    // backgroundColor: COLORS.white,
     borderBottomWidth: 1,
     borderColor: COLORS.border,
-    // borderRadius: 8,
     padding: 5,
     paddingHorizontal: 10,
     margin: 5,

@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { COLORS } from "./src/constant/colors";
+import Login from "./src/screen/Login";
 import Main from "./src/screen/Main";
 import ProductDetail from "./src/screen/ProductDetail";
 import Register from "./src/screen/Register";
@@ -12,7 +13,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Register"
+        initialRouteName="Main"
         // screenOptions={{ header: () => null }}
       >
         <Stack.Screen
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="SearchProduct" component={SearchProduct} />
         <Stack.Screen name="ProductDetail" component={ProductDetail} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );
