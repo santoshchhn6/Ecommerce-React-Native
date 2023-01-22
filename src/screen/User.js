@@ -6,7 +6,12 @@ const User = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <CustomButton style={styles.btn} title="Orders" icon="package" />
+        <CustomButton
+          onPress={() => navigation.navigate("Orders")}
+          style={styles.btn}
+          title="Orders"
+          icon="package"
+        />
         <CustomButton style={styles.btn} title="Wishlist" icon="heart" />
         <CustomButton style={styles.btn} title="My Reviews" icon="edit" />
         <CustomButton

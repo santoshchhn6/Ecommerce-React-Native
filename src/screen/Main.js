@@ -14,7 +14,7 @@ export default function Main() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        // headerShown: false,
+        headerShown: false,
         tabBarStyle: styles.tabBar,
         tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.white,
@@ -38,7 +38,6 @@ export default function Main() {
         component={Home}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -46,7 +45,6 @@ export default function Main() {
         component={Category}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -54,7 +52,6 @@ export default function Main() {
         component={Cart}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
-          headerShown: false,
         }}
       />
       <Tab.Screen

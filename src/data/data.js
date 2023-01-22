@@ -221,3 +221,26 @@ export const reviews = [
     review: "Nice Product",
   },
 ];
+
+export const orders = [
+  {
+    id: 1,
+    title: "ADIDAS ExcelCourt M Basketball Shoes",
+    img: "https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/y/n/z/-original-imaggk3gwsrhczyd.jpeg?q=70",
+    price: 2303,
+    sizes: ["6 UK"],
+    rating: 4,
+    quantity: 1,
+    instock: true,
+  },
+  {
+    id: 2,
+    title: "Samsung Galaxy s22 ultra",
+    img: "https://m.media-amazon.com/images/I/71PvHfU+pwL._SL1500_.jpg",
+    price: 118999,
+    colors: ["#1b857f"],
+    rating: 3,
+    quantity: 2,
+    instock: true,
+  },
+];

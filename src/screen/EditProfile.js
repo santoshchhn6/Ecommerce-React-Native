@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +10,9 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
+import Feather from "react-native-vector-icons/Feather";
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
 
 const EditProfile = ({ navigation }) => {
   const EMAIL_REGEX =
@@ -24,10 +28,46 @@ const EditProfile = ({ navigation }) => {
     console.log(data);
   };
 
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    // console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <ScrollView>
+          <View style={styles.img_container}>
+            <TouchableOpacity onPress={pickImage}>
+              <Feather
+                style={styles.icon}
+                name="edit"
+                size={30}
+                color={COLORS.white}
+              />
+              <Image
+                style={styles.img}
+                source={{
+                  uri:
+                    image ||
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <CustomInput
             name="firstName"
             control={control}
@@ -101,6 +141,23 @@ const styles = StyleSheet.create({
   wrapper: {
     width: "95%",
     // alignItems: "center",
+  },
+  img_container: {
+    alignItems: "center",
+  },
+  img: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  icon: {
+    position: "absolute",
+    left: 60,
+    bottom: 0,
+    zIndex: 2,
+    backgroundColor: COLORS.border,
+    padding: 3,
+    borderRadius: 10,
   },
   btn: {
     marginTop: 15,

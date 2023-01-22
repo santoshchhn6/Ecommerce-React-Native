@@ -5,6 +5,7 @@ import User from "./User";
 import DeactivateAccount from "./DeactivateAccount";
 import SavedAddress from "./SavedAddress";
 import EditProfile from "./EditProfile";
+import Orders from "./Orders";
 const Stack = createStackNavigator();
 const Account = () => {
   return (
@@ -17,6 +18,7 @@ const Account = () => {
       <Stack.Screen name="DeactivateAccount" component={DeactivateAccount} />
       <Stack.Screen name="SavedAddress" component={SavedAddress} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="Orders" component={Orders} />
     </Stack.Navigator>
   );
 };
