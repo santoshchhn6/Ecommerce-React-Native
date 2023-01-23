@@ -9,6 +9,7 @@ const Size = ({ sizes }) => {
     <View style={styles.container}>
       {sizes.map((size, i) => (
         <CustomButton
+          key={i}
           onPress={() => setActive(i)}
           style={active === i ? styles.active_btn : null}
           textStyle={active === i ? styles.active_txt : null}

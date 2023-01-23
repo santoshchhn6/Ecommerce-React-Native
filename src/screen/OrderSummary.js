@@ -20,7 +20,7 @@ import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import AddressDetail from "../components/AddressDetail";
 
-const OrderSummary = () => {
+const OrderSummary = ({ navigation }) => {
   let totalPrice = 0;
   return (
     <View style={styles.container}>
@@ -66,7 +66,7 @@ const OrderSummary = () => {
           </View>
           <PriceDetail price={totalPrice} />
           <CustomButton
-            // onPress={() => navigation.navigate("OrderSummary")}
+            onPress={() => navigation.navigate("Payment")}
             style={styles.btn}
             textStyle={styles.btn_txt}
             title="Continue"
