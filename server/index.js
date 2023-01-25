@@ -9,9 +9,6 @@ const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY, {
 const app = express();
 const port = 3000;
 
-// console.log(process.env.STRIPE_PUBLISH_KEY);
-// console.log(process.env.STRIPE_PRIVATE_KEY);
-
 app.listen(port, () => console.log(`Server listing on port:${port}`));
 
 app.post("/create-payment-intent", async (req, res) => {

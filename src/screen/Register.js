@@ -3,8 +3,16 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
+import { app } from "../firebaseConfig";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const Register = () => {
+  const auth = getAuth();
+
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const PHONE_REGEX = /^\d{10}$/;
@@ -19,7 +27,14 @@ const Register = () => {
   const pwd = watch("password");
 
   const onSignInPressed = (data) => {
-    console.log(data);
+    // Register
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        console.log(userCredential.user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -113,7 +128,7 @@ const Register = () => {
           <CustomButton
             style={styles.btn}
             textStyle={styles.btn_txt}
-            title="Register"
+            title="Create Account"
             onPress={handleSubmit(onSignInPressed)}
           />
         </ScrollView>
@@ -135,11 +150,13 @@ const styles = StyleSheet.create({
     width: "95%",
   },
   btn: {
-    marginTop: 15,
+    marginTop: 10,
     height: 50,
-    backgroundColor: COLORS.green,
-    shadowColor: COLORS.green,
-    borderColor: COLORS.green,
+    marginHorizontal: 0,
+    backgroundColor: COLORS.primaryColor,
+    shadowColor: COLORS.primaryColor,
+    borderColor: COLORS.primaryColor,
+    borderRadius: 8,
   },
   btn_txt: {
     color: COLORS.white,

@@ -1,4 +1,5 @@
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,24 +10,49 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
+import { app } from "../firebaseConfig";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
 
-const Login = ({ navigation }) => {
+const Login = ({ route, navigation }) => {
+  const [error, setError] = useState(false);
+  const auth = getAuth();
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSignInPressed = (data) => {
-    console.log(data);
+    // console.log(data);
+
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        // console.log(userCredential.user);
+        navigation.navigate("Main");
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setError(true);
+        // Alert("error");
+      });
   };
+
+  useEffect(() => {
+    route.params && route.params.clearInput && reset({});
+  }, [route]);
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
+        <View style={styles.headingContainer}>
+          <Text style={styles.heading}>E</Text>
+          <Text style={styles.heading2}>SHOP</Text>
+        </View>
         <CustomInput
           name="email"
           control={control}
@@ -50,6 +76,8 @@ const Login = ({ navigation }) => {
             },
           }}
         />
+
+        {error && <Text style={styles.error}>Authentication failed</Text>}
 
         <CustomButton
           style={styles.btn}
@@ -77,16 +105,35 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: COLORS.white,
     alignItems: "center",
+    justifyContent: "center",
   },
   wrapper: {
     width: "95%",
   },
+  headingContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 20,
+    // alignItems: "center",
+  },
+  heading: {
+    fontSize: 34,
+    fontWeight: "bold",
+    color: COLORS.primaryColor,
+  },
+  heading2: {
+    fontSize: 34,
+    fontWeight: "bold",
+    color: COLORS.gray,
+  },
   btn: {
-    marginTop: 15,
+    marginTop: 10,
     height: 50,
-    backgroundColor: COLORS.green,
-    shadowColor: COLORS.green,
-    borderColor: COLORS.green,
+    marginHorizontal: 0,
+    backgroundColor: COLORS.primaryColor,
+    shadowColor: COLORS.primaryColor,
+    borderColor: COLORS.primaryColor,
+    borderRadius: 8,
   },
   btn_txt: {
     color: COLORS.white,
@@ -105,5 +152,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontWeight: "bold",
     color: COLORS.dark,
+  },
+  error: {
+    color: COLORS.red,
+    fontSize: 16,
   },
 });

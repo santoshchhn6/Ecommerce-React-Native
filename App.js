@@ -10,12 +10,16 @@ import ProductDetail from "./src/screen/ProductDetail";
 import Register from "./src/screen/Register";
 import SearchProduct from "./src/screen/SearchProduct";
 const Stack = createStackNavigator();
+import * as Application from "expo-application";
 
 export default function App() {
+  console.log("Android Id:" + Application.androidId);
+  console.log("Application Id:" + Application.applicationId);
+  console.log("Application Name:" + Application.applicationName);
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Main"
+        initialRouteName="Login"
         // screenOptions={{ header: () => null }}
       >
         <Stack.Screen
@@ -28,7 +32,11 @@ export default function App() {
         <Stack.Screen name="OrderSummary" component={OrderSummary} />
         <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={Login}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -48,11 +48,13 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   input: {
-    borderBottomWidth: 1,
+    borderWidth: 1,
+    height: 50,
     borderColor: COLORS.border,
     padding: 5,
     paddingHorizontal: 10,
-    margin: 5,
+    borderRadius: 8,
+    // margin: 5,
   },
   error: {
     margin: 5,

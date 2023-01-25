@@ -1,8 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
+import { app } from "../firebaseConfig";
+import { getAuth, signOut } from "firebase/auth";
 
 const User = ({ navigation }) => {
+  const auth = getAuth();
+
+  const logout = () => {
+    signOut(auth)
+      .then(() => {
+        navigation.navigate("Login", { clearInput: true });
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -37,7 +50,7 @@ const User = ({ navigation }) => {
           icon="map-pin"
         />
         <CustomButton
-          onPress={() => navigation.navigate("Home")}
+          onPress={logout}
           style={styles.btn}
           title="Logout"
           icon="arrow-right-circle"
