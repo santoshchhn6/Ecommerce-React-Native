@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
-import { app } from "../firebaseConfig";
+import { app } from "../firebase";
 import { getAuth, signOut } from "firebase/auth";
 
 const User = ({ navigation }) => {

@@ -1,16 +1,19 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { app } from "../firebaseConfig";
+import { addData, app, createAccount, logIn } from "../firebase";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useState } from "react";
+import Loading from "../components/Loading";
 
-const Register = () => {
+const Register = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const auth = getAuth();
 
   const EMAIL_REGEX =
@@ -20,6 +23,7 @@ const Register = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
     watch,
   } = useForm();
@@ -27,13 +31,39 @@ const Register = () => {
   const pwd = watch("password");
 
   const onSignInPressed = (data) => {
-    // Register
-    createUserWithEmailAndPassword(auth, data.email, data.password)
+    setLoading(true);
+    createAccount(data.email, data.password)
       .then((userCredential) => {
-        console.log(userCredential.user);
+        addData(
+          data.firstName,
+          data.lastName,
+          data.email,
+          data.address,
+          data.phone
+        )
+          .then(() => {
+            logIn(data.email, data.password)
+              .then(() => {
+                setLoading(false);
+                reset({});
+                navigation.navigate("Main");
+              })
+              .catch((error) => {
+                setLoading(false);
+                console.log(error.message);
+                Alert.alert(error.message);
+              });
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.log(error.message);
+            Alert.alert(error.message);
+          });
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error.message);
+        Alert.alert(error.message);
       });
   };
 
@@ -125,6 +155,7 @@ const Register = () => {
               validate: (value) => value === pwd || "Password do not match.",
             }}
           />
+          <TextInput />
           <CustomButton
             style={styles.btn}
             textStyle={styles.btn_txt}
@@ -133,6 +164,7 @@ const Register = () => {
           />
         </ScrollView>
       </View>
+      {loading && <Loading />}
     </View>
   );
 };

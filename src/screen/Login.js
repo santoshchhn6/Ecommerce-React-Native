@@ -1,22 +1,16 @@
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { app } from "../firebaseConfig";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { logIn } from "../firebase";
+
 import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
 
 const Login = ({ route, navigation }) => {
   const [error, setError] = useState(false);
-  const auth = getAuth();
+  const [loading, setLoading] = useState(false);
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -28,23 +22,19 @@ const Login = ({ route, navigation }) => {
   } = useForm();
 
   const onSignInPressed = (data) => {
-    // console.log(data);
-
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
-        // console.log(userCredential.user);
+    setLoading(true);
+    logIn(data.email, data.password)
+      .then(() => {
+        setLoading(false);
+        reset({});
         navigation.navigate("Main");
       })
       .catch((error) => {
-        console.log(error.message);
+        setLoading(false);
         setError(true);
-        // Alert("error");
+        console.log(error.message);
       });
   };
-
-  useEffect(() => {
-    route.params && route.params.clearInput && reset({});
-  }, [route]);
 
   return (
     <View style={styles.container}>
@@ -93,6 +83,7 @@ const Login = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {loading && <Loading />}
     </View>
   );
 };
