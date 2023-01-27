@@ -63,7 +63,6 @@ const collectionRef = collection(db, "products");
 
 //Add
 export const addProduct = async ({
-  id,
   title,
   price,
   category,
@@ -75,7 +74,6 @@ export const addProduct = async ({
 }) => {
   const promise = new Promise((resolve, reject) => {
     addDoc(collectionRef, {
-      id,
       title,
       price,
       category,
@@ -112,9 +110,9 @@ import {
 
 const storage = getStorage(app);
 
-export const addProductImage = async (image) => {
+export const addProductImage = async (image, category) => {
   const promise = new Promise((resolve, reject) => {
-    const storageRef = ref(storage, `products/${image.name}`);
+    const storageRef = ref(storage, `products/${category}/${image.name}`);
     const uploadTask = uploadBytesResumable(storageRef, image);
 
     uploadTask.on(

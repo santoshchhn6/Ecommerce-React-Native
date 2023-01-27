@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SketchPicker, SwatchesPicker } from "react-color";
 import { addProduct, addProductImage, getProduct } from "../firebase";
+import Loading from "./Loading";
 
 const Product = () => {
+  const [loading, setLoading] = useState(false);
   const [inputs, setInputs] = useState({
     category: null,
     title: null,
@@ -51,7 +53,7 @@ const Product = () => {
       const promises = [];
 
       imagesArr.forEach((img, i) => {
-        promises.push(addProductImage(images[i]));
+        promises.push(addProductImage(images[i], inputs.category));
       });
 
       Promise.all(promises)
@@ -72,12 +74,13 @@ const Product = () => {
 
     details &&
       details.split("\n").forEach((element, i) => {
-        let d = element.split(":");
+        let d = element.split("\t");
         detailObj[d[0]] = d[1];
       });
 
+    console.log(detailObj);
+
     const product = {
-      id: 1234,
       title,
       price,
       category,
@@ -88,11 +91,16 @@ const Product = () => {
       images: imgUrls,
     };
 
-    console.log(product);
-
     addProduct(product)
-      .then((response) => console.log(response))
-      .catch((err) => console.log(err.message));
+      .then((response) => {
+        setLoading(false);
+        console.log(response);
+        alert(response);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err.message);
+      });
   };
 
   const handleSubmit = () => {
@@ -101,23 +109,33 @@ const Product = () => {
       //1.Check if product alredy exit in database
       //1. Upload images to firebase storage ,when completed return images urls
       //2. addProduct with image to firebase database
+      setLoading(true);
       getProduct(inputs.title)
         .then((data) => {
           if (data.docs.length === 0) {
             uploadImage()
               .then((imgUrls) => addProductToDatabase(imgUrls))
-              .catch((err) => console.log(err.message));
+              .catch((err) => {
+                setLoading(false);
+                console.log(err.message);
+              });
           } else {
+            setLoading(false);
             alert("Title alreay exit in database.");
           }
         })
-        .catch((e) => console.log(e.message));
+        .catch((e) => {
+          setLoading(false);
+          console.log(e.message);
+        });
     } else {
       alert("Please enter necessary data.");
     }
   };
+
   return (
     <div className="flex justify-center">
+      {loading && <Loading />}
       <div className="w-80  m-5 flex flex-col gap-3">
         <h1 className="text-2xl  mb-5"> Add Product</h1>
         <select

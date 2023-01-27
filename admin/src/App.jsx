@@ -7,7 +7,7 @@ import User from "./Components/User";
 function App() {
   return (
     <Router>
-      <div className="w-screen h-screen flex flex-row">
+      <div className="w-screen h-screen flex flex-row ">
         <Nav />
         <div className="w-screen h-screen bg-blue-200">
           <Routes>
