@@ -47,14 +47,23 @@ export const logOut = async (email, password) => {
 };
 
 //========================Database======================
-import { getFirestore } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  getDoc,
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 const db = getFirestore(app);
 
 //Product---------------------------------------
 const collectionRef = collection(db, "products");
 
+//Add
 export const addProduct = async ({
+  id,
   title,
   price,
   category,
@@ -66,6 +75,7 @@ export const addProduct = async ({
 }) => {
   const promise = new Promise((resolve, reject) => {
     addDoc(collectionRef, {
+      id,
       title,
       price,
       category,
@@ -77,6 +87,17 @@ export const addProduct = async ({
     })
       .then(() => resolve("Product Created!"))
       .catch((err) => reject(err));
+  });
+  return await promise;
+};
+
+//Get Query
+export const getProduct = async (title) => {
+  const q = query(collectionRef, where("title", "==", title));
+  const promise = new Promise((resolve, reject) => {
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => alert(e.message));
   });
   return await promise;
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SketchPicker, SwatchesPicker } from "react-color";
-import { addProduct, addProductImage } from "../firebase";
+import { addProduct, addProductImage, getProduct } from "../firebase";
 
 const Product = () => {
   const [inputs, setInputs] = useState({
@@ -45,45 +45,76 @@ const Product = () => {
     }
   };
 
-  const handleSubmit = () => {
-    const detailObj = {};
+  const uploadImage = async () => {
+    const promise = new Promise((resolve, reject) => {
+      const imagesArr = Object.entries(images);
+      const promises = [];
+
+      imagesArr.forEach((img, i) => {
+        promises.push(addProductImage(images[i]));
+      });
+
+      Promise.all(promises)
+        .then((imgUrls) => {
+          resolve(imgUrls);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+    return await promise;
+  };
+
+  const addProductToDatabase = (imgUrls) => {
     const { title, price, category, instock, sizes, details } = inputs;
+    const detailObj = {};
+    const pSizes = sizes ? sizes.split(",") : [];
+
     details &&
       details.split("\n").forEach((element, i) => {
         let d = element.split(":");
         detailObj[d[0]] = d[1];
       });
 
-    const pSizes = sizes ? sizes.split(",") : [];
+    const product = {
+      id: 1234,
+      title,
+      price,
+      category,
+      instock,
+      sizes: pSizes,
+      colors,
+      details: detailObj,
+      images: imgUrls,
+    };
 
-    //==========Upload Image==============
-    const imagesArr = Object.entries(images);
-    const promises = [];
+    console.log(product);
 
-    imagesArr.forEach((img, i) => {
-      promises.push(addProductImage(images[i]));
-    });
+    addProduct(product)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err.message));
+  };
 
-    Promise.all(promises)
-      .then((imgUrls) => {
-        //=============Add Product=================
-        const product = {
-          title,
-          price,
-          category,
-          instock,
-          sizes: pSizes,
-          colors,
-          details: detailObj,
-          images: imgUrls,
-        };
-        addProduct(product)
-          .then((response) => console.log(response))
-          .catch((err) => console.log(err.message));
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+  const handleSubmit = () => {
+    const { category, title, price } = inputs;
+    if (category && title && price) {
+      //1.Check if product alredy exit in database
+      //1. Upload images to firebase storage ,when completed return images urls
+      //2. addProduct with image to firebase database
+      getProduct(inputs.title)
+        .then((data) => {
+          if (data.docs.length === 0) {
+            uploadImage()
+              .then((imgUrls) => addProductToDatabase(imgUrls))
+              .catch((err) => console.log(err.message));
+          } else {
+            alert("Title alreay exit in database.");
+          }
+        })
+        .catch((e) => console.log(e.message));
+    } else {
+      alert("Please enter necessary data.");
+    }
   };
   return (
     <div className="flex justify-center">
