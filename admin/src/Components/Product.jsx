@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { SketchPicker, SwatchesPicker } from "react-color";
+import { addProduct, addProductImage } from "../firebase";
 
 const Product = () => {
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    category: null,
+    title: null,
+    price: null,
+    instock: true,
+  });
   const [colors, setColors] = useState([]);
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -12,15 +18,6 @@ const Product = () => {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setInputs((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = () => {
-    const product = {
-      details: [],
-    };
-    console.log({ inputs });
-    console.log(colors);
-    console.log(images);
   };
 
   const handleChangeComplete = (color) => {
@@ -46,6 +43,47 @@ const Product = () => {
         (file) => URL.revokeObjectURL(file) // avoid memory leak
       );
     }
+  };
+
+  const handleSubmit = () => {
+    const detailObj = {};
+    const { title, price, category, instock, sizes, details } = inputs;
+    details &&
+      details.split("\n").forEach((element, i) => {
+        let d = element.split(":");
+        detailObj[d[0]] = d[1];
+      });
+
+    const pSizes = sizes ? sizes.split(",") : [];
+
+    //==========Upload Image==============
+    const imagesArr = Object.entries(images);
+    const promises = [];
+
+    imagesArr.forEach((img, i) => {
+      promises.push(addProductImage(images[i]));
+    });
+
+    Promise.all(promises)
+      .then((imgUrls) => {
+        //=============Add Product=================
+        const product = {
+          title,
+          price,
+          category,
+          instock,
+          sizes: pSizes,
+          colors,
+          details: detailObj,
+          images: imgUrls,
+        };
+        addProduct(product)
+          .then((response) => console.log(response))
+          .catch((err) => console.log(err.message));
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
   };
   return (
     <div className="flex justify-center">
@@ -80,7 +118,7 @@ const Product = () => {
         <input
           onChange={handleInput}
           type="number"
-          name="title"
+          name="price"
           placeholder="Price"
           className="w-full h-8 rounded text-gray-700 outline-none pl-2"
         />
