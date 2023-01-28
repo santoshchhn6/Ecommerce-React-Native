@@ -12,7 +12,11 @@ const ProductList = ({ heading, products, onPress }) => {
           const { id, title, img, images, price } = e;
 
           return (
-            <TouchableOpacity onPress={onPress} key={id} style={styles.product}>
+            <TouchableOpacity
+              onPress={() => onPress(id)}
+              key={id}
+              style={styles.product}
+            >
               <Image
                 style={styles.img}
                 source={{ uri: images ? images[0] : img }}

@@ -65,15 +65,11 @@ const Home = ({ navigation }) => {
         </View>
 
         {/* Popular products */}
-        <ProductList
-          onPress={handleProductPress}
-          heading="Popular Products"
-          products={popular_product}
-        />
+
         {products && (
           <ProductList
             onPress={handleProductPress}
-            heading="All Products"
+            heading="Popular Products"
             products={products}
           />
         )}

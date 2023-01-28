@@ -13,13 +13,6 @@ const reducer = (state = initialState, { type, payload }) => {
       };
     }
 
-    //   case types.SET_SEARCH_TERM: {
-    //     return {
-    //       ...state,
-    //       searchTerm: payload,
-    //     };
-    //   }
-
     default:
       return state;
   }

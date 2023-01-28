@@ -18,11 +18,15 @@ import Reviews from "../components/Reviews";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
+import { useSelector } from "react-redux";
 
-const ProductDetail = () => {
+const ProductDetail = ({ route }) => {
   const [liked, setLiked] = useState(false);
-  const { title, images, price, rating, detail, instock, sizes, colors } =
-    product[0];
+  // const product = useSelector((state) => state.reducer.selectedProduct);
+
+  let { product } = route.params;
+  const { title, images, price, details, instock, sizes, colors } = product[0];
+  console.log(details);
   return (
     <View style={styles.container}>
       <ScrollView
@@ -30,9 +34,10 @@ const ProductDetail = () => {
         contentContainerStyle={{ alignContent: "center" }}
         showsVerticalScrollIndicator={false}
       >
+        {/* Images */}
         <View style={styles.wrapper}>
           <Panel style={styles.img_container}>
-            <SlideCard data={images} />
+            {images && <SlideCard data={images} />}
             <TouchableOpacity
               style={styles.wish_icon_container}
               onPress={() => setLiked(!liked)}
@@ -44,26 +49,30 @@ const ProductDetail = () => {
               />
             </TouchableOpacity>
           </Panel>
+          {/* Title */}
           <Panel>
             <Text style={styles.text2}>{title}</Text>
-
+            {/* Color */}
             {colors && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Color :</Text>
                 <ColorPallet colors={colors} />
               </View>
             )}
+            {/* Size */}
             {sizes && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Size :</Text>
                 <Size sizes={sizes} />
               </View>
             )}
-
-            <Rating rate={rating} />
+            {/* Rating */}
+            {/* <Rating rate={rating} /> */}
+            {/* Price */}
             <Text style={styles.price}>Rs.{price}</Text>
           </Panel>
           <Panel>
+            {/* Stock */}
             <View style={[styles.row, { marginBottom: 10 }]}>
               <Counter quantity={1} />
               {instock ? (
@@ -86,12 +95,14 @@ const ProductDetail = () => {
                 </Text>
               )}
             </View>
+            {/* Add to cart */}
             <View style={styles.row}>
               <CustomButton
                 style={styles.btn}
                 title="Add to Cart"
                 textStyle={styles.btn_text}
               />
+              {/* Buy Now */}
               <CustomButton
                 style={styles.btn_buy}
                 title="Buy Now"
@@ -100,12 +111,13 @@ const ProductDetail = () => {
             </View>
           </Panel>
 
-          {detail && (
-            <Panel style={styles.padding0}>
-              <Table data={detail} />
-            </Panel>
-          )}
+          {/* Details */}
 
+          <Panel style={styles.padding0}>
+            <Table data={details} />
+          </Panel>
+
+          {/* Reviews */}
           <Panel style={styles.padding0}>
             <Reviews />
           </Panel>

@@ -1,5 +1,3 @@
-import { getProduct } from "../firebase";
-
 export const types = {
   SET_PRODUCTS: "SET_PRODUCTS",
 };

@@ -4,11 +4,13 @@ import { COLORS } from "../constant/colors";
 
 const Table = ({ data }) => {
   let toggleColor = true;
+  const entries = Object.entries(data);
+
   return (
     <View>
-      <Text style={styles.heading}>Specs</Text>
+      <Text style={styles.heading}>Technical Details</Text>
       <View style={styles.table}>
-        {data.map((row, i) => {
+        {entries.map((col, i) => {
           toggleColor = !toggleColor;
           return (
             <View
@@ -18,15 +20,8 @@ const Table = ({ data }) => {
                 { backgroundColor: toggleColor ? COLORS.lightBlue : "white" },
               ]}
             >
-              {row.map((col, j) => {
-                return (
-                  <View key={j} style={styles.col}>
-                    <Text style={styles.text}>
-                      {j === 0 ? col.toUpperCase() : col}
-                    </Text>
-                  </View>
-                );
-              })}
+              <Text style={styles.text}>{col[0].toUpperCase()}</Text>
+              <Text style={styles.text}>{col[1]}</Text>
             </View>
           );
         })}
@@ -45,23 +40,15 @@ const styles = StyleSheet.create({
   },
   table: {
     marginTop: 5,
-    // borderWidth: 1,
-    // borderColor: "red",
   },
   row: {
     flex: 1,
     flexDirection: "row",
     padding: 8,
+  },
 
-    // borderWidth: 1,
-    // borderColor: "green",
-  },
-  col: {
-    flex: 1,
-    // borderWidth: 1,
-    // borderColor: "blue",
-  },
   text: {
+    flex: 1,
     color: COLORS.gray,
   },
 });

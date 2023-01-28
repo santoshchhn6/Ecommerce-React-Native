@@ -1,8 +1,7 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import Search from "../components/Search";
 import ProductList from "../components/ProductList";
-import { popular_product } from "../data/data";
 import { useSelector } from "react-redux";
 
 const SearchProduct = ({ route, navigation }) => {
@@ -24,8 +23,9 @@ const SearchProduct = ({ route, navigation }) => {
     filterProducts = products;
   }
 
-  const handleProductPress = () => {
-    navigation.navigate("ProductDetail");
+  const handleProductPress = (id) => {
+    const product = products.filter((p) => p.id === id);
+    navigation.navigate("ProductDetail", { product });
   };
 
   const handleSearch = (data) => {
