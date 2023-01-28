@@ -10,8 +10,11 @@ import { COLORS } from "../constant/colors";
 import { categories, popular_product } from "../data/data";
 import Search from "../components/Search";
 import ProductList from "../components/ProductList";
+import { useSelector } from "react-redux";
 
 const Home = ({ navigation }) => {
+  const products = useSelector((state) => state.reducer.products);
+
   const handleProductPress = () => {
     navigation.navigate("ProductDetail");
   };
@@ -71,6 +74,13 @@ const Home = ({ navigation }) => {
           heading="Popular Products"
           products={popular_product}
         />
+        {products && (
+          <ProductList
+            onPress={handleProductPress}
+            heading="All Products"
+            products={products}
+          />
+        )}
       </ScrollView>
     </View>
   );

@@ -56,8 +56,8 @@ export const logOut = async (email, password) => {
 };
 
 //========================Database======================
-import { getFirestore } from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
+import { getDocs, getFirestore, collection, addDoc } from "firebase/firestore";
+//========================Database======================
 const db = getFirestore(app);
 
 //User---------------------------------------
@@ -74,6 +74,21 @@ export const addData = async (firstname, lastname, email, address, phone) => {
     })
       .then(() => resolve("User Created!"))
       .catch((err) => reject(err));
+  });
+  return await promise;
+};
+
+//Product---------------------------------------
+const productRef = collection(db, "products");
+
+//Get Products
+export const getProduct = async () => {
+  const promise = new Promise((resolve, reject) => {
+    getDocs(productRef)
+      .then((response) =>
+        resolve(response.docs.map((item) => ({ ...item.data(), id: item.id })))
+      )
+      .catch((e) => alert(e.message));
   });
   return await promise;
 };

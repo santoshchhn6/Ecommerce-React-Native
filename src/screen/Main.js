@@ -7,10 +7,32 @@ import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { COLORS } from "../constant/colors";
 import CustomTabBarButton from "../components/CustomTabBarButton";
 import Account from "./Account";
+import { useDispatch } from "react-redux";
+import { setProduct } from "../redux/action";
+import { useEffect } from "react";
+import { getProduct } from "../firebase";
 
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
+
+  const fetchProduct = () => {
+    getProduct()
+      .then((products) => {
+        // console.log(products);
+
+        // const parsedProducts = JSON.parse(products);
+        // if (parsedProducts && typeof parsedProducts === "object") {
+        dispatch(setProduct(products));
+        // }
+      })
+      .catch((err) => console.log(err.message));
+  };
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

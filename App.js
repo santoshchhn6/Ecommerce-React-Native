@@ -11,34 +11,38 @@ import Register from "./src/screen/Register";
 import SearchProduct from "./src/screen/SearchProduct";
 const Stack = createStackNavigator();
 import * as Application from "expo-application";
+import { Provider } from "react-redux";
+import { Store } from "./src/redux/store";
 
 export default function App() {
   console.log("Android Id:" + Application.androidId);
   console.log("Application Id:" + Application.applicationId);
   console.log("Application Name:" + Application.applicationName);
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        // screenOptions={{ header: () => null }}
-      >
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="SearchProduct" component={SearchProduct} />
-        <Stack.Screen name="ProductDetail" component={ProductDetail} />
-        <Stack.Screen name="OrderSummary" component={OrderSummary} />
-        <Stack.Screen name="Payment" component={Payment} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={Login}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={Store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Main"
+          // screenOptions={{ header: () => null }}
+        >
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="SearchProduct" component={SearchProduct} />
+          <Stack.Screen name="ProductDetail" component={ProductDetail} />
+          <Stack.Screen name="OrderSummary" component={OrderSummary} />
+          <Stack.Screen name="Payment" component={Payment} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Login"
+            component={Login}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

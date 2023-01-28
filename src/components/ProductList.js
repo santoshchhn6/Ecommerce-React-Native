@@ -9,11 +9,14 @@ const ProductList = ({ heading, products, onPress }) => {
       {heading && <Text style={styles.heading}>{heading}</Text>}
       <View style={styles.products}>
         {products.map((e, i) => {
-          const { id, title, img, price } = e;
+          const { id, title, img, images, price } = e;
 
           return (
             <TouchableOpacity onPress={onPress} key={id} style={styles.product}>
-              <Image style={styles.img} source={{ uri: img }} />
+              <Image
+                style={styles.img}
+                source={{ uri: images ? images[0] : img }}
+              />
               <Text style={styles.title}>{title}</Text>
               <Text style={styles.text}>{toRupee(price)}</Text>
             </TouchableOpacity>
