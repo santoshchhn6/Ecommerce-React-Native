@@ -5,7 +5,7 @@ import ProductList from "../components/ProductList";
 import { useSelector } from "react-redux";
 
 const SearchProduct = ({ route, navigation }) => {
-  const products = useSelector((state) => state.reducer.products);
+  const products = useSelector((state) => state.productReducer.products);
   const [search, setSearch] = useState(null);
 
   let category = route.params && route.params.category;

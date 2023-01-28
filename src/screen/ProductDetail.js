@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -8,7 +9,7 @@ import {
 } from "react-native";
 import React, { Children, useState } from "react";
 import { COLORS } from "../constant/colors";
-import { product } from "../data/data";
+// import { product } from "../data/data";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
 import CustomButton from "../components/CustomButton";
@@ -18,15 +19,22 @@ import Reviews from "../components/Reviews";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../redux/action";
 
-const ProductDetail = ({ route }) => {
+const ProductDetail = ({ route, navigation }) => {
   const [liked, setLiked] = useState(false);
-  // const product = useSelector((state) => state.reducer.selectedProduct);
+  const dispatch = useDispatch();
 
   let { product } = route.params;
-  const { title, images, price, details, instock, sizes, colors } = product[0];
-  console.log(details);
+  const { id, title, images, price, details, instock, sizes, colors } =
+    product[0];
+
+  const handleAddToCart = (id) => {
+    dispatch(addToCart(id));
+    Alert.alert(id);
+    navigation.navigate("Cart");
+  };
   return (
     <View style={styles.container}>
       <ScrollView
@@ -98,6 +106,7 @@ const ProductDetail = ({ route }) => {
             {/* Add to cart */}
             <View style={styles.row}>
               <CustomButton
+                onPress={() => handleAddToCart(id)}
                 style={styles.btn}
                 title="Add to Cart"
                 textStyle={styles.btn_text}

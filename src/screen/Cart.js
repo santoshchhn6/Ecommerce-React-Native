@@ -10,14 +10,22 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-import { cart } from "../data/data";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
 import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
+import { useSelector } from "react-redux";
 
 const Cart = ({ navigation }) => {
+  const products = useSelector((state) => state.productReducer.products);
+  const cart = useSelector((state) => state.cartReducer.cart);
+  console.log(cart);
+
+  const cartProduct = products.filter((product) =>
+    cart.some((id) => id === product.id)
+  );
+  // console.log(cartProduct);
   let totalPrice = 0;
   return (
     <View style={styles.container}>
@@ -25,13 +33,17 @@ const Cart = ({ navigation }) => {
         <Text style={styles.heading}>My Cart</Text>
         <ScrollView>
           <View style={styles.cartItems}>
-            {cart.map((item) => {
-              let { id, title, img, price, instock, quantity, rating } = item;
+            {cartProduct.map((item) => {
+              let { id, title, images, price, instock, quantity, rating } =
+                item;
               totalPrice += price * quantity;
               return (
                 <View key={id} style={styles.cartItem}>
                   <View style={styles.cartItem_info_container}>
-                    <Image style={styles.cartItem_img} source={{ uri: img }} />
+                    <Image
+                      style={styles.cartItem_img}
+                      source={{ uri: images[0] }}
+                    />
                     <View style={styles.cartItem_info}>
                       <Text style={styles.cartItem_title}>{title}</Text>
                       <View>

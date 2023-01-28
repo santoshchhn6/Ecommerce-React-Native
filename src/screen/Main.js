@@ -24,12 +24,7 @@ export default function Main() {
   const fetchProduct = () => {
     getProduct()
       .then((products) => {
-        // console.log(products);
-
-        // const parsedProducts = JSON.parse(products);
-        // if (parsedProducts && typeof parsedProducts === "object") {
         dispatch(setProduct(products));
-        // }
       })
       .catch((err) => console.log(err.message));
   };
