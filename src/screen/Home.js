@@ -21,11 +21,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Search */}
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("SearchProduct", { category: "All" })
-        }
-      >
+      <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />
       </TouchableOpacity>
 

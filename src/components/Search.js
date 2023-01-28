@@ -2,8 +2,8 @@ import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../constant/colors";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 
-const Search = ({ enabled }) => {
-  let enable = enabled ? true : false;
+const Search = (props) => {
+  let enable = props.enabled ? true : false;
   return (
     <View style={styles.search}>
       <TextInput
@@ -12,6 +12,7 @@ const Search = ({ enabled }) => {
         selectTextOnFocus={enable}
         style={styles.input}
         placeholder="Search"
+        onChangeText={props.onChangeText}
       />
       <TouchableOpacity>
         <EvilIcons

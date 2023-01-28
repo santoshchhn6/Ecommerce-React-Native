@@ -11,6 +11,7 @@ import { COLORS } from "../constant/colors";
 import { categories } from "../data/data";
 
 const Category = ({ navigation }) => {
+  
   return (
     <View style={styles.container}>
       {/* Search */}
