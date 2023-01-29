@@ -29,7 +29,10 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
     case types.ADD_TO_CART: {
       return {
         ...state,
-        cart: [...state.cart, payload],
+        cart: [
+          ...state.cart,
+          { productId: payload.id, quantity: payload.quantity },
+        ],
       };
     }
 

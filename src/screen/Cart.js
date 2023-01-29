@@ -1,14 +1,4 @@
-import {
-  Button,
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  Touchable,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
@@ -19,27 +9,49 @@ import { useSelector } from "react-redux";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
-  const cart = useSelector((state) => state.cartReducer.cart);
-  console.log(cart);
+  const carts = useSelector((state) => state.cartReducer.cart);
+  let quantity = 1;
 
+  // const cartProduct = products.filter((product) =>
+  //   carts.map((c) => {
+  //     if (c.productId === product.id) {
+  //       let qty = c.quantity;
+  //       return { ...product, qty };
+  //     }
+  //   })
+  // );
   const cartProduct = products.filter((product) =>
-    cart.some((id) => id === product.id)
+    carts.some((c) => c.productId === product.id)
   );
-  // console.log(cartProduct);
+
+  const cartWithQty = cartProduct.map((product, i) => {
+    if (product.id === carts[i].productId) {
+      let qty = carts[i].quantity;
+
+      return { ...product, qty };
+    }
+  });
+
+  const getCounter = (data) => {
+    quantity = data;
+  };
   let totalPrice = 0;
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
+        {/* heading */}
         <Text style={styles.heading}>My Cart</Text>
         <ScrollView>
           <View style={styles.cartItems}>
-            {cartProduct.map((item) => {
-              let { id, title, images, price, instock, quantity, rating } =
+            {cartWithQty.map((item) => {
+              let { id, title, images, price, instock, quantity, rating, qty } =
                 item;
-              totalPrice += price * quantity;
+              // console.log(qty);
+              totalPrice += price * qty;
               return (
                 <View key={id} style={styles.cartItem}>
                   <View style={styles.cartItem_info_container}>
+                    {/* Image */}
                     <Image
                       style={styles.cartItem_img}
                       source={{ uri: images[0] }}
@@ -58,7 +70,11 @@ const Cart = ({ navigation }) => {
                     </View>
                   </View>
                   <View style={styles.cartItem_buy_container}>
-                    <Counter style={{ width: "40%" }} quantity={quantity} />
+                    <Counter
+                      style={{ width: "40%" }}
+                      quantity={qty}
+                      getCounter={getCounter}
+                    />
                     <View style={styles.cartItem_btn_container}>
                       <CustomButton title="Remove" />
                       <CustomButton title="Save for later" />
@@ -93,8 +109,7 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: 50,
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     overflow: "hidden",
     marginBottom: 80,
   },
@@ -107,12 +122,8 @@ const styles = StyleSheet.create({
 
   cartItems: {
     width: "100%",
-    // marginBottom: 80,
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
   },
   cartItem: {
-    // width: "100%",
     borderColor: COLORS.border,
     borderWidth: 1,
     borderRadius: 10,
@@ -128,12 +139,10 @@ const styles = StyleSheet.create({
   },
   cartItem_info_container: {
     flexDirection: "row",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     marginBottom: 5,
   },
   cartItem_img: {
-    // flex: 1,
     width: "40%",
     aspectRatio: 1,
     resizeMode: "contain",
@@ -155,8 +164,7 @@ const styles = StyleSheet.create({
   },
   cartItem_buy_container: {
     flexDirection: "row",
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
+
     marginBottom: 5,
   },
   cartItem_quantity: {
@@ -165,8 +173,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text_container: {
-    // backgroundColor: COLORS.secondaryColor,
-    width: 30,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: 5,

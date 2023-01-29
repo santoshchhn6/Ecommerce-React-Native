@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import CustomButton from "./CustomButton";
 import { COLORS } from "../constant/colors";
 
-const Counter = ({ quantity, style }) => {
+const Counter = ({ quantity, style, getCounter }) => {
   const [counter, setCounter] = useState(quantity);
   const decrement = () => {
     if (counter > 1) setCounter((c) => c - 1);
@@ -12,7 +12,10 @@ const Counter = ({ quantity, style }) => {
     if (counter < 10) setCounter((c) => c + 1);
   };
   return (
-    <View style={[styles.container, { ...style }]}>
+    <View
+      style={[styles.container, { ...style }]}
+      counter={getCounter(counter)}
+    >
       <CustomButton onPress={decrement} title="-" />
       <View style={styles.text_container}>
         <Text style={styles.text_qty}>{counter}</Text>

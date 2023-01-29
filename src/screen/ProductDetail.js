@@ -1,15 +1,12 @@
 import {
-  Alert,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
 import { COLORS } from "../constant/colors";
-// import { product } from "../data/data";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
 import CustomButton from "../components/CustomButton";
@@ -19,21 +16,26 @@ import Reviews from "../components/Reviews";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/action";
 
 const ProductDetail = ({ route, navigation }) => {
   const [liked, setLiked] = useState(false);
   const dispatch = useDispatch();
+  let quantity = 1;
 
   let { product } = route.params;
   const { id, title, images, price, details, instock, sizes, colors } =
     product[0];
 
   const handleAddToCart = (id) => {
-    dispatch(addToCart(id));
-    Alert.alert(id);
-    navigation.navigate("Cart");
+    dispatch(addToCart({ id, quantity }));
+    console.log({ id, quantity });
+    // navigation.navigate("Cart");
+  };
+
+  const getCounter = (data) => {
+    quantity = data;
   };
   return (
     <View style={styles.container}>
@@ -80,9 +82,10 @@ const ProductDetail = ({ route, navigation }) => {
             <Text style={styles.price}>Rs.{price}</Text>
           </Panel>
           <Panel>
-            {/* Stock */}
             <View style={[styles.row, { marginBottom: 10 }]}>
-              <Counter quantity={1} />
+              {/* Quantity */}
+              <Counter quantity={1} getCounter={getCounter} />
+              {/* Stock */}
               {instock ? (
                 <Text
                   style={{
