@@ -1,26 +1,42 @@
 import {
-  Button,
-  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-import { cart, orders } from "../data/data";
+// import { cart, orders } from "../data/data";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
-import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import AddressDetail from "../components/AddressDetail";
+import { useSelector } from "react-redux";
 
 const OrderSummary = ({ navigation }) => {
+  const products = useSelector((state) => state.productReducer.products);
+  const carts = useSelector((state) => state.cartReducer.cart);
+  // const dispatch = useDispatch();
+
+  const cartProduct = products?.filter((product) =>
+    carts?.some((c) => c.productId === product.id)
+  );
+
+  const cartWithQty = cartProduct?.map((product, i) => {
+    if (product.id === carts[i].productId) {
+      let qty = carts[i].quantity;
+
+      return { ...product, qty };
+    }
+  });
+  const handleProductPress = (id) => {
+    const product = products.filter((p) => p.id === id);
+    navigation.navigate("ProductDetail", { product });
+  };
   let totalPrice = 0;
   return (
     <View style={styles.container}>
@@ -28,14 +44,21 @@ const OrderSummary = ({ navigation }) => {
         <ScrollView>
           <AddressDetail />
           <View style={styles.cartItems}>
-            {orders.map((item) => {
-              let { id, title, img, price, quantity, rating, sizes, colors } =
+            {cartWithQty.map((item) => {
+              let { id, title, images, price, qty, rating, sizes, colors } =
                 item;
-              totalPrice += price * quantity;
+              totalPrice += price * qty;
               return (
-                <View key={id} style={styles.cartItem}>
+                <TouchableOpacity
+                  key={id}
+                  style={styles.cartItem}
+                  onPress={() => handleProductPress(id)}
+                >
                   <View style={styles.cartItem_info_container}>
-                    <Image style={styles.cartItem_img} source={{ uri: img }} />
+                    <Image
+                      style={styles.cartItem_img}
+                      source={{ uri: images[0] }}
+                    />
                     <View style={styles.cartItem_info}>
                       <Text style={styles.cartItem_title}>{title}</Text>
                       {sizes && (
@@ -50,17 +73,17 @@ const OrderSummary = ({ navigation }) => {
                           <ColorPallet colors={colors} />
                         </View>
                       )}
-                      <Text style={styles.text2}>Quantity: {quantity}</Text>
+                      <Text style={styles.text2}>Quantity: {qty}</Text>
                       <View>
                         <Rating rate={rating} />
                         <Text style={styles.cartItem_price}>
                           {toRupee(price)}
                         </Text>
-                        <TouchableOpacity></TouchableOpacity>
+                        {/* <TouchableOpacity></TouchableOpacity> */}
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </View>

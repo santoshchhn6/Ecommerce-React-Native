@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
@@ -14,7 +21,7 @@ const Cart = ({ navigation }) => {
   const dispatch = useDispatch();
   let cartQty = 1;
 
-  console.log(carts);
+  // console.log(carts);
 
   const cartProduct = products?.filter((product) =>
     carts?.some((c) => c.productId === product.id)
@@ -32,6 +39,11 @@ const Cart = ({ navigation }) => {
     cartQty = data;
     // console.log(cartQty)
   };
+
+  const handleProductPress = (id) => {
+    const product = products.filter((p) => p.id === id);
+    navigation.navigate("ProductDetail", { product });
+  };
   let totalPrice = 0;
   return (
     <View style={styles.container}>
@@ -45,7 +57,11 @@ const Cart = ({ navigation }) => {
               // console.log(qty);
               totalPrice += price * qty;
               return (
-                <View key={id} style={styles.cartItem}>
+                <TouchableOpacity
+                  key={id}
+                  style={styles.cartItem}
+                  onPress={() => handleProductPress(id)}
+                >
                   <View style={styles.cartItem_info_container}>
                     {/* Image */}
                     <Image
@@ -84,7 +100,7 @@ const Cart = ({ navigation }) => {
                       <CustomButton title="Save for later" />
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </View>

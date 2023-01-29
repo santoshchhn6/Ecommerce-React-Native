@@ -30,8 +30,6 @@ const ProductDetail = ({ route, navigation }) => {
 
   const handleAddToCart = (id) => {
     dispatch(addToCart({ id, quantity }));
-    console.log({ id, quantity });
-    // navigation.navigate("Cart");
   };
 
   const getCounter = (data) => {
@@ -63,14 +61,14 @@ const ProductDetail = ({ route, navigation }) => {
           <Panel>
             <Text style={styles.text2}>{title}</Text>
             {/* Color */}
-            {colors && (
+            {colors.length !== 0 && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Color :</Text>
                 <ColorPallet colors={colors} />
               </View>
             )}
             {/* Size */}
-            {sizes && (
+            {sizes.length !== 0 && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Size :</Text>
                 <Size sizes={sizes} />
