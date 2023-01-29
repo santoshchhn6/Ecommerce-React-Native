@@ -3,13 +3,16 @@ import React, { useState } from "react";
 import CustomButton from "./CustomButton";
 import { COLORS } from "../constant/colors";
 
-const Counter = ({ quantity, style, getCounter }) => {
+const Counter = ({ quantity, style, getCounter, onInc, onDec }) => {
   const [counter, setCounter] = useState(quantity);
   const decrement = () => {
     if (counter > 1) setCounter((c) => c - 1);
+    onDec && onDec();
   };
   const increment = () => {
     if (counter < 10) setCounter((c) => c + 1);
+
+    onInc && onInc();
   };
   return (
     <View

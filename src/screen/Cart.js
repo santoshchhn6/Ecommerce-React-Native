@@ -5,26 +5,22 @@ import CustomButton from "../components/CustomButton";
 import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { decQty, incQty, removeFromCart } from "../redux/action";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
   const carts = useSelector((state) => state.cartReducer.cart);
-  let quantity = 1;
+  const dispatch = useDispatch();
+  let cartQty = 1;
 
-  // const cartProduct = products.filter((product) =>
-  //   carts.map((c) => {
-  //     if (c.productId === product.id) {
-  //       let qty = c.quantity;
-  //       return { ...product, qty };
-  //     }
-  //   })
-  // );
-  const cartProduct = products.filter((product) =>
-    carts.some((c) => c.productId === product.id)
+  console.log(carts);
+
+  const cartProduct = products?.filter((product) =>
+    carts?.some((c) => c.productId === product.id)
   );
 
-  const cartWithQty = cartProduct.map((product, i) => {
+  const cartWithQty = cartProduct?.map((product, i) => {
     if (product.id === carts[i].productId) {
       let qty = carts[i].quantity;
 
@@ -33,7 +29,8 @@ const Cart = ({ navigation }) => {
   });
 
   const getCounter = (data) => {
-    quantity = data;
+    cartQty = data;
+    // console.log(cartQty)
   };
   let totalPrice = 0;
   return (
@@ -44,8 +41,7 @@ const Cart = ({ navigation }) => {
         <ScrollView>
           <View style={styles.cartItems}>
             {cartWithQty.map((item) => {
-              let { id, title, images, price, instock, quantity, rating, qty } =
-                item;
+              let { id, title, images, price, instock, rating, qty } = item;
               // console.log(qty);
               totalPrice += price * qty;
               return (
@@ -63,20 +59,28 @@ const Cart = ({ navigation }) => {
                         <Text style={styles.cartItem_price}>
                           {toRupee(price)}
                         </Text>
-                        <Text style={styles.cartItem_instock}>
-                          instock:{instock}
-                        </Text>
+                        {instock ? (
+                          <Text style={styles.instock}>instock</Text>
+                        ) : (
+                          <Text style={styles.outofstock}>OutOfStock</Text>
+                        )}
                       </View>
                     </View>
                   </View>
                   <View style={styles.cartItem_buy_container}>
+                    {/* Quantity */}
                     <Counter
                       style={{ width: "40%" }}
                       quantity={qty}
                       getCounter={getCounter}
+                      onInc={() => dispatch(incQty(id))}
+                      onDec={() => dispatch(decQty(id))}
                     />
                     <View style={styles.cartItem_btn_container}>
-                      <CustomButton title="Remove" />
+                      <CustomButton
+                        onPress={() => dispatch(removeFromCart(id))}
+                        title="Remove"
+                      />
                       <CustomButton title="Save for later" />
                     </View>
                   </View>
@@ -159,8 +163,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  cartItem_instock: {
+  instock: {
     color: COLORS.green,
+  },
+  outofstock: {
+    color: COLORS.red,
   },
   cartItem_buy_container: {
     flexDirection: "row",

@@ -1,3 +1,4 @@
+import { cart } from "../data/data";
 import { types } from "./action";
 
 const productInitialState = {
@@ -32,6 +33,48 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
         cart: [
           ...state.cart,
           { productId: payload.id, quantity: payload.quantity },
+        ],
+      };
+    }
+    case types.REMOVE_FROM_CART: {
+      return {
+        ...state,
+        cart: [...state.cart.filter((c) => c.productId !== payload)],
+      };
+    }
+    case types.INC_CART_QTY: {
+      return {
+        ...state,
+        cart: [
+          ...state.cart.map((c) => {
+            const { productId, quantity } = c;
+            if (productId === payload && quantity < 10) {
+              return { productId, quantity: quantity + 1 };
+            } else {
+              return {
+                productId,
+                quantity,
+              };
+            }
+          }),
+        ],
+      };
+    }
+    case types.DEC_CART_QTY: {
+      return {
+        ...state,
+        cart: [
+          ...state.cart.map((c) => {
+            const { productId, quantity } = c;
+            if (productId === payload && quantity > 1) {
+              return { productId, quantity: quantity - 1 };
+            } else {
+              return {
+                productId,
+                quantity,
+              };
+            }
+          }),
         ],
       };
     }
