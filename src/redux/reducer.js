@@ -33,7 +33,8 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
         cart: [
           ...state.cart,
           {
-            productId: payload.id,
+            id: payload.cartId,
+            productId: payload.productId,
             quantity: payload.quantity,
             color: payload.color,
           },
@@ -43,7 +44,7 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
     case types.REMOVE_FROM_CART: {
       return {
         ...state,
-        cart: [...state.cart.filter((c) => c.productId !== payload)],
+        cart: [...state.cart.filter((c) => c.id !== payload)],
       };
     }
     case types.INC_CART_QTY: {
@@ -51,15 +52,11 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
         ...state,
         cart: [
           ...state.cart.map((c) => {
-            const { productId, quantity, color } = c;
+            const { productId, quantity } = c;
             if (productId === payload && quantity < 10) {
-              return { productId, color, quantity: quantity + 1 };
+              return { ...c, quantity: quantity + 1 };
             } else {
-              return {
-                productId,
-                quantity,
-                color,
-              };
+              return c;
             }
           }),
         ],
@@ -72,13 +69,9 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
           ...state.cart.map((c) => {
             const { productId, quantity } = c;
             if (productId === payload && quantity > 1) {
-              return { productId, color, quantity: quantity - 1 };
+              return { ...c, quantity: quantity - 1 };
             } else {
-              return {
-                productId,
-                quantity,
-                color,
-              };
+              return c;
             }
           }),
         ],

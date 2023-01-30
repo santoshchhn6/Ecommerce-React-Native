@@ -1,5 +1,4 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
 import { COLORS } from "./src/constant/colors";
 import Login from "./src/screen/Login";
@@ -9,10 +8,12 @@ import Payment from "./src/screen/Payment";
 import ProductDetail from "./src/screen/ProductDetail";
 import Register from "./src/screen/Register";
 import SearchProduct from "./src/screen/SearchProduct";
-const Stack = createStackNavigator();
 import * as Application from "expo-application";
 import { Provider } from "react-redux";
 import { Store } from "./src/redux/store";
+
+import { createStackNavigator } from "@react-navigation/stack";
+const Stack = createStackNavigator();
 
 export default function App() {
   console.log("Android Id:" + Application.androidId);
@@ -31,7 +32,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="SearchProduct" component={SearchProduct} />
-          <Stack.Screen name="ProductDetail" component={ProductDetail} />
+          {/* <Stack.Screen name="ProductDetail" component={ProductDetail} /> */}
           <Stack.Screen name="OrderSummary" component={OrderSummary} />
           <Stack.Screen name="Payment" component={Payment} />
           <Stack.Screen name="Register" component={Register} />

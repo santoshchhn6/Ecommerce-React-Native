@@ -9,9 +9,23 @@ import {
 import Search from "../components/Search";
 import { COLORS } from "../constant/colors";
 import { categories } from "../data/data";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProductDetail from "./ProductDetail";
+const Stack = createStackNavigator();
 
-const Category = ({ navigation }) => {
-  
+const Category = () => {
+  return (
+    <Stack.Navigator
+      defaultScreenOptions="ProductCategories"
+      screenOptions={{ header: () => null }}
+    >
+      <Stack.Screen name="ProductCategories" component={ProductCategories} />
+      <Stack.Screen name="ProductDetail" component={ProductDetail} />
+    </Stack.Navigator>
+  );
+};
+
+const ProductCategories = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Search */}
@@ -52,15 +66,13 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 2,
+
     overflow: "hidden",
   },
   Categories: {
     marginTop: 10,
     width: "100%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
@@ -93,7 +105,5 @@ const styles = StyleSheet.create({
   category_title: {
     height: 18,
     color: COLORS.gray,
-    // borderColor: COLORS.gray,
-    // borderWidth: 1,
   },
 });

@@ -1,8 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../constant/colors";
 import Svg, { Path } from "react-native-svg";
+import Badge from "./Badge";
+import { useSelector } from "react-redux";
 
 const CustomTabBarButton = (props) => {
+  const carts = useSelector((state) => state.cartReducer.cart);
   const { children, accessibilityState, onPress } = props;
 
   if (accessibilityState.selected)
@@ -18,6 +21,9 @@ const CustomTabBarButton = (props) => {
           </Svg>
           <View style={styles.svgGapFiller} />
         </View>
+        {props.to === "/Main/Cart" && carts.length !== 0 && (
+          <Badge style={styles.badge} text={carts.length} />
+        )}
         <TouchableOpacity
           activeOpacity={1}
           onPress={onPress}
@@ -29,13 +35,18 @@ const CustomTabBarButton = (props) => {
     );
   else
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={onPress}
-        style={styles.inactiveBtn}
-      >
-        {children}
-      </TouchableOpacity>
+      <>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={onPress}
+          style={styles.inactiveBtn}
+        >
+          {props.to === "/Main/Cart" && carts.length !== 0 && (
+            <Text style={styles.badge2}>{carts.length}</Text>
+          )}
+          {children}
+        </TouchableOpacity>
+      </>
     );
 };
 
@@ -46,6 +57,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  badge: {
+    position: "absolute",
+    zIndex: 10,
+    top: -32,
+    right: 20,
+  },
+  badge2: {
+    position: "absolute",
+    zIndex: 10,
+    top: 16,
+    right: 57,
+    fontSize: 12,
+    color: COLORS.white,
+  },
   activeBtn: {
     position: "absolute",
     width: 50,
@@ -55,14 +80,11 @@ const styles = StyleSheet.create({
     top: -22,
     justifyContent: "center",
     alignItems: "center",
-
     shadowColor: COLORS.primaryColor,
-    // shadowOpacity: 0.8,
-    // shadowOffset: { width: 2, height: 2 },
-    // shadowRadius: 15,
     elevation: 10,
     backgroundColor: COLORS.primaryColor,
   },
+
   inactiveBtn: {
     flex: 1,
     backgroundColor: COLORS.dark,

@@ -17,7 +17,10 @@ const Home = ({ navigation }) => {
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
-    navigation.navigate("ProductDetail", { product });
+    navigation.navigate("Category", {
+      screen: "ProductDetail",
+      params: { product },
+    });
   };
   return (
     <View style={styles.container}>
@@ -89,8 +92,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 2,
+
     overflow: "hidden",
   },
 
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
   },
   category_img: {
     flex: 1,
-    // resizeMode: "contain",
   },
   text: {
     color: COLORS.lightGray,

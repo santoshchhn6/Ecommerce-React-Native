@@ -22,22 +22,32 @@ const Cart = ({ navigation }) => {
   const dispatch = useDispatch();
   let cartQty = 1;
 
-  // console.log(carts);
+  console.log(carts);
 
-  const cartProduct = products?.filter((product) =>
-    carts?.some((c) => c.productId === product.id)
-  );
-
-  const cartWithQty = cartProduct?.map((product, i) => {
-    if (product.id === carts[i].productId) {
-      const { quantity, color } = carts[i];
-      return { ...product, quantity, color };
+  const cartWithQty = [];
+  for (let i = 0; i < products.length; i++) {
+    for (let j = 0; j < carts.length; j++) {
+      const { id, productId, quantity, color } = carts[j];
+      if (productId === products[i].id) {
+        cartWithQty.push({ ...products[i], quantity, color, cartId: id });
+      }
     }
-  });
+  }
+  // console.log(cartWithQty.length);
+
+  // const cartProduct = products?.filter((product) =>
+  //   carts?.some((c) => c.productId === product.id)
+  // );
+
+  // const cartWithQty = cartProduct?.map((product, i) => {
+  //   if (product.id === carts[i].productId) {
+  //     const { quantity, color } = carts[i];
+  //     return { ...product, quantity, color };
+  //   }
+  // });
 
   const getCounter = (data) => {
     cartQty = data;
-    // console.log(cartQty)
   };
 
   const handleProductPress = (id) => {
@@ -50,12 +60,14 @@ const Cart = ({ navigation }) => {
       <View style={styles.wrapper}>
         {/* heading */}
         <Text style={styles.heading}>My Cart</Text>
+
         {carts.length !== 0 ? (
           <ScrollView>
             <View style={styles.cartItems}>
-              {cartWithQty.map((item) => {
+              {cartWithQty.map((item, i) => {
                 let {
                   id,
+                  cartId,
                   title,
                   images,
                   price,
@@ -68,7 +80,7 @@ const Cart = ({ navigation }) => {
                 totalPrice += price * quantity;
                 return (
                   <TouchableOpacity
-                    key={id}
+                    key={i}
                     style={styles.cartItem}
                     onPress={() => handleProductPress(id)}
                   >
@@ -109,7 +121,7 @@ const Cart = ({ navigation }) => {
                       />
                       <View style={styles.cartItem_btn_container}>
                         <CustomButton
-                          onPress={() => dispatch(removeFromCart(id))}
+                          onPress={() => dispatch(removeFromCart(cartId))}
                           title="Remove"
                         />
                         <CustomButton title="Save for later" />
@@ -129,7 +141,7 @@ const Cart = ({ navigation }) => {
             />
           </ScrollView>
         ) : (
-          <Text>No items</Text>
+          <Text style={styles.text}>No items</Text>
         )}
       </View>
     </View>
@@ -243,5 +255,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginTop: 100,
+  },
+  text2: {
+    fontSize: 18,
   },
 });

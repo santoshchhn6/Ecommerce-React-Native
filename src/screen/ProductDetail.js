@@ -18,11 +18,14 @@ import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/action";
+import FeedBack from "../components/FeedBack";
+import uuid from "react-native-uuid";
 
 const ProductDetail = ({ route, navigation }) => {
   const [liked, setLiked] = useState(false);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
+  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
   let quantity = 1;
 
@@ -31,8 +34,9 @@ const ProductDetail = ({ route, navigation }) => {
     product[0];
 
   const handleAddToCart = (id) => {
-    // console.log(color);
-    dispatch(addToCart({ id, quantity, color }));
+    const cartId = uuid.v4();
+    dispatch(addToCart({ cartId, productId: id, quantity, color }));
+    showFeedBack();
   };
 
   const getCounter = (data) => {
@@ -40,8 +44,14 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const getSelectedColor = (c) => {
-    // console.log(c);
     setColor(c);
+  };
+
+  const showFeedBack = () => {
+    setVisible(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 1000);
   };
   return (
     <View style={styles.container}>
@@ -50,6 +60,7 @@ const ProductDetail = ({ route, navigation }) => {
         contentContainerStyle={{ alignContent: "center" }}
         showsVerticalScrollIndicator={false}
       >
+        <FeedBack text="Added To Cart" visible={visible} />
         {/* Images */}
         <View style={styles.wrapper}>
           <Panel style={styles.img_container}>
@@ -163,16 +174,10 @@ const styles = StyleSheet.create({
   scrollView: {
     marginTop: 30,
     width: "100%",
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
   },
   wrapper: {
     width: "100%",
-    // borderColor: COLORS.primaryColor,
-    // borderWidth: 1,
     alignItems: "center",
-
-    // overflow: "hidden",
   },
 
   colors: {
@@ -191,7 +196,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     marginRight: 5,
-    // backgroundColor: COLORS.secondaryColor,
   },
   btn_text: {
     color: COLORS.gray,
@@ -233,7 +237,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   panel: {
-    // borderRadius: 10,
     width: "100%",
     borderColor: COLORS.border,
     borderWidth: 1,
