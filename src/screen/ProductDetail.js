@@ -21,6 +21,8 @@ import { addToCart } from "../redux/action";
 
 const ProductDetail = ({ route, navigation }) => {
   const [liked, setLiked] = useState(false);
+  const [color, setColor] = useState(null);
+  const [size, setSize] = useState(null);
   const dispatch = useDispatch();
   let quantity = 1;
 
@@ -29,11 +31,17 @@ const ProductDetail = ({ route, navigation }) => {
     product[0];
 
   const handleAddToCart = (id) => {
-    dispatch(addToCart({ id, quantity }));
+    // console.log(color);
+    dispatch(addToCart({ id, quantity, color }));
   };
 
   const getCounter = (data) => {
     quantity = data;
+  };
+
+  const getSelectedColor = (c) => {
+    // console.log(c);
+    setColor(c);
   };
   return (
     <View style={styles.container}>
@@ -64,7 +72,10 @@ const ProductDetail = ({ route, navigation }) => {
             {colors.length !== 0 && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Color :</Text>
-                <ColorPallet colors={colors} />
+                <ColorPallet
+                  colors={colors}
+                  getSelectedColor={getSelectedColor}
+                />
               </View>
             )}
             {/* Size */}

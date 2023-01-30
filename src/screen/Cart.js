@@ -14,6 +14,7 @@ import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
 import { useDispatch, useSelector } from "react-redux";
 import { decQty, incQty, removeFromCart } from "../redux/action";
+import ColorPallet from "../components/ColorPallet";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
@@ -29,9 +30,8 @@ const Cart = ({ navigation }) => {
 
   const cartWithQty = cartProduct?.map((product, i) => {
     if (product.id === carts[i].productId) {
-      let qty = carts[i].quantity;
-
-      return { ...product, qty };
+      const { quantity, color } = carts[i];
+      return { ...product, quantity, color };
     }
   });
 
@@ -50,69 +50,87 @@ const Cart = ({ navigation }) => {
       <View style={styles.wrapper}>
         {/* heading */}
         <Text style={styles.heading}>My Cart</Text>
-        <ScrollView>
-          <View style={styles.cartItems}>
-            {cartWithQty.map((item) => {
-              let { id, title, images, price, instock, rating, qty } = item;
-              // console.log(qty);
-              totalPrice += price * qty;
-              return (
-                <TouchableOpacity
-                  key={id}
-                  style={styles.cartItem}
-                  onPress={() => handleProductPress(id)}
-                >
-                  <View style={styles.cartItem_info_container}>
-                    {/* Image */}
-                    <Image
-                      style={styles.cartItem_img}
-                      source={{ uri: images[0] }}
-                    />
-                    <View style={styles.cartItem_info}>
-                      <Text style={styles.cartItem_title}>{title}</Text>
-                      <View>
-                        <Rating rate={rating} />
-                        <Text style={styles.cartItem_price}>
-                          {toRupee(price)}
-                        </Text>
-                        {instock ? (
-                          <Text style={styles.instock}>instock</Text>
-                        ) : (
-                          <Text style={styles.outofstock}>OutOfStock</Text>
-                        )}
+        {carts.length !== 0 ? (
+          <ScrollView>
+            <View style={styles.cartItems}>
+              {cartWithQty.map((item) => {
+                let {
+                  id,
+                  title,
+                  images,
+                  price,
+                  instock,
+                  rating,
+                  quantity,
+                  color,
+                } = item;
+                // console.log(qty);
+                totalPrice += price * quantity;
+                return (
+                  <TouchableOpacity
+                    key={id}
+                    style={styles.cartItem}
+                    onPress={() => handleProductPress(id)}
+                  >
+                    <View style={styles.cartItem_info_container}>
+                      {/* Image */}
+                      <Image
+                        style={styles.cartItem_img}
+                        source={{ uri: images[0] }}
+                      />
+                      <View style={styles.cartItem_info}>
+                        <Text style={styles.cartItem_title}>{title}</Text>
+                        <View>
+                          {/* SelectedColor */}
+                          <View style={styles.colors}>
+                            <Text style={styles.text2}>Color :</Text>
+                            <ColorPallet colors={[color]} />
+                          </View>
+                          <Rating rate={rating} />
+                          <Text style={styles.cartItem_price}>
+                            {toRupee(price)}
+                          </Text>
+                          {instock ? (
+                            <Text style={styles.instock}>instock</Text>
+                          ) : (
+                            <Text style={styles.outofstock}>OutOfStock</Text>
+                          )}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                  <View style={styles.cartItem_buy_container}>
-                    {/* Quantity */}
-                    <Counter
-                      style={{ width: "40%" }}
-                      quantity={qty}
-                      getCounter={getCounter}
-                      onInc={() => dispatch(incQty(id))}
-                      onDec={() => dispatch(decQty(id))}
-                    />
-                    <View style={styles.cartItem_btn_container}>
-                      <CustomButton
-                        onPress={() => dispatch(removeFromCart(id))}
-                        title="Remove"
+                    <View style={styles.cartItem_buy_container}>
+                      {/* Quantity */}
+                      <Counter
+                        style={{ width: "40%" }}
+                        quantity={quantity}
+                        getCounter={getCounter}
+                        onInc={() => dispatch(incQty(id))}
+                        onDec={() => dispatch(decQty(id))}
                       />
-                      <CustomButton title="Save for later" />
+                      <View style={styles.cartItem_btn_container}>
+                        <CustomButton
+                          onPress={() => dispatch(removeFromCart(id))}
+                          title="Remove"
+                        />
+                        <CustomButton title="Save for later" />
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <PriceDetail price={totalPrice} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <PriceDetail price={totalPrice} />
 
-          <CustomButton
-            onPress={() => navigation.navigate("OrderSummary")}
-            style={styles.btn}
-            textStyle={styles.btn_txt}
-            title="Place Order"
-          />
-        </ScrollView>
+            <CustomButton
+              onPress={() => navigation.navigate("OrderSummary")}
+              style={styles.btn}
+              textStyle={styles.btn_txt}
+              title="Place Order"
+            />
+          </ScrollView>
+        ) : (
+          <Text>No items</Text>
+        )}
       </View>
     </View>
   );
@@ -220,5 +238,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: COLORS.white,
+  },
+  colors: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
   },
 });

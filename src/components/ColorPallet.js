@@ -3,14 +3,18 @@ import React, { useState } from "react";
 import { COLORS } from "../constant/colors";
 import Entypo from "react-native-vector-icons/Entypo";
 
-const ColorPallet = ({ colors }) => {
-  const [active, setActive] = useState(0);
+const ColorPallet = ({ colors, getSelectedColor }) => {
+  const [active, setActive] = useState(null);
+  const handleSelectColor = (color, i) => {
+    setActive(i);
+    getSelectedColor && getSelectedColor(color);
+  };
   return (
     <View style={styles.container}>
       {colors.map((color, i) => (
         <TouchableOpacity
           key={i}
-          onPress={() => setActive(i)}
+          onPress={() => handleSelectColor(color, i)}
           style={[styles.color, { backgroundColor: color }]}
         >
           {active === i && (
@@ -45,8 +49,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   icon: {
-    // borderWidth: 1,
-    // borderColor: "red",
     borderRadius: 10,
     backgroundColor: COLORS.border,
   },

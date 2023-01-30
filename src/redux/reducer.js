@@ -32,7 +32,11 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
         ...state,
         cart: [
           ...state.cart,
-          { productId: payload.id, quantity: payload.quantity },
+          {
+            productId: payload.id,
+            quantity: payload.quantity,
+            color: payload.color,
+          },
         ],
       };
     }
@@ -47,13 +51,14 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
         ...state,
         cart: [
           ...state.cart.map((c) => {
-            const { productId, quantity } = c;
+            const { productId, quantity, color } = c;
             if (productId === payload && quantity < 10) {
-              return { productId, quantity: quantity + 1 };
+              return { productId, color, quantity: quantity + 1 };
             } else {
               return {
                 productId,
                 quantity,
+                color,
               };
             }
           }),
@@ -67,11 +72,12 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
           ...state.cart.map((c) => {
             const { productId, quantity } = c;
             if (productId === payload && quantity > 1) {
-              return { productId, quantity: quantity - 1 };
+              return { productId, color, quantity: quantity - 1 };
             } else {
               return {
                 productId,
                 quantity,
+                color,
               };
             }
           }),
