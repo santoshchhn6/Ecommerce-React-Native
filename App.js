@@ -33,7 +33,7 @@ export default function App() {
           <Stack.Screen
             name="SearchProduct"
             component={SearchProduct}
-            options={{ headerShown: false }}
+            // options={{ headerShown: false }}
           />
           <Stack.Screen name="OrderSummary" component={OrderSummary} />
           <Stack.Screen name="Payment" component={Payment} />

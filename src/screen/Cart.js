@@ -13,7 +13,13 @@ import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
 import { useDispatch, useSelector } from "react-redux";
-import { addToWishList, decQty, incQty, removeFromCart } from "../redux/action";
+import {
+  addToPayment,
+  addToWishList,
+  decQty,
+  incQty,
+  removeFromCart,
+} from "../redux/action";
 import ColorPallet from "../components/ColorPallet";
 import uuid from "react-native-uuid";
 
@@ -48,6 +54,11 @@ const Cart = ({ navigation }) => {
     // console.log(wishListId);
     dispatch(addToWishList({ id: wishListId, productId: id }));
     dispatch(removeFromCart(cartId));
+  };
+
+  const handlePlaceOrder = () => {
+    dispatch(addToPayment(cartWithQty));
+    navigation.navigate("OrderSummary");
   };
   return (
     <View style={styles.container}>
@@ -131,7 +142,7 @@ const Cart = ({ navigation }) => {
             <PriceDetail price={totalPrice} />
 
             <CustomButton
-              onPress={() => navigation.navigate("OrderSummary")}
+              onPress={handlePlaceOrder}
               style={styles.btn}
               textStyle={styles.btn_txt}
               title="Place Order"

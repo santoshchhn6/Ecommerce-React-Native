@@ -71,6 +71,7 @@ export const addProduct = async ({
   colors,
   details,
   images,
+  defaultImageIndex,
 }) => {
   const promise = new Promise((resolve, reject) => {
     addDoc(collectionRef, {
@@ -82,6 +83,7 @@ export const addProduct = async ({
       colors,
       details,
       images,
+      defaultImageIndex,
     })
       .then(() => resolve("Product Created!"))
       .catch((err) => reject(err));

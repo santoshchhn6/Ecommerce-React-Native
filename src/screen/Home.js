@@ -11,9 +11,10 @@ import { categories } from "../data/data";
 import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 
 const Home = ({ navigation }) => {
-  const products = useSelector((state) => state.productReducer.products);
+  const { products, loading } = useSelector((state) => state.productReducer);
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
@@ -24,6 +25,7 @@ const Home = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
+      {loading && <Loading />}
       {/* Search */}
       <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />
@@ -87,6 +89,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 40,
     backgroundColor: "white",
     alignItems: "center",
   },

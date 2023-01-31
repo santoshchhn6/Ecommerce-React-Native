@@ -17,6 +17,7 @@ const Category = () => {
   return (
     <Stack.Navigator
       initialRouteName="ProductCategories"
+      // defaultScreenOptions="ProductCategories"
       screenOptions={{ header: () => null }}
     >
       <Stack.Screen name="ProductCategories" component={ProductCategories} />

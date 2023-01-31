@@ -17,9 +17,10 @@ import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
 import { useDispatch } from "react-redux";
-import { addToCart, addToWishList, removeFromWishList } from "../redux/action";
+import { addToCart, addToPayment, addToWishList } from "../redux/action";
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
+import toRupee from "../js/toRupee";
 
 const ProductDetail = ({ route, navigation }) => {
   const [liked, setLiked] = useState(false);
@@ -64,6 +65,11 @@ const ProductDetail = ({ route, navigation }) => {
       dispatch(addToWishList({ id: wishListId, productId: id }));
     }
     setLiked(!liked);
+  };
+
+  const handleBuyNow = () => {
+    dispatch(addToPayment([{ ...product[0], quantity }]));
+    navigation.navigate("OrderSummary");
   };
   return (
     <View style={styles.container}>
@@ -111,7 +117,7 @@ const ProductDetail = ({ route, navigation }) => {
             {/* Rating */}
             {/* <Rating rate={rating} /> */}
             {/* Price */}
-            <Text style={styles.price}>Rs.{price}</Text>
+            <Text style={styles.price}>{toRupee(price)}</Text>
           </Panel>
           <Panel>
             <View style={[styles.row, { marginBottom: 10 }]}>
@@ -151,6 +157,7 @@ const ProductDetail = ({ route, navigation }) => {
                 style={styles.btn_buy}
                 title="Buy Now"
                 textStyle={styles.btn_buy_text}
+                onPress={handleBuyNow}
               />
             </View>
           </Panel>

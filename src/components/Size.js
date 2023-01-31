@@ -25,9 +25,10 @@ export default Size;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    flexWrap: "wrap",
   },
   btn: {
-    marginLeft: 5,
+    margin: 5,
   },
   active_btn: {
     backgroundColor: COLORS.dark,

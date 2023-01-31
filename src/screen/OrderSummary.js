@@ -19,18 +19,9 @@ import { useSelector } from "react-redux";
 
 const OrderSummary = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
-  const carts = useSelector((state) => state.cartReducer.cart);
-  // const dispatch = useDispatch();
+  const payment = useSelector((state) => state.paymentReducer.payment);
 
-  const cartWithQty = [];
-  for (let i = 0; i < products.length; i++) {
-    for (let j = 0; j < carts.length; j++) {
-      const { id, productId, quantity, color } = carts[j];
-      if (productId === products[i].id) {
-        cartWithQty.push({ ...products[i], quantity, color, cartId: id });
-      }
-    }
-  }
+  // console.log(payment);
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
@@ -43,20 +34,34 @@ const OrderSummary = ({ navigation }) => {
         <ScrollView>
           <AddressDetail />
           <View style={styles.cartItems}>
-            {cartWithQty.map((item) => {
-              let { id, title, images, price, quantity, rating, sizes, color } =
-                item;
+            {payment.map((item, i) => {
+              let {
+                id,
+                title,
+                images,
+                defaultImageIndex,
+                price,
+                quantity,
+                rating,
+                sizes,
+                color,
+              } = item;
               totalPrice += price * quantity;
+              // console.log(price);
               return (
                 <TouchableOpacity
-                  key={id}
+                  key={i}
                   style={styles.cartItem}
                   onPress={() => handleProductPress(id)}
                 >
                   <View style={styles.cartItem_info_container}>
                     <Image
                       style={styles.cartItem_img}
-                      source={{ uri: images[0] }}
+                      source={{
+                        uri: defaultImageIndex
+                          ? images[defaultImageIndex]
+                          : images[0],
+                      }}
                     />
                     <View style={styles.cartItem_info}>
                       <Text style={styles.cartItem_title}>{title}</Text>

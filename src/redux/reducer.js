@@ -3,6 +3,7 @@ import { types } from "./action";
 
 const productInitialState = {
   products: [],
+  loading: false,
 };
 
 export const productReducer = (
@@ -14,6 +15,12 @@ export const productReducer = (
       return {
         ...state,
         products: payload,
+      };
+    }
+    case types.SET_PRODUCT_LOADING: {
+      return {
+        ...state,
+        loading: payload,
       };
     }
 
@@ -106,6 +113,24 @@ export const wishListReducer = (
       return {
         ...state,
         wishList: [...state.wishList.filter((w) => w.id !== payload)],
+      };
+    }
+
+    default:
+      return state;
+  }
+};
+const paymentInitialState = {
+  payment: [],
+};
+export const paymentReducer = (
+  state = paymentInitialState,
+  { type, payload }
+) => {
+  switch (type) {
+    case types.ADD_TO_PAYMENT: {
+      return {
+        payment: payload,
       };
     }
 

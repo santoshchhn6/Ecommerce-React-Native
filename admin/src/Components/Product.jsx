@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { SketchPicker, SwatchesPicker } from "react-color";
+import React, { useState } from "react";
+import { SwatchesPicker } from "react-color";
 import { addProduct, addProductImage, getProduct } from "../firebase";
 import Loading from "./Loading";
 
@@ -14,8 +14,8 @@ const Product = () => {
   const [colors, setColors] = useState([]);
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
-
   const [visible, setVisible] = useState(false);
+  const [defaultImage, setDefaultImage] = useState(0);
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -89,6 +89,7 @@ const Product = () => {
       colors,
       details: detailObj,
       images: imgUrls,
+      defaultImageIndex: defaultImage,
     };
 
     addProduct(product)
@@ -240,11 +241,24 @@ const Product = () => {
             onChange={handleImageChange}
           />
         </div>
-
+        {/* Preview Images */}
         {previews && (
           <div className="w-full flex flex-row flex-wrap  gap-1">
             {previews.map((image, i) => (
-              <img className="w-24 h-24  object-contain" key={i} src={image} />
+              <div
+                style={{
+                  border: defaultImage === i ? "2px solid blue" : "none",
+                }}
+                onClick={() => {
+                  setDefaultImage(i);
+                }}
+              >
+                <img
+                  className="w-24 h-24  object-contain"
+                  key={i}
+                  src={image}
+                />
+              </div>
             ))}
           </div>
         )}

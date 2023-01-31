@@ -30,7 +30,7 @@ export default Search;
 
 const styles = StyleSheet.create({
   search: {
-    marginTop: 40,
+    // marginTop: 40,
     width: "95%",
     height: 40,
     flexDirection: "row",

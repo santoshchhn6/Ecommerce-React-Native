@@ -8,7 +8,7 @@ import { COLORS } from "../constant/colors";
 import CustomTabBarButton from "../components/CustomTabBarButton";
 import Account from "./Account";
 import { useDispatch } from "react-redux";
-import { setProduct } from "../redux/action";
+import { setProduct, setProductLoading } from "../redux/action";
 import { useEffect } from "react";
 import { getProduct } from "../firebase";
 
@@ -22,11 +22,15 @@ export default function Main() {
   }, []);
 
   const fetchProduct = () => {
+    dispatch(setProductLoading(true));
     getProduct()
       .then((products) => {
         dispatch(setProduct(products));
+        dispatch(setProductLoading(false));
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
   return (
     <Tab.Navigator
