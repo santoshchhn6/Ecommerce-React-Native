@@ -22,17 +22,16 @@ const OrderSummary = ({ navigation }) => {
   const carts = useSelector((state) => state.cartReducer.cart);
   // const dispatch = useDispatch();
 
-  const cartProduct = products?.filter((product) =>
-    carts?.some((c) => c.productId === product.id)
-  );
-
-  const cartWithQty = cartProduct?.map((product, i) => {
-    if (product.id === carts[i].productId) {
-      let qty = carts[i].quantity;
-
-      return { ...product, qty };
+  const cartWithQty = [];
+  for (let i = 0; i < products.length; i++) {
+    for (let j = 0; j < carts.length; j++) {
+      const { id, productId, quantity, color } = carts[j];
+      if (productId === products[i].id) {
+        cartWithQty.push({ ...products[i], quantity, color, cartId: id });
+      }
     }
-  });
+  }
+
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
     navigation.navigate("ProductDetail", { product });
@@ -45,9 +44,9 @@ const OrderSummary = ({ navigation }) => {
           <AddressDetail />
           <View style={styles.cartItems}>
             {cartWithQty.map((item) => {
-              let { id, title, images, price, qty, rating, sizes, colors } =
+              let { id, title, images, price, quantity, rating, sizes, color } =
                 item;
-              totalPrice += price * qty;
+              totalPrice += price * quantity;
               return (
                 <TouchableOpacity
                   key={id}
@@ -67,13 +66,13 @@ const OrderSummary = ({ navigation }) => {
                           <Size sizes={sizes} />
                         </View>
                       )}
-                      {colors && (
+                      {color && (
                         <View style={styles.colors}>
                           <Text style={styles.text2}>Color :</Text>
-                          <ColorPallet colors={colors} />
+                          <ColorPallet colors={[color]} />
                         </View>
                       )}
-                      <Text style={styles.text2}>Quantity: {qty}</Text>
+                      <Text style={styles.text2}>Quantity: {quantity}</Text>
                       <View>
                         <Rating rate={rating} />
                         <Text style={styles.cartItem_price}>

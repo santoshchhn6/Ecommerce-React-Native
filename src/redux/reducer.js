@@ -82,6 +82,37 @@ export const cartReducer = (state = cartInitialState, { type, payload }) => {
       return state;
   }
 };
+const wishInitialState = {
+  wishList: [],
+};
+export const wishListReducer = (
+  state = wishInitialState,
+  { type, payload }
+) => {
+  switch (type) {
+    case types.ADD_TO_WISHLIST: {
+      return {
+        ...state,
+        wishList: [
+          ...state.wishList,
+          {
+            id: payload.id,
+            productId: payload.productId,
+          },
+        ],
+      };
+    }
+    case types.REMOVE_FROM_WISHLIST: {
+      return {
+        ...state,
+        wishList: [...state.wishList.filter((w) => w.id !== payload)],
+      };
+    }
+
+    default:
+      return state;
+  }
+};
 
 const UserInitialState = {
   user: null,

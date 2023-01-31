@@ -4,6 +4,8 @@ export const types = {
   REMOVE_FROM_CART: "REMOVE_FROM_CART",
   INC_CART_QTY: "INC_CART_QTY",
   DEC_CART_QTY: "DEC_CART_QTY",
+  ADD_TO_WISHLIST: "ADD_TO_WISHLIST",
+  REMOVE_FROM_WISHLIST: "REMOVE_FROM_WISHLIST",
 };
 
 export const setProduct = (payload) => {
@@ -24,4 +26,12 @@ export const incQty = (payload) => {
 
 export const decQty = (payload) => {
   return { type: types.DEC_CART_QTY, payload };
+};
+
+export const addToWishList = (payload) => {
+  return { type: types.ADD_TO_WISHLIST, payload };
+};
+
+export const removeFromWishList = (payload) => {
+  return { type: types.REMOVE_FROM_WISHLIST, payload };
 };

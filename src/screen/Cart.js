@@ -13,16 +13,16 @@ import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
 import { useDispatch, useSelector } from "react-redux";
-import { decQty, incQty, removeFromCart } from "../redux/action";
+import { addToWishList, decQty, incQty, removeFromCart } from "../redux/action";
 import ColorPallet from "../components/ColorPallet";
+import uuid from "react-native-uuid";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
   const carts = useSelector((state) => state.cartReducer.cart);
   const dispatch = useDispatch();
   let cartQty = 1;
-
-  console.log(carts);
+  let totalPrice = 0;
 
   const cartWithQty = [];
   for (let i = 0; i < products.length; i++) {
@@ -33,18 +33,6 @@ const Cart = ({ navigation }) => {
       }
     }
   }
-  // console.log(cartWithQty.length);
-
-  // const cartProduct = products?.filter((product) =>
-  //   carts?.some((c) => c.productId === product.id)
-  // );
-
-  // const cartWithQty = cartProduct?.map((product, i) => {
-  //   if (product.id === carts[i].productId) {
-  //     const { quantity, color } = carts[i];
-  //     return { ...product, quantity, color };
-  //   }
-  // });
 
   const getCounter = (data) => {
     cartQty = data;
@@ -54,7 +42,13 @@ const Cart = ({ navigation }) => {
     const product = products.filter((p) => p.id === id);
     navigation.navigate("ProductDetail", { product });
   };
-  let totalPrice = 0;
+
+  const handleSaveForLater = (id, cartId) => {
+    const wishListId = uuid.v4();
+    // console.log(wishListId);
+    dispatch(addToWishList({ id: wishListId, productId: id }));
+    dispatch(removeFromCart(cartId));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -124,7 +118,10 @@ const Cart = ({ navigation }) => {
                           onPress={() => dispatch(removeFromCart(cartId))}
                           title="Remove"
                         />
-                        <CustomButton title="Save for later" />
+                        <CustomButton
+                          title="Save for later"
+                          onPress={() => handleSaveForLater(id, cartId)}
+                        />
                       </View>
                     </View>
                   </TouchableOpacity>

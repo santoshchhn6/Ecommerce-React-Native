@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 const Category = () => {
   return (
     <Stack.Navigator
-      defaultScreenOptions="ProductCategories"
+      initialRouteName="ProductCategories"
       screenOptions={{ header: () => null }}
     >
       <Stack.Screen name="ProductCategories" component={ProductCategories} />

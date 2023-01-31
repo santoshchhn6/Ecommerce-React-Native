@@ -2,28 +2,37 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { COLORS } from "../constant/colors";
 import toRupee from "../js/toRupee";
+import CustomButton from "./CustomButton";
 
-const ProductList = ({ heading, products, onPress }) => {
+const ProductList = ({ heading, products, onPress, onRemovePress }) => {
   return (
     <View style={styles.container}>
       {heading && <Text style={styles.heading}>{heading}</Text>}
       <View style={styles.products}>
         {products.map((e, i) => {
-          const { id, title, img, images, price } = e;
+          const { wishListId, id, title, img, images, price } = e;
 
           return (
-            <TouchableOpacity
-              onPress={() => onPress(id)}
-              key={id}
-              style={styles.product}
-            >
-              <Image
-                style={styles.img}
-                source={{ uri: images ? images[0] : img }}
-              />
-              <Text style={styles.title}>{title}</Text>
-              <Text style={styles.text}>{toRupee(price)}</Text>
-            </TouchableOpacity>
+            <View style={styles.ProductContainer}>
+              <TouchableOpacity
+                onPress={() => onPress(id)}
+                key={id}
+                style={styles.product}
+              >
+                <Image
+                  style={styles.img}
+                  source={{ uri: images ? images[0] : img }}
+                />
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.text}>{toRupee(price)}</Text>
+              </TouchableOpacity>
+              {onRemovePress && (
+                <CustomButton
+                  title="Remove"
+                  onPress={() => onRemovePress(wishListId)}
+                />
+              )}
+            </View>
           );
         })}
       </View>
@@ -37,9 +46,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     marginBottom: 50,
-
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
   },
   heading: {
     fontSize: 18,
@@ -51,27 +57,26 @@ const styles = StyleSheet.create({
   products: {
     marginTop: 10,
     width: "100%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
-
-  product: {
+  ProductContainer: {
     width: "47%",
+    flexDirection: "column",
+  },
+  product: {
+    width: "95%",
     aspectRatio: 0.9,
-    margin: 5,
+    margin: 10,
     borderRadius: 10,
-    overflow: "hidden",
+    // overflow: "hidden",
     padding: 5,
     borderColor: COLORS.border,
     borderWidth: 1,
 
     shadowColor: COLORS.dark,
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
     elevation: 4,
     backgroundColor: "white",
   },
@@ -83,8 +88,6 @@ const styles = StyleSheet.create({
   title: {
     height: 18,
     color: COLORS.gray,
-    // borderColor: COLORS.gray,
-    // borderWidth: 1,
   },
   text: {
     color: COLORS.lightGray,

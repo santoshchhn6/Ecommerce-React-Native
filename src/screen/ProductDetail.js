@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
@@ -17,7 +17,7 @@ import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/action";
+import { addToCart, addToWishList, removeFromWishList } from "../redux/action";
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
 
@@ -32,6 +32,10 @@ const ProductDetail = ({ route, navigation }) => {
   let { product } = route.params;
   const { id, title, images, price, details, instock, sizes, colors } =
     product[0];
+
+  useEffect(() => {
+    setLiked(false);
+  }, [id]);
 
   const handleAddToCart = (id) => {
     const cartId = uuid.v4();
@@ -51,7 +55,15 @@ const ProductDetail = ({ route, navigation }) => {
     setVisible(true);
     setTimeout(() => {
       setVisible(false);
-    }, 1000);
+    }, 2000);
+  };
+
+  const handleLike = (id) => {
+    if (!liked) {
+      const wishListId = uuid.v4();
+      dispatch(addToWishList({ id: wishListId, productId: id }));
+    }
+    setLiked(!liked);
   };
   return (
     <View style={styles.container}>
@@ -67,7 +79,7 @@ const ProductDetail = ({ route, navigation }) => {
             {images && <SlideCard data={images} />}
             <TouchableOpacity
               style={styles.wish_icon_container}
-              onPress={() => setLiked(!liked)}
+              onPress={() => handleLike(id)}
             >
               <AntDesign
                 name="heart"

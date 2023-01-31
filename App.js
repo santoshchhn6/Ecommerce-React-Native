@@ -5,7 +5,6 @@ import Login from "./src/screen/Login";
 import Main from "./src/screen/Main";
 import OrderSummary from "./src/screen/OrderSummary";
 import Payment from "./src/screen/Payment";
-import ProductDetail from "./src/screen/ProductDetail";
 import Register from "./src/screen/Register";
 import SearchProduct from "./src/screen/SearchProduct";
 import * as Application from "expo-application";
@@ -31,8 +30,11 @@ export default function App() {
             component={Main}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="SearchProduct" component={SearchProduct} />
-          {/* <Stack.Screen name="ProductDetail" component={ProductDetail} /> */}
+          <Stack.Screen
+            name="SearchProduct"
+            component={SearchProduct}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="OrderSummary" component={OrderSummary} />
           <Stack.Screen name="Payment" component={Payment} />
           <Stack.Screen name="Register" component={Register} />
