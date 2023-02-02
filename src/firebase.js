@@ -29,48 +29,64 @@ import {
 } from "firebase/auth";
 const auth = getAuth();
 
-export const logIn = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
+export const logIn = ({ email, password }) =>
+  new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => resolve(userCredential))
+      .then((userCredential) => {
+        console.log("Successful Login");
+        resolve(userCredential);
+      })
       .catch((error) => reject(error));
   });
-  return await promise;
-};
-export const createAccount = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
+
+export const createAccount = ({ email, password }) =>
+  new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => resolve(userCredential))
       .catch((error) => reject(error));
   });
-  return await promise;
-};
 
-export const logOut = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
-    signOut(auth, email, password)
+export const logOut = () =>
+  new Promise((resolve, reject) => {
+    signOut(auth)
       .then((userCredential) => resolve(userCredential))
       .catch((error) => reject(error));
   });
-  return await promise;
-};
 
-//========================Database======================
-import { getDocs, getFirestore, collection, addDoc } from "firebase/firestore";
-//========================Database======================
+//========================Database====================================
+import {
+  getDocs,
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 const db = getFirestore(app);
 
-//User---------------------------------------
-const collectionRef = collection(db, "users");
+//=================================User===============================
+const userCollectionRef = collection(db, "users");
 
-export const addData = async (firstname, lastname, email, address, phone) => {
+export const addUser = async ({
+  firstName,
+  lastName,
+  email,
+  address,
+  phone,
+  uid,
+  image,
+}) => {
   const promise = new Promise((resolve, reject) => {
-    addDoc(collectionRef, {
-      firstname,
-      lastname,
+    addDoc(userCollectionRef, {
+      firstName,
+      lastName,
       email,
       address,
       phone,
+      uid,
+      image,
     })
       .then(() => resolve("User Created!"))
       .catch((err) => reject(err));
@@ -78,7 +94,28 @@ export const addData = async (firstname, lastname, email, address, phone) => {
   return await promise;
 };
 
-//Product---------------------------------------
+//get user
+export const getUser = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(userCollectionRef, where("uid", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+
+//update user
+export const updateUser = (id, userInfo) =>
+  new Promise((resolve, reject) => {
+    //select doc to update using id
+    const docToUpdate = doc(db, "users", id);
+    //update
+    console.log(id);
+    console.log(userInfo);
+    updateDoc(docToUpdate, userInfo)
+      .then(() => resolve("Data Updated!"))
+      .catch((e) => reject(e));
+  });
+//=========================Product================================
 const productRef = collection(db, "products");
 
 //Get Products
@@ -92,3 +129,53 @@ export const getProduct = async () => {
   });
   return await promise;
 };
+
+//========================Storage======================
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { async } from "@firebase/util";
+
+const storage = getStorage(app);
+
+//for android only
+export const addUserImage = ({ uri }) => {
+  return new Promise(async (resolve, reject) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const filename = uri.substring(uri.lastIndexOf("/") + 1);
+
+    const storageRef = ref(storage, `users/${filename}`);
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          resolve(downloadURL);
+        });
+      }
+    );
+  });
+};
+//========================Storage======================

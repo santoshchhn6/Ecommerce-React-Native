@@ -1,16 +1,20 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { logIn } from "../firebase";
+import { getUser, logIn } from "../firebase";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loading from "../components/Loading";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/action";
 
 const Login = ({ route, navigation }) => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -21,19 +25,27 @@ const Login = ({ route, navigation }) => {
     formState: { errors },
   } = useForm();
 
-  const onSignInPressed = (data) => {
-    setLoading(true);
-    logIn(data.email, data.password)
-      .then(() => {
-        setLoading(false);
-        reset({});
-        navigation.navigate("Main");
-      })
-      .catch((error) => {
-        setLoading(false);
-        setError(true);
-        console.log(error.message);
+  const logInAndFetchUserInfo = async (data) => {
+    try {
+      setLoading(true);
+      const response = await logIn(data);
+      const userInfo = await getUser(response.user.uid);
+      let userData;
+      userInfo.forEach((doc) => {
+        userData = { ...doc.data(), id: doc.id };
       });
+      dispatch(setUser(userData));
+      setLoading(false);
+      navigation.navigate("Root");
+    } catch (e) {
+      console.log(e);
+      setError(true);
+      setLoading(false);
+    }
+  };
+
+  const onSignInPressed = (data) => {
+    logInAndFetchUserInfo(data);
   };
 
   return (

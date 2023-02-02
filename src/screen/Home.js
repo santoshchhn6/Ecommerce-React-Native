@@ -12,9 +12,14 @@ import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import { useSelector } from "react-redux";
 import Loading from "../components/Loading";
+import { useEffect } from "react";
 
 const Home = ({ navigation }) => {
   const { products, loading } = useSelector((state) => state.productReducer);
+  const { user } = useSelector((state) => state.userReducer);
+
+  // console.log(user);
+  console.log("Welcome " + user.firstName + "!");
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
@@ -89,7 +94,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
+    paddingTop: 40,
     backgroundColor: "white",
     alignItems: "center",
   },

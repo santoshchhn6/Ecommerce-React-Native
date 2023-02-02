@@ -8,6 +8,7 @@ export const types = {
   REMOVE_FROM_WISHLIST: "REMOVE_FROM_WISHLIST",
   SET_PRODUCT_LOADING: "SET_PRODUCT_LOADING",
   ADD_TO_PAYMENT: "ADD_TO_PAYMENT",
+  SET_USER: "SET_USER",
 };
 
 export const setProduct = (payload) => {
@@ -44,4 +45,8 @@ export const setProductLoading = (payload) => {
 
 export const addToPayment = (payload) => {
   return { type: types.ADD_TO_PAYMENT, payload };
+};
+
+export const setUser = (payload) => {
+  return { type: types.SET_USER, payload };
 };

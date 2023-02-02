@@ -113,6 +113,7 @@ const Product = () => {
       setLoading(true);
       getProduct(inputs.title)
         .then((data) => {
+          //if same product not exist in database
           if (data.docs.length === 0) {
             uploadImage()
               .then((imgUrls) => addProductToDatabase(imgUrls))

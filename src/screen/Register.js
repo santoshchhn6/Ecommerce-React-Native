@@ -1,20 +1,52 @@
-import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { addData, app, createAccount, logIn } from "../firebase";
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+  addUser,
+  addUserImage,
+  app,
+  createAccount,
+  getUser,
+  logIn,
+} from "../firebase";
 import { useState } from "react";
 import Loading from "../components/Loading";
+import * as ImagePicker from "expo-image-picker";
+import Feather from "react-native-vector-icons/Feather";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/action";
 
 const Register = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const auth = getAuth();
+  const [image, setImage] = useState(null);
+  const dispatch = useDispatch();
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    // console.log(result);
+
+    if (!result.canceled) {
+      const source = { uri: result.assets[0].uri };
+      setImage(source);
+    }
+  };
 
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -30,47 +62,61 @@ const Register = ({ navigation }) => {
 
   const pwd = watch("password");
 
-  const onSignInPressed = (data) => {
+  const creatAccountAndLogIn = async (data) => {
     setLoading(true);
-    createAccount(data.email, data.password)
-      .then((userCredential) => {
-        addData(
-          data.firstName,
-          data.lastName,
-          data.email,
-          data.address,
-          data.phone
-        )
-          .then(() => {
-            logIn(data.email, data.password)
-              .then(() => {
-                setLoading(false);
-                reset({});
-                navigation.navigate("Main");
-              })
-              .catch((error) => {
-                setLoading(false);
-                console.log(error.message);
-                Alert.alert(error.message);
-              });
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.log(error.message);
-            Alert.alert(error.message);
-          });
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error.message);
-        Alert.alert(error.message);
+    let imageUrl = "";
+    try {
+      const userCredential = await createAccount(data);
+      if (image) {
+        imageUrl = await addUserImage(image);
+      }
+      const user = { ...data, uid: userCredential.user.uid, image: imageUrl };
+      await addUser(user);
+      await logIn(data);
+
+      const userInfo = await getUser(response.user.uid);
+      let userData;
+      userInfo.forEach((doc) => {
+        userData = { ...doc.data(), id: doc.id };
       });
+      dispatch(setUser(userData));
+
+      setLoading(false);
+      reset({});
+      navigation.navigate("Root");
+    } catch (err) {
+      console.log(err);
+      Alert.alert(err.message);
+      setLoading(false);
+    }
+  };
+
+  const onSignInPressed = (data) => {
+    creatAccountAndLogIn(data);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <ScrollView>
+          <View style={styles.img_container}>
+            <TouchableOpacity onPress={pickImage}>
+              <Feather
+                style={styles.icon}
+                name="edit"
+                size={30}
+                color={COLORS.white}
+              />
+              <Image
+                style={styles.img}
+                source={{
+                  uri: image
+                    ? image.uri
+                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <CustomInput
             name="firstName"
             control={control}
@@ -194,5 +240,22 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 18,
     fontWeight: "bold",
+  },
+  img_container: {
+    alignItems: "center",
+  },
+  img: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  icon: {
+    position: "absolute",
+    left: 60,
+    bottom: 0,
+    zIndex: 2,
+    backgroundColor: COLORS.border,
+    padding: 3,
+    borderRadius: 10,
   },
 });

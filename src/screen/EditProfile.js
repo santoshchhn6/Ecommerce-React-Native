@@ -12,40 +12,55 @@ import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
 import Feather from "react-native-vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { updateUser } from "../firebase";
 
 const EditProfile = ({ navigation }) => {
-  const EMAIL_REGEX =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const { user } = useSelector((state) => state.userReducer);
+  const { id, firstName, lastName } = user;
+  const userImageUrl = user.image;
 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
-  const onSignInPressed = (data) => {
-    console.log(data);
-  };
+  useEffect(() => {
+    setValue("firstName", firstName);
+    setValue("lastName", lastName);
+    if (userImageUrl) setImgUri(userImageUrl);
+  }, []);
 
   const [image, setImage] = useState(null);
+  const [imgUri, setImgUri] = useState(
+    "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+  );
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const source = { uri: result.assets[0].uri };
+      setImage(source);
+      setImgUri(source.uri);
     }
   };
 
+  const onSubmitPressed = (data) => {
+    console.log(data);
+    updateUser(id, data)
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e.message));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -61,9 +76,7 @@ const EditProfile = ({ navigation }) => {
               <Image
                 style={styles.img}
                 source={{
-                  uri:
-                    image ||
-                    "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                  uri: imgUri,
                 }}
               />
             </TouchableOpacity>
@@ -100,21 +113,12 @@ const EditProfile = ({ navigation }) => {
               },
             }}
           />
-          <CustomInput
-            name="email"
-            control={control}
-            placeholder="Email ID"
-            rules={{
-              required: "Email is Required",
-              pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
-            }}
-          />
 
           <CustomButton
             style={styles.btn}
             textStyle={styles.btn_txt}
             title="Submit"
-            onPress={handleSubmit(onSignInPressed)}
+            onPress={handleSubmit(onSubmitPressed)}
           />
 
           <TouchableOpacity
