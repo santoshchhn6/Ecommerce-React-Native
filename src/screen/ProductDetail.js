@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
@@ -16,13 +16,15 @@ import Reviews from "../components/Reviews";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart, addToPayment, addToWishList } from "../redux/action";
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
 import toRupee from "../js/toRupee";
+import { addCart } from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
+  const uid = useSelector((state) => state.userReducer.user.uid);
   const [liked, setLiked] = useState(false);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
@@ -71,6 +73,10 @@ const ProductDetail = ({ route, navigation }) => {
     const cartId = uuid.v4();
     dispatch(addToCart({ id: cartId, productId: id, quantity, color, size }));
     showFeedBack();
+    //firebase
+    addCart(cartId, { productId: id, userId: uid, quantity, color, size })
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e.message));
   };
 
   const handleBuyNow = () => {
@@ -121,7 +127,7 @@ const ProductDetail = ({ route, navigation }) => {
               </View>
             )}
             {/* Rating */}
-            {/* <Rating rate={rating} /> */}
+            <Rating rate={1} count={0} />
             {/* Price */}
             <Text style={styles.price}>{toRupee(price)}</Text>
           </Panel>

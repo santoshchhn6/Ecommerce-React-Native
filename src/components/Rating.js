@@ -1,8 +1,8 @@
 import { COLORS } from "../constant/colors";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
-const Rating = ({ rate }) => {
+const Rating = ({ rate, count }) => {
   let total = 5;
   if (rate > 5) rate = 5;
   rate = Math.floor(rate);
@@ -12,6 +12,7 @@ const Rating = ({ rate }) => {
     <View style={styles.rating}>
       <Stars n={rate} color={COLORS.green} />
       <Stars n={remaining} color={COLORS.lightGray} />
+      <Text style={styles.text}>({count})</Text>
     </View>
   );
 };
@@ -29,5 +30,10 @@ export default Rating;
 const styles = StyleSheet.create({
   rating: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  text: {
+    marginLeft: 5,
+    color: COLORS.lightGray,
   },
 });

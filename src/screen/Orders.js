@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-// import { cart, orders } from "../data/data";
 import Rating from "../components/Rating";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
@@ -69,7 +68,7 @@ const Orders = () => {
                         )}
                         <Text style={styles.text2}>Quantity: {quantity}</Text>
                         <View>
-                          <Rating rate={rating} />
+                          <Rating rate={1} count={0} />
                           <Text style={styles.cartItem_price}>
                             {toRupee(price)}
                           </Text>

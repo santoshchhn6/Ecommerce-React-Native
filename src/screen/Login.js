@@ -28,14 +28,13 @@ const Login = ({ route, navigation }) => {
   const logInAndFetchUserInfo = async (data) => {
     try {
       setLoading(true);
-      const response = await logIn(data);
-      const userInfo = await getUser(response.user.uid);
-      let userData;
-      userInfo.forEach((doc) => {
-        userData = { ...doc.data(), id: doc.id };
-      });
+      const userCredential = await logIn(data);
+      const doc = await getUser(userCredential.user.uid);
+      let userData = { ...doc.data(), id: doc.id };
+      console.log(userData);
       dispatch(setUser(userData));
       setLoading(false);
+      reset({});
       navigation.navigate("Root");
     } catch (e) {
       console.log(e);

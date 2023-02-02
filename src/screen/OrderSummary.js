@@ -80,7 +80,7 @@ const OrderSummary = ({ navigation }) => {
                       )}
                       <Text style={styles.text2}>Quantity: {quantity}</Text>
                       <View>
-                        <Rating rate={rating} />
+                        <Rating rate={1} count={0} />
                         <Text style={styles.cartItem_price}>
                           {toRupee(price)}
                         </Text>

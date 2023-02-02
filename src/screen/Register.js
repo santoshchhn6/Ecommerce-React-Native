@@ -70,15 +70,13 @@ const Register = ({ navigation }) => {
       if (image) {
         imageUrl = await addUserImage(image);
       }
-      const user = { ...data, uid: userCredential.user.uid, image: imageUrl };
-      await addUser(user);
+      const user = { ...data, image: imageUrl };
+      await addUser(userCredential.user.uid, user);
       const response = await logIn(data);
 
-      const userInfo = await getUser(response.user.uid);
-      let userData;
-      userInfo.forEach((doc) => {
-        userData = { ...doc.data(), id: doc.id };
-      });
+      const doc = await getUser(userCredential.user.uid);
+      let userData = { ...doc.data(), id: doc.id };
+      console.log(userData);
       dispatch(setUser(userData));
 
       setLoading(false);

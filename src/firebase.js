@@ -63,42 +63,28 @@ import {
   where,
   doc,
   updateDoc,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
 const db = getFirestore(app);
 
 //=================================User===============================
 const userCollectionRef = collection(db, "users");
 
-export const addUser = async ({
-  firstName,
-  lastName,
-  email,
-  address,
-  phone,
-  uid,
-  image,
-}) => {
-  const promise = new Promise((resolve, reject) => {
-    addDoc(userCollectionRef, {
-      firstName,
-      lastName,
-      email,
-      address,
-      phone,
-      uid,
-      image,
-    })
+export const addUser = async (
+  id,
+  { firstName, lastName, email, address, phone }
+) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "users", id), { firstName, lastName, email, address, phone })
       .then(() => resolve("User Created!"))
       .catch((err) => reject(err));
   });
-  return await promise;
-};
 
 //get user
 export const getUser = (id) =>
   new Promise((resolve, reject) => {
-    const q = query(userCollectionRef, where("uid", "==", id));
-    getDocs(q)
+    getDoc(doc(db, "users", id))
       .then((response) => resolve(response))
       .catch((e) => reject(e));
   });
@@ -129,6 +115,38 @@ export const getProduct = async () => {
   });
   return await promise;
 };
+
+//=================================Cart===============================
+const cartCollectionRef = collection(db, "cart");
+
+export const addCart = async (id, cart) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "cart", id), cart)
+      .then(() => resolve("Cart Created!"))
+      .catch((err) => reject(err));
+  });
+
+//get cart
+export const getCart = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(cartCollectionRef, where("uid", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+
+//update cart
+export const updateCart = (id, userInfo) =>
+  new Promise((resolve, reject) => {
+    //select doc to update using id
+    const docToUpdate = doc(db, "cart", id);
+    //update
+    console.log(id);
+    console.log(userInfo);
+    updateDoc(docToUpdate, userInfo)
+      .then(() => resolve("Data Updated!"))
+      .catch((e) => reject(e));
+  });
 
 //========================Storage======================
 import {
