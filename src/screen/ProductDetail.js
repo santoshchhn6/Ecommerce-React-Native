@@ -36,13 +36,9 @@ const ProductDetail = ({ route, navigation }) => {
 
   useEffect(() => {
     setLiked(false);
+    setColor(null);
+    setSize(null);
   }, [id]);
-
-  const handleAddToCart = (id) => {
-    const cartId = uuid.v4();
-    dispatch(addToCart({ cartId, productId: id, quantity, color }));
-    showFeedBack();
-  };
 
   const getCounter = (data) => {
     quantity = data;
@@ -50,6 +46,10 @@ const ProductDetail = ({ route, navigation }) => {
 
   const getSelectedColor = (c) => {
     setColor(c);
+  };
+
+  const getSelectedSize = (s) => {
+    setSize(s);
   };
 
   const showFeedBack = () => {
@@ -67,8 +67,14 @@ const ProductDetail = ({ route, navigation }) => {
     setLiked(!liked);
   };
 
+  const handleAddToCart = (id) => {
+    const cartId = uuid.v4();
+    dispatch(addToCart({ id: cartId, productId: id, quantity, color, size }));
+    showFeedBack();
+  };
+
   const handleBuyNow = () => {
-    dispatch(addToPayment([{ ...product[0], quantity }]));
+    dispatch(addToPayment([{ ...product[0], quantity, color, size }]));
     navigation.navigate("OrderSummary");
   };
   return (
@@ -111,7 +117,7 @@ const ProductDetail = ({ route, navigation }) => {
             {sizes.length !== 0 && (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Size :</Text>
-                <Size sizes={sizes} />
+                <Size sizes={sizes} getSelectedSize={getSelectedSize} />
               </View>
             )}
             {/* Rating */}

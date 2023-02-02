@@ -1,74 +1,96 @@
 import {
-  Button,
-  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-import { cart, orders } from "../data/data";
+// import { cart, orders } from "../data/data";
 import Rating from "../components/Rating";
-import CustomButton from "../components/CustomButton";
-import Counter from "../components/Counter";
 import PriceDetail from "../components/PriceDetail";
 import toRupee from "../js/toRupee";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import AddressDetail from "../components/AddressDetail";
+import { useSelector } from "react-redux";
 
 const Orders = () => {
+  const user = useSelector((state) => state.userReducer.user);
+  const orders = useSelector((state) => state.orderReducer.orders);
+
+  const { address, phone } = user;
   let totalPrice = 0;
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <ScrollView>
-          <AddressDetail />
-          <View style={styles.cartItems}>
-            {orders.map((item) => {
-              let { id, title, img, price, quantity, rating, sizes, colors } =
-                item;
-              totalPrice += price * quantity;
-              return (
-                <View key={id} style={styles.cartItem}>
-                  <View style={styles.cartItem_info_container}>
-                    <Image style={styles.cartItem_img} source={{ uri: img }} />
-                    <View style={styles.cartItem_info}>
-                      <Text style={styles.cartItem_title}>{title}</Text>
-                      {sizes && (
-                        <View style={styles.colors}>
-                          <Text style={styles.text2}>Size :</Text>
-                          <Size sizes={sizes} />
+        {orders.length !== 0 ? (
+          <ScrollView>
+            <AddressDetail address={address} phone={phone} />
+            <View style={styles.cartItems}>
+              {orders.map((item) => {
+                let {
+                  id,
+                  title,
+                  images,
+                  defaultImageIndex,
+                  price,
+                  quantity,
+                  rating,
+                  size,
+                  color,
+                } = item;
+                totalPrice += price * quantity;
+                return (
+                  <View key={id} style={styles.cartItem}>
+                    <View style={styles.cartItem_info_container}>
+                      <Image
+                        style={styles.cartItem_img}
+                        source={{
+                          uri: defaultImageIndex
+                            ? images[defaultImageIndex]
+                            : images[0],
+                        }}
+                      />
+                      <View style={styles.cartItem_info}>
+                        <Text style={styles.cartItem_title}>{title}</Text>
+                        {size && (
+                          <View style={styles.colors}>
+                            <Text style={styles.text2}>Size :</Text>
+                            <Size sizes={[size]} />
+                          </View>
+                        )}
+                        {color && (
+                          <View style={styles.colors}>
+                            <Text style={styles.text2}>Color :</Text>
+                            <ColorPallet colors={[color]} />
+                          </View>
+                        )}
+                        <Text style={styles.text2}>Quantity: {quantity}</Text>
+                        <View>
+                          <Rating rate={rating} />
+                          <Text style={styles.cartItem_price}>
+                            {toRupee(price)}
+                          </Text>
+                          {/* <TouchableOpacity>
+                            <Text style={styles.text}>Cancle Request</Text>
+                          </TouchableOpacity> */}
                         </View>
-                      )}
-                      {colors && (
-                        <View style={styles.colors}>
-                          <Text style={styles.text2}>Color :</Text>
-                          <ColorPallet colors={colors} />
-                        </View>
-                      )}
-                      <Text style={styles.text2}>Quantity: {quantity}</Text>
-                      <View>
-                        <Rating rate={rating} />
-                        <Text style={styles.cartItem_price}>
-                          {toRupee(price)}
-                        </Text>
-                        <TouchableOpacity>
-                          <Text style={styles.text}>Cancle Request</Text>
-                        </TouchableOpacity>
                       </View>
                     </View>
+                    <Text style={styles.text3}>
+                      Arriving tomarrow at 9:00 AM
+                    </Text>
                   </View>
-                  <Text style={styles.text3}>Arriving tomarrow at 9:00 AM</Text>
-                </View>
-              );
-            })}
-          </View>
-          <PriceDetail price={totalPrice} />
-        </ScrollView>
+                );
+              })}
+            </View>
+            <PriceDetail price={totalPrice} />
+          </ScrollView>
+        ) : (
+          <Text style={styles.text4}>No items</Text>
+        )}
       </View>
     </View>
   );
@@ -158,6 +180,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     marginBottom: 5,
+  },
+  text4: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginTop: 100,
   },
   colors: {
     flexDirection: "row",

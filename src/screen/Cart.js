@@ -22,6 +22,7 @@ import {
 } from "../redux/action";
 import ColorPallet from "../components/ColorPallet";
 import uuid from "react-native-uuid";
+import Size from "../components/Size";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
@@ -33,9 +34,9 @@ const Cart = ({ navigation }) => {
   const cartWithQty = [];
   for (let i = 0; i < products.length; i++) {
     for (let j = 0; j < carts.length; j++) {
-      const { id, productId, quantity, color } = carts[j];
+      const { id, productId, quantity, color, size } = carts[j];
       if (productId === products[i].id) {
-        cartWithQty.push({ ...products[i], quantity, color, cartId: id });
+        cartWithQty.push({ ...products[i], quantity, color, size, cartId: id });
       }
     }
   }
@@ -75,13 +76,15 @@ const Cart = ({ navigation }) => {
                   cartId,
                   title,
                   images,
+                  defaultImageIndex,
                   price,
                   instock,
                   rating,
                   quantity,
                   color,
+                  size,
                 } = item;
-                // console.log(qty);
+                console.log(size);
                 totalPrice += price * quantity;
                 return (
                   <TouchableOpacity
@@ -93,16 +96,29 @@ const Cart = ({ navigation }) => {
                       {/* Image */}
                       <Image
                         style={styles.cartItem_img}
-                        source={{ uri: images[0] }}
+                        source={{
+                          uri: defaultImageIndex
+                            ? images[defaultImageIndex]
+                            : images[0],
+                        }}
                       />
                       <View style={styles.cartItem_info}>
                         <Text style={styles.cartItem_title}>{title}</Text>
                         <View>
+                          {/* SelectedSize */}
+                          {size && (
+                            <View style={styles.rows}>
+                              <Text style={styles.text2}>Size :</Text>
+                              <Size sizes={[size]} />
+                            </View>
+                          )}
                           {/* SelectedColor */}
-                          <View style={styles.colors}>
-                            <Text style={styles.text2}>Color :</Text>
-                            <ColorPallet colors={[color]} />
-                          </View>
+                          {color && (
+                            <View style={styles.rows}>
+                              <Text style={styles.text2}>Color :</Text>
+                              <ColorPallet colors={[color]} />
+                            </View>
+                          )}
                           <Rating rate={rating} />
                           <Text style={styles.cartItem_price}>
                             {toRupee(price)}
@@ -259,7 +275,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.white,
   },
-  colors: {
+  rows: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,

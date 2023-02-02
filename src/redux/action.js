@@ -4,11 +4,14 @@ export const types = {
   REMOVE_FROM_CART: "REMOVE_FROM_CART",
   INC_CART_QTY: "INC_CART_QTY",
   DEC_CART_QTY: "DEC_CART_QTY",
+  RESET_CART: "RESET_CART",
   ADD_TO_WISHLIST: "ADD_TO_WISHLIST",
   REMOVE_FROM_WISHLIST: "REMOVE_FROM_WISHLIST",
   SET_PRODUCT_LOADING: "SET_PRODUCT_LOADING",
   ADD_TO_PAYMENT: "ADD_TO_PAYMENT",
+  RESET_PAYMENT: "RESET_PAYMENT",
   SET_USER: "SET_USER",
+  ADD_TO_ORDER: "ADD_TO_ORDER",
 };
 
 export const setProduct = (payload) => {
@@ -21,6 +24,14 @@ export const addToCart = (payload) => {
 
 export const removeFromCart = (payload) => {
   return { type: types.REMOVE_FROM_CART, payload };
+};
+
+export const resetCart = () => {
+  return { type: types.RESET_CART };
+};
+
+export const resetPayment = () => {
+  return { type: types.RESET_PAYMENT };
 };
 
 export const incQty = (payload) => {
@@ -49,4 +60,8 @@ export const addToPayment = (payload) => {
 
 export const setUser = (payload) => {
   return { type: types.SET_USER, payload };
+};
+
+export const addToOrder = (payload) => {
+  return { type: types.ADD_TO_ORDER, payload };
 };

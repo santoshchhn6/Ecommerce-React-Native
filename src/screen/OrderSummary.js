@@ -20,7 +20,8 @@ import { useSelector } from "react-redux";
 const OrderSummary = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
   const payment = useSelector((state) => state.paymentReducer.payment);
-
+  const user = useSelector((state) => state.userReducer.user);
+  const { address, phone } = user;
   // console.log(payment);
 
   const handleProductPress = (id) => {
@@ -32,7 +33,7 @@ const OrderSummary = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <ScrollView>
-          <AddressDetail />
+          <AddressDetail address={address} phone={phone} />
           <View style={styles.cartItems}>
             {payment.map((item, i) => {
               let {
@@ -43,7 +44,7 @@ const OrderSummary = ({ navigation }) => {
                 price,
                 quantity,
                 rating,
-                sizes,
+                size,
                 color,
               } = item;
               totalPrice += price * quantity;
@@ -65,10 +66,10 @@ const OrderSummary = ({ navigation }) => {
                     />
                     <View style={styles.cartItem_info}>
                       <Text style={styles.cartItem_title}>{title}</Text>
-                      {sizes && (
+                      {size && (
                         <View style={styles.colors}>
                           <Text style={styles.text2}>Size :</Text>
-                          <Size sizes={sizes} />
+                          <Size sizes={[size]} />
                         </View>
                       )}
                       {color && (
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5,
   },
+
   colors: {
     flexDirection: "row",
     alignItems: "center",

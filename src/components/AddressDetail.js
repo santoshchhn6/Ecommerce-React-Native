@@ -4,8 +4,6 @@ import { COLORS } from "../constant/colors";
 import toRupee from "../js/toRupee";
 
 const PriceDetail = ({ address, phone }) => {
-  address = address || "Vitthalwadi, kalyan East";
-  phone = phone || 123456789;
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Address Details</Text>

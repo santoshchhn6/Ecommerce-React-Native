@@ -6,6 +6,7 @@ import {
   cartReducer,
   wishListReducer,
   paymentReducer,
+  orderReducer,
 } from "./reducer";
 const rootReducer = combineReducers({
   productReducer,
@@ -13,5 +14,6 @@ const rootReducer = combineReducers({
   cartReducer,
   wishListReducer,
   paymentReducer,
+  orderReducer,
 });
 export const Store = createStore(rootReducer, applyMiddleware(thunk));
