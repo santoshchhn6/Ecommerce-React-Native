@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -14,12 +15,14 @@ import Feather from "react-native-vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { updateUser } from "../firebase";
+import { addUserImage, updateUser } from "../firebase";
+import Loading from "../components/Loading";
 
 const EditProfile = ({ navigation }) => {
   const { user } = useSelector((state) => state.userReducer);
   const { id, firstName, lastName } = user;
   const userImageUrl = user.image;
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -55,11 +58,28 @@ const EditProfile = ({ navigation }) => {
     }
   };
 
+  const updateUserWithImage = async (data) => {
+    try {
+      setLoading(true);
+      let imageUrl;
+      let res;
+      if (image) {
+        imageUrl = await addUserImage(image);
+        res = await updateUser(id, { ...data, image: imageUrl });
+      } else {
+        res = await updateUser(id, data);
+      }
+      setLoading(false);
+      console.log(res);
+      Alert.alert(res);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
+  };
+
   const onSubmitPressed = (data) => {
-    console.log(data);
-    updateUser(id, data)
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e.message));
+    updateUserWithImage(data);
   };
   return (
     <View style={styles.container}>
@@ -129,6 +149,7 @@ const EditProfile = ({ navigation }) => {
           </TouchableOpacity>
         </ScrollView>
       </View>
+      {loading && <Loading />}
     </View>
   );
 };

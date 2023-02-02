@@ -1,20 +1,46 @@
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
+import { useEffect, useState } from "react";
+import { updateUser } from "../firebase";
 
 const SavedAddress = () => {
+  const { user } = useSelector((state) => state.userReducer);
+  const { id, address, phone } = user;
+  const [loading, setLoading] = useState(false);
   const PHONE_REGEX = /^\d{10}$/;
 
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
-  const onSignInPressed = (data) => {
-    console.log(data);
+  useEffect(() => {
+    setValue("address", address);
+    setValue("phone", phone);
+  }, []);
+
+  const updateAddressAndPhone = async (data) => {
+    try {
+      setLoading(true);
+      const res = await updateUser(id, data);
+      setLoading(false);
+      console.log(res);
+      Alert.alert(res);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
+  };
+
+  const onSubmitPressed = (data) => {
+    updateAddressAndPhone(data);
   };
 
   return (
@@ -46,10 +72,11 @@ const SavedAddress = () => {
             style={styles.btn}
             textStyle={styles.btn_txt}
             title="Update Address"
-            onPress={handleSubmit(onSignInPressed)}
+            onPress={handleSubmit(onSubmitPressed)}
           />
         </ScrollView>
       </View>
+      {loading && <Loading />}
     </View>
   );
 };

@@ -72,7 +72,7 @@ const Register = ({ navigation }) => {
       }
       const user = { ...data, uid: userCredential.user.uid, image: imageUrl };
       await addUser(user);
-      await logIn(data);
+      const response = await logIn(data);
 
       const userInfo = await getUser(response.user.uid);
       let userData;
