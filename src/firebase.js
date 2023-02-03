@@ -65,6 +65,9 @@ import {
   updateDoc,
   setDoc,
   getDoc,
+  deleteDoc,
+  writeBatch,
+  WriteBatch,
 } from "firebase/firestore";
 const db = getFirestore(app);
 
@@ -129,22 +132,85 @@ export const addCart = async (id, cart) =>
 //get cart
 export const getCart = (id) =>
   new Promise((resolve, reject) => {
-    const q = query(cartCollectionRef, where("uid", "==", id));
+    const q = query(cartCollectionRef, where("userId", "==", id));
     getDocs(q)
       .then((response) => resolve(response))
       .catch((e) => reject(e));
   });
 
-//update cart
-export const updateCart = (id, userInfo) =>
+//delete cart
+export const deleteCart = (id) =>
   new Promise((resolve, reject) => {
-    //select doc to update using id
-    const docToUpdate = doc(db, "cart", id);
-    //update
-    console.log(id);
-    console.log(userInfo);
-    updateDoc(docToUpdate, userInfo)
-      .then(() => resolve("Data Updated!"))
+    const docToDelete = doc(db, "cart", id);
+    deleteDoc(docToDelete)
+      .then(() => resolve("Cart Deleted!"))
+      .catch((e) => reject(e));
+  });
+
+//delet All cart
+export const deleteAllCart = (carts) =>
+  new Promise((resolve, reject) => {
+    console.log(carts);
+    let batch = [];
+    carts.forEach((cart) => batch.push(deleteCart(cart.id)));
+    Promise.all(batch)
+      .then((res) => resolve(res))
+      .catch((e) => reject(e));
+  });
+//=================================WishList===============================
+const wishListCollectionRef = collection(db, "wishList");
+
+//add WishList
+export const addWishList = async (id, wishList) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "wishList", id), wishList)
+      .then(() => resolve("WishList Created!"))
+      .catch((err) => reject(err));
+  });
+
+//get WishList
+export const getWishList = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(wishListCollectionRef, where("userId", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+
+//delete WishList
+export const deleteWishList = (id) =>
+  new Promise((resolve, reject) => {
+    const docToDelete = doc(db, "wishList", id);
+    deleteDoc(docToDelete)
+      .then(() => resolve("WishList Deleted!"))
+      .catch((e) => reject(e));
+  });
+//=================================Orders===============================
+const ordersCollectionRef = collection(db, "orders");
+
+//add orders
+export const addOrders = async (id, orders) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "orders", id), orders)
+      .then(() => resolve("Orders Created!"))
+      .catch((err) => reject(err));
+  });
+
+//get orders
+export const getOrders = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(ordersCollectionRef, where("userId", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+
+//delete orders
+export const deleteOrders = (id) =>
+  new Promise((resolve, reject) => {
+    const docToDelete = doc(db, "orders", id);
+    deleteDoc(docToDelete)
+      .then(() => resolve("Orders Deleted!"))
       .catch((e) => reject(e));
   });
 
@@ -155,7 +221,6 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { async } from "@firebase/util";
 
 const storage = getStorage(app);
 

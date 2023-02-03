@@ -17,14 +17,14 @@ const ColorPallet = ({ colors, getSelectedColor }) => {
           onPress={() => handleSelectColor(color, i)}
           style={[styles.color, { backgroundColor: color }]}
         >
-          {active === i && (
+          {active === i ? (
             <Entypo
               style={styles.icon}
               name="check"
               size={20}
               color={COLORS.white}
             />
-          )}
+          ) : null}
         </TouchableOpacity>
       ))}
     </View>

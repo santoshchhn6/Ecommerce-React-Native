@@ -21,9 +21,9 @@ const CustomTabBarButton = (props) => {
           </Svg>
           <View style={styles.svgGapFiller} />
         </View>
-        {props.to === "/Root/Main/Cart" && carts.length !== 0 && (
+        {props.to === "/Root/Main/Cart" && carts.length !== 0 ? (
           <Badge style={styles.badge} text={carts.length} />
-        )}
+        ):null}
         <TouchableOpacity
           activeOpacity={1}
           onPress={onPress}
@@ -41,9 +41,9 @@ const CustomTabBarButton = (props) => {
           onPress={onPress}
           style={styles.inactiveBtn}
         >
-          {props.to === "/Root/Main/Cart" && carts.length !== 0 && (
+          {props.to === "/Root/Main/Cart" && carts.length !== 0 ? (
             <Text style={styles.badge2}>{carts.length}</Text>
-          )}
+          ) : null}
           {children}
         </TouchableOpacity>
       </>

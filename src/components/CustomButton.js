@@ -12,14 +12,14 @@ const CustomButton = (props) => {
       style={[styles.btn, { ...props.style }]}
     >
       <View style={styles.btnWrapper}>
-        {props.icon && (
+        {props.icon ? (
           <Feather
             style={styles.icon}
             name={props.icon}
             size={20}
             color={COLORS.gray}
           />
-        )}
+        ) : null}
         <Text style={[styles.text, { ...props.textStyle }]}>{props.title}</Text>
       </View>
     </TouchableOpacity>

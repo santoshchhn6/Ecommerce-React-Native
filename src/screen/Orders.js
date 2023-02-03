@@ -54,18 +54,18 @@ const Orders = () => {
                       />
                       <View style={styles.cartItem_info}>
                         <Text style={styles.cartItem_title}>{title}</Text>
-                        {size && (
+                        {size ? (
                           <View style={styles.colors}>
                             <Text style={styles.text2}>Size :</Text>
                             <Size sizes={[size]} />
                           </View>
-                        )}
-                        {color && (
+                        ):null}
+                        {color ? (
                           <View style={styles.colors}>
                             <Text style={styles.text2}>Color :</Text>
                             <ColorPallet colors={[color]} />
                           </View>
-                        )}
+                        ):null}
                         <Text style={styles.text2}>Quantity: {quantity}</Text>
                         <View>
                           <Rating rate={1} count={0} />

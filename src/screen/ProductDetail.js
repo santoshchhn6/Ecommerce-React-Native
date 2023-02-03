@@ -24,7 +24,7 @@ import toRupee from "../js/toRupee";
 import { addCart } from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
-  const uid = useSelector((state) => state.userReducer.user.uid);
+  const userId = useSelector((state) => state.userReducer.user.id);
   const [liked, setLiked] = useState(false);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
@@ -74,7 +74,7 @@ const ProductDetail = ({ route, navigation }) => {
     dispatch(addToCart({ id: cartId, productId: id, quantity, color, size }));
     showFeedBack();
     //firebase
-    addCart(cartId, { productId: id, userId: uid, quantity, color, size })
+    addCart(cartId, { productId: id, userId, quantity, color, size })
       .then((res) => console.log(res))
       .catch((e) => console.log(e.message));
   };
@@ -94,7 +94,7 @@ const ProductDetail = ({ route, navigation }) => {
         {/* Images */}
         <View style={styles.wrapper}>
           <Panel style={styles.img_container}>
-            {images && <SlideCard data={images} />}
+            {images ? <SlideCard data={images} /> : null}
             <TouchableOpacity
               style={styles.wish_icon_container}
               onPress={() => handleLike(id)}
@@ -110,7 +110,7 @@ const ProductDetail = ({ route, navigation }) => {
           <Panel>
             <Text style={styles.text2}>{title}</Text>
             {/* Color */}
-            {colors.length !== 0 && (
+            {colors.length !== 0 ? (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Color :</Text>
                 <ColorPallet
@@ -118,14 +118,14 @@ const ProductDetail = ({ route, navigation }) => {
                   getSelectedColor={getSelectedColor}
                 />
               </View>
-            )}
+            ) : null}
             {/* Size */}
-            {sizes.length !== 0 && (
+            {sizes.length !== 0 ? (
               <View style={styles.colors}>
                 <Text style={styles.text2}>Size :</Text>
                 <Size sizes={sizes} getSelectedSize={getSelectedSize} />
               </View>
-            )}
+            ) : null}
             {/* Rating */}
             <Rating rate={1} count={0} />
             {/* Price */}

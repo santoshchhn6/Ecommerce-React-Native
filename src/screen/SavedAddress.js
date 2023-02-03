@@ -76,7 +76,7 @@ const SavedAddress = () => {
           />
         </ScrollView>
       </View>
-      {loading && <Loading />}
+      {loading ? <Loading /> : null}
     </View>
   );
 };

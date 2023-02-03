@@ -149,7 +149,7 @@ const EditProfile = ({ navigation }) => {
           </TouchableOpacity>
         </ScrollView>
       </View>
-      {loading && <Loading />}
+      {loading ? <Loading />:null}
     </View>
   );
 };

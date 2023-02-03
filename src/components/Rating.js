@@ -12,7 +12,7 @@ const Rating = ({ rate, count }) => {
     <View style={styles.rating}>
       <Stars n={rate} color={COLORS.green} />
       <Stars n={remaining} color={COLORS.lightGray} />
-      <Text style={styles.text}>({count})</Text>
+      {count ? <Text style={styles.text}>({count})</Text> : null}
     </View>
   );
 };

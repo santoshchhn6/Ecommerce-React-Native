@@ -26,9 +26,9 @@ const CustomInput = (props) => {
                 { borderColor: error ? COLORS.red : COLORS.border },
               ]}
             />
-            {error && (
+            {error ? (
               <Text style={styles.error}>{error.message || Error}</Text>
-            )}
+            ) : null}
           </>
         )}
       />

@@ -3,12 +3,12 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { getUser, logIn } from "../firebase";
+import { getCart, getUser, getWishList, logIn } from "../firebase";
 
 import { useState } from "react";
 import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
-import { setUser } from "../redux/action";
+import { setCart, setOrders, setUser, setWishList } from "../redux/action";
 
 const Login = ({ route, navigation }) => {
   const [error, setError] = useState(false);
@@ -29,12 +29,36 @@ const Login = ({ route, navigation }) => {
     try {
       setLoading(true);
       const userCredential = await logIn(data);
+
       const doc = await getUser(userCredential.user.uid);
       let userData = { ...doc.data(), id: doc.id };
-      console.log(userData);
+
+      const cartDocs = await getCart(userData.id);
+      let cartData = cartDocs.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const wisListDocs = await getWishList(userData.id);
+      let wishListData = wisListDocs.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      const ordersDocs = await getWishList(userData.id);
+      let ordersData = ordersDocs.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
       dispatch(setUser(userData));
+      dispatch(setCart(cartData));
+      dispatch(setWishList(wishListData));
+      dispatch(setOrders(ordersData));
+
       setLoading(false);
       reset({});
+
       navigation.navigate("Root");
     } catch (e) {
       console.log(e);
@@ -78,7 +102,7 @@ const Login = ({ route, navigation }) => {
           }}
         />
 
-        {error && <Text style={styles.error}>Authentication failed</Text>}
+        {error ? <Text style={styles.error}>Authentication failed</Text> : null}
 
         <CustomButton
           style={styles.btn}
@@ -94,7 +118,7 @@ const Login = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {loading && <Loading />}
+      {loading ? <Loading /> : null}
     </View>
   );
 };

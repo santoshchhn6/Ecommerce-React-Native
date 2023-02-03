@@ -208,7 +208,7 @@ const Register = ({ navigation }) => {
           />
         </ScrollView>
       </View>
-      {loading && <Loading />}
+      {loading ? <Loading /> : null}
     </View>
   );
 };

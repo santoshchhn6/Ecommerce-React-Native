@@ -17,10 +17,12 @@ import { COLORS } from "../constant/colors";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import { addToOrder, resetCart, resetPayment } from "../redux/action";
+import { deleteAllCart } from "../firebase";
 
 const Payment = ({ navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
   const payment = useSelector((state) => state.paymentReducer.payment);
+  const cart = useSelector((state) => state.cartReducer.cart);
 
   const [ploading, setPLoading] = useState(false);
   const [email, setEmail] = useState();
@@ -73,10 +75,19 @@ const Payment = ({ navigation }) => {
           setPLoading(false);
           alert("Payment Successful");
           console.log("Payment Successful", paymentIntent);
+
           dispatch(addToOrder(payment));
           dispatch(resetCart());
           dispatch(resetPayment());
-          navigation.navigate("Orders");
+
+          deleteAllCart(cart)
+            .then((res) => console.log(res))
+            .catch((e) => console.log(e));
+
+          navigation.navigate("Main", {
+            screen: "Account",
+            params: { screen: "Orders" },
+          });
         }
       }
     } catch (e) {
@@ -114,7 +125,7 @@ const Payment = ({ navigation }) => {
             <Text style={styles.text}>PAY</Text>
           </TouchableOpacity>
         </View>
-        {ploading && <Loading />}
+        {ploading ? <Loading /> : null}
       </View>
     </StripeProvider>
   );

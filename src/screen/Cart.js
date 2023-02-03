@@ -23,6 +23,7 @@ import {
 import ColorPallet from "../components/ColorPallet";
 import uuid from "react-native-uuid";
 import Size from "../components/Size";
+import { deleteCart } from "../firebase";
 
 const Cart = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
@@ -61,6 +62,13 @@ const Cart = ({ navigation }) => {
     dispatch(addToPayment(cartWithQty));
     navigation.navigate("OrderSummary");
   };
+
+  const handleRemoveItem = (id) => {
+    dispatch(removeFromCart(id));
+    deleteCart(id)
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -84,7 +92,6 @@ const Cart = ({ navigation }) => {
                   color,
                   size,
                 } = item;
-                console.log(size);
                 totalPrice += price * quantity;
                 return (
                   <TouchableOpacity
@@ -106,19 +113,19 @@ const Cart = ({ navigation }) => {
                         <Text style={styles.cartItem_title}>{title}</Text>
                         <View>
                           {/* SelectedSize */}
-                          {size && (
+                          {size ? (
                             <View style={styles.rows}>
                               <Text style={styles.text2}>Size :</Text>
                               <Size sizes={[size]} />
                             </View>
-                          )}
+                          ) : null}
                           {/* SelectedColor */}
-                          {color && (
+                          {color ? (
                             <View style={styles.rows}>
                               <Text style={styles.text2}>Color :</Text>
                               <ColorPallet colors={[color]} />
                             </View>
-                          )}
+                          ) : null}
                           <Rating rate={1} count={0} />
                           <Text style={styles.cartItem_price}>
                             {toRupee(price)}
@@ -142,7 +149,7 @@ const Cart = ({ navigation }) => {
                       />
                       <View style={styles.cartItem_btn_container}>
                         <CustomButton
-                          onPress={() => dispatch(removeFromCart(cartId))}
+                          onPress={() => handleRemoveItem(cartId)}
                           title="Remove"
                         />
                         <CustomButton

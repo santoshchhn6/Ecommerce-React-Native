@@ -30,7 +30,7 @@ const Home = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      {loading && <Loading />}
+      {loading ? <Loading />:null}
       {/* Search */}
       <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />
@@ -77,13 +77,13 @@ const Home = ({ navigation }) => {
 
         {/* Popular products */}
 
-        {products && (
+        {products ? (
           <ProductList
             onPress={handleProductPress}
             heading="Popular Products"
             products={products}
           />
-        )}
+        ):null}
       </ScrollView>
     </View>
   );
