@@ -91,7 +91,7 @@ const Payment = ({ route, navigation }) => {
 
           navigation.navigate("Main", {
             screen: "Account",
-            params: { screen: "Orders" },
+            params: { screen: "Orders", initial: false },
           });
         }
       }

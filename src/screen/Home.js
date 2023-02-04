@@ -25,12 +25,13 @@ const Home = ({ navigation }) => {
     const product = products.filter((p) => p.id === id);
     navigation.navigate("Category", {
       screen: "ProductDetail",
+      initial: false,
       params: { product },
     });
   };
   return (
     <View style={styles.container}>
-      {loading ? <Loading />:null}
+      {loading ? <Loading /> : null}
       {/* Search */}
       <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />
@@ -83,7 +84,7 @@ const Home = ({ navigation }) => {
             heading="Popular Products"
             products={products}
           />
-        ):null}
+        ) : null}
       </ScrollView>
     </View>
   );
