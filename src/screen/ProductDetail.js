@@ -39,8 +39,17 @@ const ProductDetail = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   let { product } = route.params;
-  const { id, title, images, price, details, instock, sizes, colors } =
-    product[0];
+  const {
+    id,
+    title,
+    images,
+    defaultImageIndex,
+    price,
+    details,
+    instock,
+    sizes,
+    colors,
+  } = product[0];
 
   let liked =
     wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
@@ -103,7 +112,16 @@ const ProductDetail = ({ route, navigation }) => {
     dispatch(
       addToPayment([{ id: newPaymentId, productId: id, quantity, color, size }])
     );
-    navigation.navigate("OrderSummary",{from:'ProductDetail'});
+    navigation.navigate("OrderSummary", { from: "ProductDetail" });
+  };
+
+  const handleRateProduct = () => {
+    // console.log("rate");
+    navigation.navigate("RateProduct", {
+      image: images[defaultImageIndex],
+      title,
+      price,
+    });
   };
   return (
     <View style={styles.container}>
@@ -208,7 +226,7 @@ const ProductDetail = ({ route, navigation }) => {
 
           {/* Reviews */}
           <Panel style={styles.padding0}>
-            <Reviews />
+            <Reviews onPress={handleRateProduct} />
           </Panel>
         </View>
       </ScrollView>
@@ -235,6 +253,7 @@ const styles = StyleSheet.create({
   wrapper: {
     width: "100%",
     alignItems: "center",
+    marginBottom: 50,
   },
 
   colors: {

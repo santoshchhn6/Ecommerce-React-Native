@@ -188,3 +188,28 @@ export const orderReducer = (state = orderInitialState, { type, payload }) => {
       return state;
   }
 };
+
+const reviewInitialState = {
+  reviews: [],
+};
+export const reviewsReducer = (
+  state = reviewInitialState,
+  { type, payload }
+) => {
+  switch (type) {
+    case types.ADD_TO_REVIEWS: {
+      return {
+        ...state,
+        reviews: [...state.reviews, payload],
+      };
+    }
+    case types.SET_ORDERS: {
+      return {
+        reviews: payload,
+      };
+    }
+
+    default:
+      return state;
+  }
+};

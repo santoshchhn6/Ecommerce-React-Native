@@ -3,6 +3,7 @@ import Payment from "./Payment";
 import SearchProduct from "./SearchProduct";
 import { createStackNavigator } from "@react-navigation/stack";
 import Main from "./Main";
+import RateProduct from "./RateProduct";
 const Stack = createStackNavigator();
 
 const Root = () => {
@@ -23,6 +24,7 @@ const Root = () => {
       />
       <Stack.Screen name="OrderSummary" component={OrderSummary} />
       <Stack.Screen name="Payment" component={Payment} />
+      <Stack.Screen name="RateProduct" component={RateProduct} />
     </Stack.Navigator>
   );
 };

@@ -17,11 +17,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     borderWidth: 1,
     overflow: "hidden",
-    padding: 5,
-    margin: 5,
 
     shadowColor: COLORS.lightGray,
-    elevation: 4,
+    elevation: 8,
     backgroundColor: "white",
   },
 });

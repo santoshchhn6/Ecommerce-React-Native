@@ -7,7 +7,7 @@ import CustomButton from "./CustomButton";
 const ProductList = ({ heading, products, onPress, onRemovePress }) => {
   return (
     <View style={styles.container}>
-      {heading ? <Text style={styles.heading}>{heading}</Text>:null}
+      {heading ? <Text style={styles.heading}>{heading}</Text> : null}
       <View style={styles.products}>
         {products.map((e, i) => {
           const { wishListId, id, title, images, defaultImageIndex, price } = e;
@@ -35,7 +35,7 @@ const ProductList = ({ heading, products, onPress, onRemovePress }) => {
                   title="Remove"
                   onPress={() => onRemovePress(wishListId)}
                 />
-              ):null}
+              ) : null}
             </View>
           );
         })}
