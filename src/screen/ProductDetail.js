@@ -31,6 +31,9 @@ import { addCart, addWishList, deleteWishList } from "../firebase";
 const ProductDetail = ({ route, navigation }) => {
   const userId = useSelector((state) => state.userReducer.user.id);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
+  const reviews = useSelector((state) => state.reviewsReducer.reviews);
+  console.log("reviews=====================");
+  console.log(reviews);
 
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
@@ -53,6 +56,8 @@ const ProductDetail = ({ route, navigation }) => {
 
   let liked =
     wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
+
+  const productReviews = reviews.filter((r) => r.productId === id);
 
   useEffect(() => {
     setColor(null);
@@ -121,8 +126,11 @@ const ProductDetail = ({ route, navigation }) => {
       image: images[defaultImageIndex],
       title,
       price,
+      userId,
+      productId: id,
     });
   };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -226,7 +234,7 @@ const ProductDetail = ({ route, navigation }) => {
 
           {/* Reviews */}
           <Panel style={styles.padding0}>
-            <Reviews onPress={handleRateProduct} />
+            <Reviews reviews={productReviews} onPress={handleRateProduct} />
           </Panel>
         </View>
       </ScrollView>

@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const InteractiveRating = ({ onPress }) => {
   const stars = ["*", "*", "*", "*", "*"];
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(5);
   const handleOnPress = (i) => {
     setRating(i);
     onPress && onPress(i);

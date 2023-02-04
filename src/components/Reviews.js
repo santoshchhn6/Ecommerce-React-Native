@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   review: {
     width: "98%",
     padding: 10,
+    marginVertical: 5,
   },
   user_container: {
     flexDirection: "row",
