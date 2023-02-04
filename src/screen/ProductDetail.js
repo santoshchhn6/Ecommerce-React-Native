@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useId, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
@@ -17,33 +17,41 @@ import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import SlideCard from "../components/SlideCard";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, addToPayment, addToWishList } from "../redux/action";
+import {
+  addToCart,
+  addToPayment,
+  addToWishList,
+  removeFromWishList,
+} from "../redux/action";
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
 import toRupee from "../js/toRupee";
-import { addCart } from "../firebase";
+import { addCart, addWishList, deleteWishList } from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
   const userId = useSelector((state) => state.userReducer.user.id);
-  const [liked, setLiked] = useState(false);
+  const wishList = useSelector((state) => state.wishListReducer.wishList);
+
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-  let quantity = 1;
 
   let { product } = route.params;
   const { id, title, images, price, details, instock, sizes, colors } =
     product[0];
 
+  let liked =
+    wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
+
   useEffect(() => {
-    setLiked(false);
     setColor(null);
     setSize(null);
   }, [id]);
 
-  const getCounter = (data) => {
-    quantity = data;
+  const handleCounterPress = (data) => {
+    setQuantity(data);
   };
 
   const getSelectedColor = (c) => {
@@ -63,10 +71,21 @@ const ProductDetail = ({ route, navigation }) => {
 
   const handleLike = (id) => {
     if (!liked) {
-      const wishListId = uuid.v4();
-      dispatch(addToWishList({ id: wishListId, productId: id }));
+      console.log("liked");
+      const newWishListId = uuid.v4();
+      dispatch(addToWishList({ id: newWishListId, productId: id }));
+      addWishList(newWishListId, { productId: id, userId })
+        .then((res) => console.log(res))
+        .catch((e) => console.log(e));
+    } else {
+      console.log("unliked");
+      const wishListId = wishList.filter((w) => w.productId === id)[0].id;
+      console.log(wishListId);
+      dispatch(removeFromWishList(wishListId));
+      deleteWishList(wishListId)
+        .then((res) => console.log(res))
+        .catch((e) => console.log(e));
     }
-    setLiked(!liked);
   };
 
   const handleAddToCart = (id) => {
@@ -80,8 +99,11 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const handleBuyNow = () => {
-    dispatch(addToPayment([{ ...product[0], quantity, color, size }]));
-    navigation.navigate("OrderSummary");
+    const newPaymentId = uuid.v4();
+    dispatch(
+      addToPayment([{ id: newPaymentId, productId: id, quantity, color, size }])
+    );
+    navigation.navigate("OrderSummary",{from:'ProductDetail'});
   };
   return (
     <View style={styles.container}>
@@ -134,7 +156,11 @@ const ProductDetail = ({ route, navigation }) => {
           <Panel>
             <View style={[styles.row, { marginBottom: 10 }]}>
               {/* Quantity */}
-              <Counter quantity={1} getCounter={getCounter} />
+              <Counter
+                quantity={1}
+                // getCounter={getCounter}
+                onPress={handleCounterPress}
+              />
               {/* Stock */}
               {instock ? (
                 <Text

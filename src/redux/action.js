@@ -41,6 +41,9 @@ export const resetCart = () => {
 export const resetPayment = () => {
   return { type: types.RESET_PAYMENT };
 };
+export const addToPayment = (payload) => {
+  return { type: types.ADD_TO_PAYMENT, payload };
+};
 
 export const incQty = (payload) => {
   return { type: types.INC_CART_QTY, payload };
@@ -60,10 +63,6 @@ export const removeFromWishList = (payload) => {
 
 export const setProductLoading = (payload) => {
   return { type: types.SET_PRODUCT_LOADING, payload };
-};
-
-export const addToPayment = (payload) => {
-  return { type: types.ADD_TO_PAYMENT, payload };
 };
 
 export const setUser = (payload) => {

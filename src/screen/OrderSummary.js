@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { COLORS } from "../constant/colors";
-// import { cart, orders } from "../data/data";
 import Rating from "../components/Rating";
 import CustomButton from "../components/CustomButton";
 import PriceDetail from "../components/PriceDetail";
@@ -15,18 +14,40 @@ import toRupee from "../js/toRupee";
 import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import AddressDetail from "../components/AddressDetail";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToOrder } from "../redux/action";
 
-const OrderSummary = ({ navigation }) => {
-  const products = useSelector((state) => state.productReducer.products);
-  const payment = useSelector((state) => state.paymentReducer.payment);
+const OrderSummary = ({ route, navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
   const { address, phone } = user;
-  // console.log(payment);
+  const products = useSelector((state) => state.productReducer.products);
+  const payment = useSelector((state) => state.paymentReducer.payment);
+  const dispatch = useDispatch();
+
+  const paymentWithQty = [];
+  for (let i = 0; i < products.length; i++) {
+    for (let j = 0; j < payment.length; j++) {
+      const { id, productId, quantity, color, size } = payment[j];
+      if (productId === products[i].id) {
+        paymentWithQty.push({
+          ...products[i],
+          quantity,
+          color,
+          size,
+          paymentId: id,
+        });
+      }
+    }
+  }
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
     navigation.navigate("ProductDetail", { product });
+  };
+
+  const handlePayment = () => {
+    dispatch(addToOrder(paymentWithQty));
+    navigation.navigate("Payment", { from: route.params.from });
   };
   let totalPrice = 0;
   return (
@@ -35,7 +56,7 @@ const OrderSummary = ({ navigation }) => {
         <ScrollView>
           <AddressDetail address={address} phone={phone} />
           <View style={styles.cartItems}>
-            {payment.map((item, i) => {
+            {paymentWithQty.map((item, i) => {
               let {
                 id,
                 title,
@@ -43,12 +64,10 @@ const OrderSummary = ({ navigation }) => {
                 defaultImageIndex,
                 price,
                 quantity,
-                rating,
                 size,
                 color,
               } = item;
               totalPrice += price * quantity;
-              // console.log(price);
               return (
                 <TouchableOpacity
                   key={i}
@@ -71,20 +90,19 @@ const OrderSummary = ({ navigation }) => {
                           <Text style={styles.text2}>Size :</Text>
                           <Size sizes={[size]} />
                         </View>
-                      ):null}
+                      ) : null}
                       {color ? (
                         <View style={styles.colors}>
                           <Text style={styles.text2}>Color :</Text>
                           <ColorPallet colors={[color]} />
                         </View>
-                      ):null}
+                      ) : null}
                       <Text style={styles.text2}>Quantity: {quantity}</Text>
                       <View>
                         <Rating rate={1} count={0} />
                         <Text style={styles.cartItem_price}>
                           {toRupee(price)}
                         </Text>
-                        {/* <TouchableOpacity></TouchableOpacity> */}
                       </View>
                     </View>
                   </View>
@@ -94,10 +112,10 @@ const OrderSummary = ({ navigation }) => {
           </View>
           <PriceDetail price={totalPrice} />
           <CustomButton
-            onPress={() => navigation.navigate("Payment")}
+            onPress={handlePayment}
             style={styles.btn}
             textStyle={styles.btn_txt}
-            title="Continue"
+            title="Payment"
           />
         </ScrollView>
       </View>
@@ -115,8 +133,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     overflow: "hidden",
   },
   heading: {
@@ -128,12 +145,8 @@ const styles = StyleSheet.create({
 
   cartItems: {
     width: "100%",
-    // marginBottom: 80,
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
   },
   cartItem: {
-    // width: "100%",
     borderColor: COLORS.border,
     borderWidth: 1,
     borderRadius: 10,
@@ -149,12 +162,10 @@ const styles = StyleSheet.create({
   },
   cartItem_info_container: {
     flexDirection: "row",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
+
     marginBottom: 5,
   },
   cartItem_img: {
-    // flex: 1,
     width: "40%",
     aspectRatio: 1,
     resizeMode: "contain",

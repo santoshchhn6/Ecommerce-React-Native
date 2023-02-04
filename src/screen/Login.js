@@ -33,6 +33,8 @@ const Login = ({ route, navigation }) => {
       const doc = await getUser(userCredential.user.uid);
       let userData = { ...doc.data(), id: doc.id };
 
+      console.log(userData);
+
       const cartDocs = await getCart(userData.id);
       let cartData = cartDocs.docs.map((doc) => ({
         ...doc.data(),

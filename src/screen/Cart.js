@@ -59,8 +59,8 @@ const Cart = ({ navigation }) => {
   };
 
   const handlePlaceOrder = () => {
-    dispatch(addToPayment(cartWithQty));
-    navigation.navigate("OrderSummary");
+    dispatch(addToPayment(carts));
+    navigation.navigate("OrderSummary", { from: "Cart" });
   };
 
   const handleRemoveItem = (id) => {
@@ -87,7 +87,6 @@ const Cart = ({ navigation }) => {
                   defaultImageIndex,
                   price,
                   instock,
-                  rating,
                   quantity,
                   color,
                   size,

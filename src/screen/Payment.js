@@ -17,9 +17,9 @@ import { COLORS } from "../constant/colors";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import { addToOrder, resetCart, resetPayment } from "../redux/action";
-import { deleteAllCart } from "../firebase";
+import { addOrders, deleteAllCart } from "../firebase";
 
-const Payment = ({ navigation }) => {
+const Payment = ({ route, navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
   const payment = useSelector((state) => state.paymentReducer.payment);
   const cart = useSelector((state) => state.cartReducer.cart);
@@ -76,13 +76,18 @@ const Payment = ({ navigation }) => {
           alert("Payment Successful");
           console.log("Payment Successful", paymentIntent);
 
-          dispatch(addToOrder(payment));
-          dispatch(resetCart());
-          dispatch(resetPayment());
-
-          deleteAllCart(cart)
+          addOrders(user.id, payment)
             .then((res) => console.log(res))
             .catch((e) => console.log(e));
+          dispatch(addToOrder(payment));
+          dispatch(resetPayment());
+
+          if (route.params.from === "Cart") {
+            dispatch(resetCart());
+            deleteAllCart(cart)
+              .then((res) => console.log(res))
+              .catch((e) => console.log(e));
+          }
 
           navigation.navigate("Main", {
             screen: "Account",

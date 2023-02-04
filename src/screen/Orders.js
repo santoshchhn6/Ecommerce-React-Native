@@ -18,6 +18,23 @@ import { useSelector } from "react-redux";
 const Orders = () => {
   const user = useSelector((state) => state.userReducer.user);
   const orders = useSelector((state) => state.orderReducer.orders);
+  const products = useSelector((state) => state.productReducer.products);
+
+  const ordersWithQty = [];
+  for (let i = 0; i < products.length; i++) {
+    for (let j = 0; j < orders.length; j++) {
+      const { id, productId, quantity, color, size } = orders[j];
+      if (productId === products[i].id) {
+        ordersWithQty.push({
+          ...products[i],
+          quantity,
+          color,
+          size,
+          cartId: id,
+        });
+      }
+    }
+  }
 
   const { address, phone } = user;
   let totalPrice = 0;
@@ -28,7 +45,7 @@ const Orders = () => {
           <ScrollView>
             <AddressDetail address={address} phone={phone} />
             <View style={styles.cartItems}>
-              {orders.map((item) => {
+              {ordersWithQty.map((item, i) => {
                 let {
                   id,
                   title,
@@ -36,13 +53,12 @@ const Orders = () => {
                   defaultImageIndex,
                   price,
                   quantity,
-                  rating,
                   size,
                   color,
                 } = item;
                 totalPrice += price * quantity;
                 return (
-                  <View key={id} style={styles.cartItem}>
+                  <View key={i} style={styles.cartItem}>
                     <View style={styles.cartItem_info_container}>
                       <Image
                         style={styles.cartItem_img}
@@ -59,13 +75,13 @@ const Orders = () => {
                             <Text style={styles.text2}>Size :</Text>
                             <Size sizes={[size]} />
                           </View>
-                        ):null}
+                        ) : null}
                         {color ? (
                           <View style={styles.colors}>
                             <Text style={styles.text2}>Color :</Text>
                             <ColorPallet colors={[color]} />
                           </View>
-                        ):null}
+                        ) : null}
                         <Text style={styles.text2}>Quantity: {quantity}</Text>
                         <View>
                           <Rating rate={1} count={0} />

@@ -18,13 +18,15 @@ export default function Main() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchProduct();
+    // fetchProduct();
   }, []);
 
   const fetchProduct = () => {
     dispatch(setProductLoading(true));
     getProduct()
       .then((products) => {
+        console.log("fetching products completed");
+        console.log(products);
         dispatch(setProduct(products));
         dispatch(setProductLoading(false));
       })

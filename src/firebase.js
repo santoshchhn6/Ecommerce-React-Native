@@ -66,8 +66,6 @@ import {
   setDoc,
   getDoc,
   deleteDoc,
-  writeBatch,
-  WriteBatch,
 } from "firebase/firestore";
 const db = getFirestore(app);
 
@@ -150,7 +148,7 @@ export const deleteCart = (id) =>
 //delet All cart
 export const deleteAllCart = (carts) =>
   new Promise((resolve, reject) => {
-    console.log(carts);
+    // console.log(carts);
     let batch = [];
     carts.forEach((cart) => batch.push(deleteCart(cart.id)));
     Promise.all(batch)
@@ -189,9 +187,23 @@ export const deleteWishList = (id) =>
 const ordersCollectionRef = collection(db, "orders");
 
 //add orders
-export const addOrders = async (id, orders) =>
+export const addOrders = async (userId, orders) =>
   new Promise((resolve, reject) => {
-    setDoc(doc(db, "orders", id), orders)
+    let batch = [];
+    console.log(orders);
+    orders.forEach((order) => {
+      const { id, productId, quantity, size, color } = order;
+      batch.push(
+        setDoc(doc(db, "orders", id), {
+          productId,
+          userId,
+          quantity,
+          size,
+          color,
+        })
+      );
+    });
+    Promise.all(batch)
       .then(() => resolve("Orders Created!"))
       .catch((err) => reject(err));
   });

@@ -1,23 +1,33 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
 import { COLORS } from "../constant/colors";
 
-const Counter = ({ quantity, style, getCounter, onInc, onDec }) => {
+const Counter = ({ quantity, style, getCounter, onInc, onDec, onPress }) => {
   const [counter, setCounter] = useState(quantity);
+
   const decrement = () => {
-    if (counter > 1) setCounter((c) => c - 1);
+    if (counter > 1) {
+      setCounter((c) => c - 1);
+      onPress && onPress(counter - 1);
+    } else {
+      onPress && onPress(counter);
+    }
     onDec && onDec();
   };
   const increment = () => {
-    if (counter < 10) setCounter((c) => c + 1);
-
+    if (counter < 5) {
+      setCounter((c) => c + 1);
+      onPress && onPress(counter + 1);
+    } else {
+      onPress && onPress(counter);
+    }
     onInc && onInc();
   };
   return (
     <View
       style={[styles.container, { ...style }]}
-      counter={getCounter(counter)}
+      // counter={getCounter(counter)}
     >
       <CustomButton onPress={decrement} title="-" />
       <View style={styles.text_container}>

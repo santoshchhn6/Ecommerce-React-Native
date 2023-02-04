@@ -3,6 +3,7 @@ import React from "react";
 import ProductList from "../components/ProductList";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishList } from "../redux/action";
+import { deleteWishList } from "../firebase";
 
 const Wishlist = ({ navigation }) => {
   const products = useSelector((state) => state.productReducer.products);
@@ -28,7 +29,11 @@ const Wishlist = ({ navigation }) => {
   };
 
   const onRemovePress = (id) => {
+    console.log(id);
     dispatch(removeFromWishList(id));
+    deleteWishList(id)
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e));
   };
   return (
     <View style={styles.container}>

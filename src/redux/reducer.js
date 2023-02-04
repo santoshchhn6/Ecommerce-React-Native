@@ -1,7 +1,15 @@
+import { products } from "../data/data";
 import { types } from "./action";
 
 const UserInitialState = {
-  user: null,
+  user: {
+    address: "kalyan",
+    email: "san@gmail.com",
+    firstName: "Santosh",
+    id: "Yuo38EmICoRqsT8gkInUyiIJBfT2",
+    lastName: "Chauhan",
+    phone: "1212121212",
+  },
 };
 
 export const userReducer = (state = UserInitialState, { type, payload }) => {
@@ -16,7 +24,7 @@ export const userReducer = (state = UserInitialState, { type, payload }) => {
 };
 
 const productInitialState = {
-  products: [],
+  products: products,
   loading: false,
 };
 

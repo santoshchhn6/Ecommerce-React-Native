@@ -12,13 +12,14 @@ const Size = ({ sizes, getSelectedSize }) => {
   return (
     <View style={styles.container}>
       {sizes.map((size, i) => (
-        <CustomButton
-          key={i}
-          onPress={() => handleOnPress(size, i)}
-          style={active === i ? styles.active_btn : null}
-          textStyle={active === i ? styles.active_txt : null}
-          title={size}
-        />
+        <View key={i}>
+          <CustomButton
+            onPress={() => handleOnPress(size, i)}
+            style={active === i ? styles.active_btn : null}
+            textStyle={active === i ? styles.active_txt : null}
+            title={size}
+          />
+        </View>
       ))}
     </View>
   );
