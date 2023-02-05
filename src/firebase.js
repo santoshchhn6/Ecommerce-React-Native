@@ -225,6 +225,43 @@ export const deleteOrders = (id) =>
       .then(() => resolve("Orders Deleted!"))
       .catch((e) => reject(e));
   });
+//=================================Reviews===============================
+const reviewsCollectionRef = collection(db, "reviews");
+
+//add reviews
+export const addReviews = async (id, reviews) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "reviews", id), reviews)
+      .then(() => resolve("reviews Created!"))
+      .catch((err) => reject(err));
+  });
+
+//get reviews
+export const getReviews = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(reviewsCollectionRef, where("productId", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+//=================================Rating===============================
+const ratingCollectionRef = collection(db, "rating");
+
+//add rating
+export const addRating = async (id, rating) =>
+  new Promise((resolve, reject) => {
+    setDoc(doc(db, "rating", id), rating)
+      .then(() => resolve("rating Created!"))
+      .catch((err) => reject(err));
+  });
+
+//get rating
+export const getRating = (id) =>
+  new Promise((resolve, reject) => {
+    getDoc(doc(db, "rating", id))
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
 
 //========================Storage======================
 import {
@@ -273,4 +310,3 @@ export const addUserImage = ({ uri }) => {
     );
   });
 };
-//========================Storage======================

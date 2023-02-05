@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -14,10 +15,12 @@ import InteractiveRating from "../components/InteractiveRating";
 import CustomButton from "../components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import { addToReviews } from "../redux/action";
+import { addRating, addReviews, getRating } from "../firebase";
+import uuid from "react-native-uuid";
 
-const RateProduct = ({ route }) => {
-  const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(1);
+const RateProduct = ({ route, navigation }) => {
+  const [comment, setComment] = useState(null);
+  const [rating, setRating] = useState(5);
   const {
     firstName,
     lastName,
@@ -30,18 +33,41 @@ const RateProduct = ({ route }) => {
     setRating(r);
   };
 
+  const createReviewsAndRating = async () => {
+    try {
+      const newReviews = {
+        userImg: userImg ? userImg : null,
+        productId,
+        userId,
+        username: firstName + " " + lastName,
+        rating,
+        review: comment,
+      };
+
+      comment && (await addReviews(uuid.v4(), newReviews));
+
+      const doc = await getRating(productId);
+      const reviewData = { ...doc.data(), id: doc.id };
+
+      const newRating = {
+        rating: reviewData.rating
+          ? (reviewData.rating * reviewData.count + rating) /
+            (reviewData.count + 1)
+          : rating,
+        count: reviewData.count ? reviewData.count + 1 : 1,
+      };
+
+      await addRating(productId, newRating);
+
+      Alert.alert("your reviews submitted!");
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleSubmit = () => {
-    let reviews = {
-      userImg,
-      productId,
-      userId,
-      username: firstName + " " + lastName,
-      rating,
-      review: comment,
-    };
-    console.log(reviews);
-    dispatch(addToReviews(reviews));
-    console.log("add to reviews");
+    createReviewsAndRating();
   };
   return (
     <View style={styles.container}>
@@ -90,7 +116,6 @@ const styles = StyleSheet.create({
   input: {
     width: "95%",
     height: 50,
-    // borderWidth: 1,
     color: COLORS.gray,
     padding: 5,
     paddingLeft: 10,

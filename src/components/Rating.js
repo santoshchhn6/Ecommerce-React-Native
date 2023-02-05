@@ -5,7 +5,7 @@ import { View, StyleSheet, Text } from "react-native";
 const Rating = ({ rate, count, size }) => {
   let total = 5;
   let s = size ? size : 15;
-  let r = rate ? rate : 0;
+  let r = rate ? Math.round(rate) : 1;
   if (r > 5) r = 5;
   r = Math.floor(r);
   let remaining = total - r;

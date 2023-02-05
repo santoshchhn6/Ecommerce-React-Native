@@ -26,19 +26,28 @@ import {
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
 import toRupee from "../js/toRupee";
-import { addCart, addWishList, deleteWishList } from "../firebase";
+import {
+  addCart,
+  addWishList,
+  deleteWishList,
+  getRating,
+  getReviews,
+} from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
   const userId = useSelector((state) => state.userReducer.user.id);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
-  const reviews = useSelector((state) => state.reviewsReducer.reviews);
-  console.log("reviews=====================");
-  console.log(reviews);
+  // const reviews = useSelector((state) => state.reviewsReducer.reviews);
+  // console.log("reviews=====================");
+  // console.log(reviews);
 
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [visible, setVisible] = useState(false);
+  const [reviews, setReviews] = useState(null);
+  const [rating, setRating] = useState(null);
+  const [count, setCount] = useState(null);
   const dispatch = useDispatch();
 
   let { product } = route.params;
@@ -57,9 +66,27 @@ const ProductDetail = ({ route, navigation }) => {
   let liked =
     wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
 
-  const productReviews = reviews.filter((r) => r.productId === id);
+  // const productReviews = reviews.filter((r) => r.productId === id);
+  const fetchReviews = async () => {
+    const response = await getReviews(id);
+    let reviewsData = response.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    // console.log(reviewsData);
+    setReviews(reviewsData);
+  };
+  const fetchRating = async () => {
+    const doc = await getRating(id);
+    let ratingData = { ...doc.data(), id: doc.id };
+    console.log(ratingData);
+    setRating(ratingData.rating);
+    setCount(ratingData.count);
+  };
 
   useEffect(() => {
+    fetchReviews();
+    fetchRating();
     setColor(null);
     setSize(null);
   }, [id]);
@@ -175,7 +202,7 @@ const ProductDetail = ({ route, navigation }) => {
               </View>
             ) : null}
             {/* Rating */}
-            <Rating rate={1} count={0} />
+            <Rating rate={rating} count={count} />
             {/* Price */}
             <Text style={styles.price}>{toRupee(price)}</Text>
           </Panel>
@@ -234,7 +261,7 @@ const ProductDetail = ({ route, navigation }) => {
 
           {/* Reviews */}
           <Panel style={styles.padding0}>
-            <Reviews reviews={productReviews} onPress={handleRateProduct} />
+            <Reviews reviews={reviews} onPress={handleRateProduct} />
           </Panel>
         </View>
       </ScrollView>
