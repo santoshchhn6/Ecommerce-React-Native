@@ -18,7 +18,7 @@ export default function Main() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // fetchProduct();
+    fetchProduct();
   }, []);
 
   const fetchProduct = () => {

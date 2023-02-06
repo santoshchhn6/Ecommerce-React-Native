@@ -74,10 +74,17 @@ const userCollectionRef = collection(db, "users");
 
 export const addUser = async (
   id,
-  { firstName, lastName, email, address, phone }
+  { firstName, lastName, email, address, phone, image }
 ) =>
   new Promise((resolve, reject) => {
-    setDoc(doc(db, "users", id), { firstName, lastName, email, address, phone })
+    setDoc(doc(db, "users", id), {
+      firstName,
+      lastName,
+      email,
+      address,
+      phone,
+      image,
+    })
       .then(() => resolve("User Created!"))
       .catch((err) => reject(err));
   });
@@ -240,6 +247,15 @@ export const addReviews = async (id, reviews) =>
 export const getReviews = (id) =>
   new Promise((resolve, reject) => {
     const q = query(reviewsCollectionRef, where("productId", "==", id));
+    getDocs(q)
+      .then((response) => resolve(response))
+      .catch((e) => reject(e));
+  });
+
+//get reviews
+export const getUserReviews = (id) =>
+  new Promise((resolve, reject) => {
+    const q = query(reviewsCollectionRef, where("userId", "==", id));
     getDocs(q)
       .then((response) => resolve(response))
       .catch((e) => reject(e));

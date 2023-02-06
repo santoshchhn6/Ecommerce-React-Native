@@ -28,7 +28,7 @@ const Reviews = ({ reviews, onPress }) => {
                       style={styles.user_img}
                       source={{
                         uri:
-                          item.user_img ||
+                          item.userImg ||
                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
                       }}
                     />

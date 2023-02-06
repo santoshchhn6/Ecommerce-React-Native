@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { COLORS } from "../constant/colors";
 import Rating from "../components/Rating";
 import Counter from "../components/Counter";
@@ -37,9 +37,6 @@ import {
 const ProductDetail = ({ route, navigation }) => {
   const userId = useSelector((state) => state.userReducer.user.id);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
-  // const reviews = useSelector((state) => state.reviewsReducer.reviews);
-  // console.log("reviews=====================");
-  // console.log(reviews);
 
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
@@ -66,14 +63,12 @@ const ProductDetail = ({ route, navigation }) => {
   let liked =
     wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
 
-  // const productReviews = reviews.filter((r) => r.productId === id);
   const fetchReviews = async () => {
     const response = await getReviews(id);
     let reviewsData = response.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
-    // console.log(reviewsData);
     setReviews(reviewsData);
   };
   const fetchRating = async () => {
@@ -84,9 +79,14 @@ const ProductDetail = ({ route, navigation }) => {
     setCount(ratingData.count);
   };
 
+  useLayoutEffect(() => {
+    setQuantity(1);
+  }, [id]);
+
   useEffect(() => {
     fetchReviews();
     fetchRating();
+
     setColor(null);
     setSize(null);
   }, [id]);
@@ -148,7 +148,6 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const handleRateProduct = () => {
-    // console.log("rate");
     navigation.navigate("RateProduct", {
       image: images[defaultImageIndex],
       title,
@@ -209,11 +208,7 @@ const ProductDetail = ({ route, navigation }) => {
           <Panel>
             <View style={[styles.row, { marginBottom: 10 }]}>
               {/* Quantity */}
-              <Counter
-                quantity={1}
-                // getCounter={getCounter}
-                onPress={handleCounterPress}
-              />
+              <Counter quantity={quantity} onPress={handleCounterPress} />
               {/* Stock */}
               {instock ? (
                 <Text

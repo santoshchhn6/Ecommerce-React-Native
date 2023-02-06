@@ -4,7 +4,13 @@ import CustomButton from "./CustomButton";
 import { COLORS } from "../constant/colors";
 
 const Counter = ({ quantity, style, getCounter, onInc, onDec, onPress }) => {
-  const [counter, setCounter] = useState(quantity);
+  const [counter, setCounter] = useState(1);
+
+  useEffect(() => {
+    setCounter(quantity);
+  }, [quantity]);
+
+  // console.log(counter);
 
   const decrement = () => {
     if (counter > 1) {

@@ -53,7 +53,6 @@ const Cart = ({ navigation }) => {
 
   const handleSaveForLater = (id, cartId) => {
     const wishListId = uuid.v4();
-    // console.log(wishListId);
     dispatch(addToWishList({ id: wishListId, productId: id }));
     dispatch(removeFromCart(cartId));
   };

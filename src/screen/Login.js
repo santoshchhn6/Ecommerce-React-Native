@@ -3,7 +3,7 @@ import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
 import { COLORS } from "../constant/colors";
 import { useForm } from "react-hook-form";
-import { getCart, getUser, getWishList, logIn } from "../firebase";
+import { getCart, getOrders, getUser, getWishList, logIn } from "../firebase";
 
 import { useState } from "react";
 import Loading from "../components/Loading";
@@ -47,11 +47,15 @@ const Login = ({ route, navigation }) => {
         id: doc.id,
       }));
 
-      const ordersDocs = await getWishList(userData.id);
+      const ordersDocs = await getOrders(userData.id);
       let ordersData = ordersDocs.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
+
+      console.log("fetching====================");
+      console.log(wishListData.length);
+      console.log(ordersData.length);
 
       dispatch(setUser(userData));
       dispatch(setCart(cartData));
@@ -142,7 +146,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-    // alignItems: "center",
   },
   heading: {
     fontSize: 34,

@@ -40,8 +40,6 @@ const Register = ({ navigation }) => {
       quality: 1,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
       const source = { uri: result.assets[0].uri };
       setImage(source);
@@ -67,6 +65,7 @@ const Register = ({ navigation }) => {
     let imageUrl = "";
     try {
       const userCredential = await createAccount(data);
+      console.log(image);
       if (image) {
         imageUrl = await addUserImage(image);
       }

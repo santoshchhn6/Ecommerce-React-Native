@@ -121,8 +121,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
     overflow: "hidden",
     marginBottom: 50,
   },
@@ -135,12 +133,8 @@ const styles = StyleSheet.create({
 
   cartItems: {
     width: "100%",
-    // marginBottom: 80,
-    // borderColor: COLORS.secondaryColor,
-    // borderWidth: 1,
   },
   cartItem: {
-    // width: "100%",
     borderColor: COLORS.border,
     borderWidth: 1,
     borderRadius: 10,
@@ -156,12 +150,9 @@ const styles = StyleSheet.create({
   },
   cartItem_info_container: {
     flexDirection: "row",
-    // borderColor: COLORS.dark,
-    // borderWidth: 1,
     marginBottom: 5,
   },
   cartItem_img: {
-    // flex: 1,
     width: "40%",
     aspectRatio: 1,
     resizeMode: "contain",

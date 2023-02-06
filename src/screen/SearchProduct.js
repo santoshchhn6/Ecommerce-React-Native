@@ -25,7 +25,11 @@ const SearchProduct = ({ route, navigation }) => {
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
-    navigation.navigate("ProductDetail", { product });
+    navigation.navigate("Category", {
+      screen: "ProductDetail",
+      initial: false,
+      params: { product },
+    });
   };
 
   const handleSearch = (data) => {
@@ -56,8 +60,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // borderColor: COLORS.dark,
-    // borderWidth: 2,
     overflow: "hidden",
   },
 });

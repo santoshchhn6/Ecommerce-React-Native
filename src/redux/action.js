@@ -20,9 +20,6 @@ export const types = {
 
   ADD_TO_ORDER: "ADD_TO_ORDER",
   SET_ORDERS: "SET_ORDERS",
-
-  ADD_TO_REVIEWS: "ADD_TO_REVIEWS",
-  SET_REVIEWS: "SET_REVIEWS",
 };
 
 export const setProduct = (payload) => {
@@ -86,8 +83,4 @@ export const setOrders = (payload) => {
 
 export const addToOrder = (payload) => {
   return { type: types.ADD_TO_ORDER, payload };
-};
-
-export const addToReviews = (payload) => {
-  return { type: types.ADD_TO_REVIEWS, payload };
 };

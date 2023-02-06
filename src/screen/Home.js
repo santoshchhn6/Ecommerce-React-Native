@@ -12,14 +12,25 @@ import Search from "../components/Search";
 import ProductList from "../components/ProductList";
 import { useSelector } from "react-redux";
 import Loading from "../components/Loading";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import FeedBack from "../components/FeedBack";
 
 const Home = ({ navigation }) => {
   const { products, loading } = useSelector((state) => state.productReducer);
   const { user } = useSelector((state) => state.userReducer);
+  const [visible, setVisible] = useState(false);
 
-  // console.log(user);
+  useEffect(() => {
+    showFeedBack();
+  }, []);
   console.log("Welcome " + user.firstName + "!");
+
+  const showFeedBack = () => {
+    setVisible(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 2000);
+  };
 
   const handleProductPress = (id) => {
     const product = products.filter((p) => p.id === id);
@@ -32,6 +43,7 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {loading ? <Loading /> : null}
+      <FeedBack text={`Welcome ${user.firstName}!`} visible={visible} />
       {/* Search */}
       <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />

@@ -165,7 +165,6 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: "95%",
-    // alignItems: "center",
   },
   img_container: {
     alignItems: "center",
