@@ -1,7 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../constant/colors";
-import { user_reviews } from "../data/data";
 import Rating from "../components/Rating";
 import { getUserReviews } from "../firebase";
 import { useSelector } from "react-redux";

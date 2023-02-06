@@ -1,6 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
-// import { reviews } from "../data/data";
 import Rating from "./Rating";
 import Card from "./Card";
 import { COLORS } from "../constant/colors";
