@@ -4,8 +4,7 @@ This project is created with create-expo-app command.
 In this project I have used 'firebase ' as a backend.
 
 ## Screenshot
-<img src="https://user-images.githubusercontent.com/102342620/217282865-0c832310-b124-467c-b012-077e329f1a53.jpg" width="300" >
-<img src="https://user-images.githubusercontent.com/102342620/217282920-ea78f948-d486-4d7d-940d-502351aa1148.jpg" width="300" >
+<img src="https://user-images.githubusercontent.com/102342620/217282865-0c832310-b124-467c-b012-077e329f1a53.jpg" width="300" > <img src="https://user-images.githubusercontent.com/102342620/217282920-ea78f948-d486-4d7d-940d-502351aa1148.jpg" width="300" >
 
 ## Prerequisite
 ### Firebase
