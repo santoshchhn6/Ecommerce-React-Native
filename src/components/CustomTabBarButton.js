@@ -23,7 +23,7 @@ const CustomTabBarButton = (props) => {
         </View>
         {props.to === "/Root/Main/Cart" && carts.length !== 0 ? (
           <Badge style={styles.badge} text={carts.length} />
-        ):null}
+        ) : null}
         <TouchableOpacity
           activeOpacity={1}
           onPress={onPress}
@@ -63,14 +63,7 @@ const styles = StyleSheet.create({
     top: -32,
     right: 20,
   },
-  badge2: {
-    position: "absolute",
-    zIndex: 10,
-    top: 16,
-    right: 57,
-    fontSize: 12,
-    color: COLORS.white,
-  },
+
   activeBtn: {
     position: "absolute",
     width: 50,
@@ -90,6 +83,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.dark,
     justifyContent: "center",
     alignItems: "center",
+  },
+  badge2: {
+    position: "absolute",
+    zIndex: 10,
+    top: "38%",
+    right: "45%",
+    fontSize: 12,
+    color: COLORS.white,
   },
   svgContainer: {
     flexDirection: "row",
