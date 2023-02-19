@@ -1,8 +1,9 @@
 # Ecommerce-React-Native
+### DEMO
 https://user-images.githubusercontent.com/102342620/217233030-7b3779dc-6b32-40a5-8178-2692169096b1.mp4
 
-This project is created with create-expo-app command.
 
+This project is created with create-expo-app command.
 In this project I have used 'firebase ' as a backend.
 
 ## Screenshot
