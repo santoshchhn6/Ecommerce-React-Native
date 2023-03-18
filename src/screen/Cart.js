@@ -26,6 +26,7 @@ import Size from "../components/Size";
 import { deleteCart } from "../firebase";
 
 const Cart = ({ navigation }) => {
+  const { user } = useSelector((state) => state.userReducer);
   const products = useSelector((state) => state.productReducer.products);
   const carts = useSelector((state) => state.cartReducer.cart);
   const dispatch = useDispatch();
@@ -64,9 +65,10 @@ const Cart = ({ navigation }) => {
 
   const handleRemoveItem = (id) => {
     dispatch(removeFromCart(id));
-    deleteCart(id)
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e));
+    if (user)
+      deleteCart(id)
+        .then((res) => console.log(res))
+        .catch((e) => console.log(e));
   };
   return (
     <View style={styles.container}>

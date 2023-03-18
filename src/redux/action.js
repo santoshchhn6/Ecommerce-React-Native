@@ -20,6 +20,18 @@ export const types = {
 
   ADD_TO_ORDER: "ADD_TO_ORDER",
   SET_ORDERS: "SET_ORDERS",
+
+  SET_DEMO_LOGIN: "SET_DEMO_LOGIN",
+
+  RESET_DEMO_LOGIN: "RESET_DEMO_LOGIN",
+};
+
+export const resetDemoLogin = () => {
+  return { type: types.RESET_DEMO_LOGIN };
+};
+
+export const setDemoLogin = () => {
+  return { type: types.SET_DEMO_LOGIN };
 };
 
 export const setProduct = (payload) => {

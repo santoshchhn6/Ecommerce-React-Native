@@ -40,7 +40,7 @@ const SavedAddress = () => {
   };
 
   const onSubmitPressed = (data) => {
-    updateAddressAndPhone(data);
+    if (!demoLogin) updateAddressAndPhone(data);
   };
 
   return (

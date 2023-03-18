@@ -23,7 +23,6 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     showFeedBack();
   }, []);
-  console.log("Welcome " + user.firstName + "!");
 
   const showFeedBack = () => {
     setVisible(true);
@@ -43,7 +42,10 @@ const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {loading ? <Loading /> : null}
-      <FeedBack text={`Welcome ${user.firstName}!`} visible={visible} />
+      <FeedBack
+        text={`Welcome ${user ? user.firstName : ""}!`}
+        visible={visible}
+      />
       {/* Search */}
       <TouchableOpacity onPress={() => navigation.navigate("SearchProduct")}>
         <Search />

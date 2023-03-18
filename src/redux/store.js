@@ -8,7 +8,7 @@ import {
   paymentReducer,
   orderReducer,
 } from "./reducer";
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   productReducer,
   userReducer,
   cartReducer,
@@ -16,4 +16,10 @@ const rootReducer = combineReducers({
   paymentReducer,
   orderReducer,
 });
+const rootReducer=(state,action)=>{
+  if (action.type === 'USER_LOGOUT') {
+    return appReducer(undefined, action)
+  }
+  return appReducer(state,action);
+}
 export const Store = createStore(rootReducer, applyMiddleware(thunk));

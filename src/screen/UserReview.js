@@ -6,6 +6,7 @@ import { getUserReviews } from "../firebase";
 import { useSelector } from "react-redux";
 
 const UserReview = () => {
+  const { user } = useSelector((state) => state.userReducer);
   const [reviews, setReviews] = useState([]);
   const userId = useSelector((state) => state.userReducer.user.id);
   const products = useSelector((state) => state.productReducer.products);
@@ -30,7 +31,7 @@ const UserReview = () => {
   };
 
   useEffect(() => {
-    fetchReviews();
+    if (user) fetchReviews();
   }, []);
   return (
     <ScrollView style={styles.container}>

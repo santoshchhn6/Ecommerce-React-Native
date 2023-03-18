@@ -63,6 +63,7 @@ const EditProfile = ({ navigation }) => {
       setLoading(true);
       let imageUrl;
       let res;
+
       if (image) {
         imageUrl = await addUserImage(image);
         res = await updateUser(id, { ...data, image: imageUrl });
@@ -79,7 +80,7 @@ const EditProfile = ({ navigation }) => {
   };
 
   const onSubmitPressed = (data) => {
-    updateUserWithImage(data);
+    if (user) updateUserWithImage(data);
   };
   return (
     <View style={styles.container}>
@@ -149,7 +150,7 @@ const EditProfile = ({ navigation }) => {
           </TouchableOpacity>
         </ScrollView>
       </View>
-      {loading ? <Loading />:null}
+      {loading ? <Loading /> : null}
     </View>
   );
 };

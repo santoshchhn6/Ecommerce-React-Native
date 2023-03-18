@@ -19,6 +19,11 @@ const Orders = () => {
   const user = useSelector((state) => state.userReducer.user);
   const orders = useSelector((state) => state.orderReducer.orders);
   const products = useSelector((state) => state.productReducer.products);
+  const address = user ? user.address : "Mumbai";
+  const phone = user ? user.phone : "0000000000";
+
+  console.log("-+--=-=-=-=-=-=-=-=-");
+  console.log(orders.length);
 
   const ordersWithQty = [];
   for (let i = 0; i < products.length; i++) {
@@ -36,7 +41,6 @@ const Orders = () => {
     }
   }
 
-  const { address, phone } = user;
   let totalPrice = 0;
   return (
     <View style={styles.container}>

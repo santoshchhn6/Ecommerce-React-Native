@@ -8,7 +8,13 @@ import { getCart, getOrders, getUser, getWishList, logIn } from "../firebase";
 import { useState } from "react";
 import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
-import { setCart, setOrders, setUser, setWishList } from "../redux/action";
+import {
+  setCart,
+  setDemoLogin,
+  setOrders,
+  setUser,
+  setWishList,
+} from "../redux/action";
 
 const Login = ({ route, navigation }) => {
   const [error, setError] = useState(false);
@@ -76,6 +82,9 @@ const Login = ({ route, navigation }) => {
   const onSignInPressed = (data) => {
     logInAndFetchUserInfo(data);
   };
+  const onDemoPressed = () => {
+    navigation.navigate("Root");
+  };
 
   return (
     <View style={styles.container}>
@@ -115,6 +124,12 @@ const Login = ({ route, navigation }) => {
           textStyle={styles.btn_txt}
           title="Login"
           onPress={handleSubmit(onSignInPressed)}
+        />
+        <CustomButton
+          style={styles.btn}
+          textStyle={styles.btn_txt}
+          title="Demo Login"
+          onPress={onDemoPressed}
         />
 
         <View style={styles.row}>

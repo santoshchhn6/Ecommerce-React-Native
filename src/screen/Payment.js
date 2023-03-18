@@ -32,7 +32,7 @@ const Payment = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setEmail(user.email);
+    setEmail(user ? user.email : "demo@gmail.com");
   }, []);
 
   const fetchPaymentIntentClientSecret = async () => {
@@ -46,7 +46,7 @@ const Payment = ({ route, navigation }) => {
     return { clientSecret, error };
   };
 
-  const handlePayPress = async () => {
+  const paymentAndOrder = async () => {
     //1. Gather the customer billing info (e.g. email)
     if (!cardDetails?.complete || !email) {
       Alert.alert("Please enter the complete card details and Email");
@@ -100,6 +100,10 @@ const Payment = ({ route, navigation }) => {
       console.log(e.message);
     }
     //3.Confirm the payment with card details
+  };
+
+  const handlePayPress = () => {
+    if (user) paymentAndOrder();
   };
   return (
     <StripeProvider publishableKey={STRIPE_PUBLISH_KEY}>

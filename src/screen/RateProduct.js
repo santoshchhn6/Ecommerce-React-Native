@@ -67,7 +67,7 @@ const RateProduct = ({ route, navigation }) => {
   };
 
   const handleSubmit = () => {
-    createReviewsAndRating();
+    if (!demoLogin) createReviewsAndRating();
   };
   return (
     <View style={styles.container}>

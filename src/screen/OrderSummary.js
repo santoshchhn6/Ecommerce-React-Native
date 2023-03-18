@@ -19,7 +19,8 @@ import { addToOrder } from "../redux/action";
 
 const OrderSummary = ({ route, navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
-  const { address, phone } = user;
+  const address = user ? user.address : "Mumbai";
+  const phone = user ? user.phone : "0000000000";
   const products = useSelector((state) => state.productReducer.products);
   const payment = useSelector((state) => state.paymentReducer.payment);
   const dispatch = useDispatch();

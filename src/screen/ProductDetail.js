@@ -35,7 +35,7 @@ import {
 } from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
-  const userId = useSelector((state) => state.userReducer.user.id);
+  const { user } = useSelector((state) => state.userReducer);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
 
   const [color, setColor] = useState(null);
@@ -115,17 +115,19 @@ const ProductDetail = ({ route, navigation }) => {
       console.log("liked");
       const newWishListId = uuid.v4();
       dispatch(addToWishList({ id: newWishListId, productId: id }));
-      addWishList(newWishListId, { productId: id, userId })
-        .then((res) => console.log(res))
-        .catch((e) => console.log(e));
+      if (user)
+        addWishList(newWishListId, { productId: id, userId: user.id })
+          .then((res) => console.log(res))
+          .catch((e) => console.log(e));
     } else {
       console.log("unliked");
       const wishListId = wishList.filter((w) => w.productId === id)[0].id;
       console.log(wishListId);
       dispatch(removeFromWishList(wishListId));
-      deleteWishList(wishListId)
-        .then((res) => console.log(res))
-        .catch((e) => console.log(e));
+      if (user)
+        deleteWishList(wishListId)
+          .then((res) => console.log(res))
+          .catch((e) => console.log(e));
     }
   };
 
@@ -134,9 +136,10 @@ const ProductDetail = ({ route, navigation }) => {
     dispatch(addToCart({ id: cartId, productId: id, quantity, color, size }));
     showFeedBack();
     //firebase
-    addCart(cartId, { productId: id, userId, quantity, color, size })
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e.message));
+    if (user)
+      addCart(cartId, { productId: id, userId: user.id, quantity, color, size })
+        .then((res) => console.log(res))
+        .catch((e) => console.log(e.message));
   };
 
   const handleBuyNow = () => {
@@ -152,7 +155,7 @@ const ProductDetail = ({ route, navigation }) => {
       image: images[defaultImageIndex],
       title,
       price,
-      userId,
+      userId: user.id,
       productId: id,
     });
   };
