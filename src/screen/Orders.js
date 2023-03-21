@@ -23,7 +23,8 @@ const Orders = () => {
   const phone = user ? user.phone : "0000000000";
 
   console.log("-+--=-=-=-=-=-=-=-=-");
-  console.log(orders.length);
+  console.log({ orders });
+  console.log(products.length);
 
   const ordersWithQty = [];
   for (let i = 0; i < products.length; i++) {
@@ -41,6 +42,8 @@ const Orders = () => {
     }
   }
 
+  console.log(ordersWithQty);
+
   let totalPrice = 0;
   return (
     <View style={styles.container}>
@@ -51,7 +54,6 @@ const Orders = () => {
             <View style={styles.cartItems}>
               {ordersWithQty.map((item, i) => {
                 let {
-                  id,
                   title,
                   images,
                   defaultImageIndex,

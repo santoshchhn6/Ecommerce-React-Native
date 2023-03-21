@@ -15,7 +15,7 @@ import ColorPallet from "../components/ColorPallet";
 import Size from "../components/Size";
 import AddressDetail from "../components/AddressDetail";
 import { useDispatch, useSelector } from "react-redux";
-import { addToOrder } from "../redux/action";
+import { addToOrder, addToPayment } from "../redux/action";
 
 const OrderSummary = ({ route, navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
@@ -32,6 +32,7 @@ const OrderSummary = ({ route, navigation }) => {
       if (productId === products[i].id) {
         paymentWithQty.push({
           ...products[i],
+          productId: products[i].id,
           quantity,
           color,
           size,
@@ -47,7 +48,7 @@ const OrderSummary = ({ route, navigation }) => {
   };
 
   const handlePayment = () => {
-    dispatch(addToOrder(paymentWithQty));
+    dispatch(addToPayment(paymentWithQty));
     navigation.navigate("Payment", { from: route.params.from });
   };
   let totalPrice = 0;

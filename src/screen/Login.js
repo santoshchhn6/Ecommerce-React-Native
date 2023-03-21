@@ -8,13 +8,7 @@ import { getCart, getOrders, getUser, getWishList, logIn } from "../firebase";
 import { useState } from "react";
 import Loading from "../components/Loading";
 import { useDispatch } from "react-redux";
-import {
-  setCart,
-  setDemoLogin,
-  setOrders,
-  setUser,
-  setWishList,
-} from "../redux/action";
+import { setCart, setOrders, setUser, setWishList } from "../redux/action";
 
 const Login = ({ route, navigation }) => {
   const [error, setError] = useState(false);

@@ -30,6 +30,7 @@ const Payment = ({ route, navigation }) => {
   const { confirmPayment, loading } = useConfirmPayment();
 
   const dispatch = useDispatch();
+  console.log({ payment });
 
   useEffect(() => {
     setEmail(user ? user.email : "demo@gmail.com");
@@ -102,8 +103,30 @@ const Payment = ({ route, navigation }) => {
     //3.Confirm the payment with card details
   };
 
+  //if Demo login fake payment
+  const fakePayment = () => {
+    setPLoading(true);
+    setTimeout(() => {
+      dispatch(addToOrder(payment));
+      dispatch(resetPayment());
+      if (route.params.from === "Cart") {
+        dispatch(resetCart());
+      }
+
+      setPLoading(false);
+      alert("Payment Successful");
+      console.log("Payment Successful");
+
+      navigation.navigate("Main", {
+        screen: "Account",
+        params: { screen: "Orders", initial: false },
+      });
+    }, 2000);
+  };
+
   const handlePayPress = () => {
     if (user) paymentAndOrder();
+    else fakePayment();
   };
   return (
     <StripeProvider publishableKey={STRIPE_PUBLISH_KEY}>
