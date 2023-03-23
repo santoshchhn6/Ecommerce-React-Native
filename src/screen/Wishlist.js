@@ -6,7 +6,7 @@ import { removeFromWishList } from "../redux/action";
 import { deleteWishList } from "../firebase";
 
 const Wishlist = ({ navigation }) => {
-  const { user } = useSelector((state) => state.userReducer);
+  const demo = useSelector((state) => state.demoReducer.demo);
   const products = useSelector((state) => state.productReducer.products);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const Wishlist = ({ navigation }) => {
   const onRemovePress = (id) => {
     console.log(id);
     dispatch(removeFromWishList(id));
-    if (user)
+    if (!demo)
       deleteWishList(id)
         .then((res) => console.log(res))
         .catch((e) => console.log(e));

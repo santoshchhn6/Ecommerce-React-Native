@@ -1,5 +1,20 @@
 import { types } from "./action";
 
+const DemoInitialState = {
+  demo: false,
+};
+
+export const demoReducer = (state = DemoInitialState, { type, payload }) => {
+  switch (type) {
+    case types.SET_DEMO_LOGIN: {
+      return { demo: true };
+    }
+
+    default:
+      return state;
+  }
+};
+
 const UserInitialState = {
   user: null,
 };
@@ -18,6 +33,10 @@ export const userReducer = (state = UserInitialState, { type, payload }) => {
 const productInitialState = {
   products: [],
   loading: false,
+  rating: {
+    count: 1,
+    rating: 1,
+  },
 };
 
 export const productReducer = (
@@ -35,6 +54,21 @@ export const productReducer = (
       return {
         ...state,
         loading: payload,
+      };
+    }
+    case types.ADD_RATING: {
+      return {
+        ...state,
+        products: [
+          ...state.products.map((product) => {
+            if (product.id === payload.productId) {
+              return {
+                ...product,
+                rating: { count: payload.count, star: payload.star },
+              };
+            } else return product;
+          }),
+        ],
       };
     }
 
@@ -174,6 +208,23 @@ export const orderReducer = (state = orderInitialState, { type, payload }) => {
       return {
         orders: payload,
       };
+    }
+
+    default:
+      return state;
+  }
+};
+
+const reviewInitialState = {
+  reviews: [],
+};
+export const reviewReducer = (
+  state = reviewInitialState,
+  { type, payload }
+) => {
+  switch (type) {
+    case types.ADD_REVIEW: {
+      return { reviews: [...state.reviews, payload] };
     }
 
     default:

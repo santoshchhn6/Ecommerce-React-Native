@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 15,
+    marginHorizontal: 0,
     height: 50,
     backgroundColor: COLORS.green,
     shadowColor: COLORS.green,

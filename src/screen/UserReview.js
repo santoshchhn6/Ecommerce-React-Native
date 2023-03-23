@@ -7,21 +7,33 @@ import { useSelector } from "react-redux";
 
 const UserReview = () => {
   const { user } = useSelector((state) => state.userReducer);
+  const demo = useSelector((state) => state.demoReducer.demo);
+  const productReviews = useSelector((state) => state.reviewReducer.reviews);
+
   const [reviews, setReviews] = useState([]);
-  const userId = useSelector((state) => state.userReducer.user.id);
   const products = useSelector((state) => state.productReducer.products);
 
   const fetchReviews = async () => {
-    const response = await getUserReviews(userId);
+    const response = await getUserReviews(user.id);
     let reviewsData = response.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
 
+    setProductWithReviews(reviewsData);
+  };
+
+  useEffect(() => {
+    if (!demo) fetchReviews();
+    else
+      setProductWithReviews(productReviews.filter((p) => p.userId === user.id));
+  }, []);
+
+  const setProductWithReviews = (reviews) => {
     const productWithReviews = [];
     for (let i = 0; i < products.length; i++) {
-      for (let j = 0; j < reviewsData.length; j++) {
-        const { productId, review, rating } = reviewsData[j];
+      for (let j = 0; j < reviews.length; j++) {
+        const { productId, review, rating } = reviews[j];
         if (productId === products[i].id) {
           productWithReviews.push({ ...products[i], review, rating });
         }
@@ -29,35 +41,35 @@ const UserReview = () => {
     }
     setReviews(productWithReviews);
   };
-
-  useEffect(() => {
-    if (user) fetchReviews();
-  }, []);
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.products}>
-        {reviews.map((e, i) => {
-          const { title, images, defaultImageIndex, rating, review } = e;
+      {reviews.length !== 0 ? (
+        <View style={styles.products}>
+          {reviews.map((e, i) => {
+            const { title, images, defaultImageIndex, rating, review } = e;
 
-          return (
-            <View key={i} style={styles.product}>
-              <View style={styles.product_info}>
-                <View style={styles.img_container}>
-                  <Image
-                    style={styles.img}
-                    source={{ uri: images[defaultImageIndex] }}
-                  />
+            return (
+              <View key={i} style={styles.product}>
+                <View style={styles.product_info}>
+                  <View style={styles.img_container}>
+                    <Image
+                      style={styles.img}
+                      source={{ uri: images[defaultImageIndex] }}
+                    />
+                  </View>
+                  <View style={styles.info}>
+                    <Text style={styles.title}>{title}</Text>
+                  </View>
                 </View>
-                <View style={styles.info}>
-                  <Text style={styles.title}>{title}</Text>
-                </View>
+                <Rating rate={rating} />
+                <Text style={styles.text}>{review}</Text>
               </View>
-              <Rating rate={rating} />
-              <Text style={styles.text}>{review}</Text>
-            </View>
-          );
-        })}
-      </View>
+            );
+          })}
+        </View>
+      ) : (
+        <Text style={styles.text4}>No Reviews</Text>
+      )}
     </ScrollView>
   );
 };
@@ -97,6 +109,12 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 10,
     color: COLORS.lightGray,
+  },
+  text4: {
+    fontSize: 20,
+    fontWeight: "bold",
+    alignSelf: "center",
+    marginTop: 100,
   },
   product_info: {
     flexDirection: "row",

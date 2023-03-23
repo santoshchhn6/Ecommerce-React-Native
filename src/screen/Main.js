@@ -7,27 +7,39 @@ import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import { COLORS } from "../constant/colors";
 import CustomTabBarButton from "../components/CustomTabBarButton";
 import Account from "./Account";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProduct, setProductLoading } from "../redux/action";
 import { useEffect } from "react";
 import { getProduct } from "../firebase";
+import { products } from "../data/data";
 
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
+  const demo = useSelector((state) => state.demoReducer.demo);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchProduct();
+    if (!demo) fetchProduct();
+    else fakeLoadingProduct();
   }, []);
+
+  //for demoLogin
+  const fakeLoadingProduct = () => {
+    dispatch(setProductLoading(true));
+    setTimeout(() => {
+      dispatch(setProduct(products));
+      dispatch(setProductLoading(false));
+    }, 1000);
+  };
 
   const fetchProduct = () => {
     dispatch(setProductLoading(true));
     getProduct()
-      .then((products) => {
+      .then((data) => {
         console.log("fetching products completed");
-        console.log(products);
-        dispatch(setProduct(products));
+        console.log(data);
+        dispatch(setProduct(data));
         dispatch(setProductLoading(false));
       })
       .catch((err) => {

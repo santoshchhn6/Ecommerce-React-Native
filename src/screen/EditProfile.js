@@ -20,8 +20,9 @@ import Loading from "../components/Loading";
 
 const EditProfile = ({ navigation }) => {
   const { user } = useSelector((state) => state.userReducer);
-  const { id, firstName, lastName } = user;
-  const userImageUrl = user.image;
+  const demo = useSelector((state) => state.demoReducer.demo);
+
+  const userImageUrl = user ? user.image : null;
   const [loading, setLoading] = useState(false);
 
   const {
@@ -32,8 +33,8 @@ const EditProfile = ({ navigation }) => {
   } = useForm();
 
   useEffect(() => {
-    setValue("firstName", firstName);
-    setValue("lastName", lastName);
+    setValue("firstName", user ? user.firstName : null);
+    setValue("lastName", user ? user.lastName : null);
     if (userImageUrl) setImgUri(userImageUrl);
   }, []);
 
@@ -66,9 +67,9 @@ const EditProfile = ({ navigation }) => {
 
       if (image) {
         imageUrl = await addUserImage(image);
-        res = await updateUser(id, { ...data, image: imageUrl });
+        res = await updateUser(user.id, { ...data, image: imageUrl });
       } else {
-        res = await updateUser(id, data);
+        res = await updateUser(user.id, data);
       }
       setLoading(false);
       console.log(res);
@@ -80,7 +81,7 @@ const EditProfile = ({ navigation }) => {
   };
 
   const onSubmitPressed = (data) => {
-    if (user) updateUserWithImage(data);
+    if (!demo) updateUserWithImage(data);
   };
   return (
     <View style={styles.container}>
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 15,
+    marginHorizontal: 0,
     height: 50,
     backgroundColor: COLORS.green,
     shadowColor: COLORS.green,

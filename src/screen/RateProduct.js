@@ -14,9 +14,9 @@ import Card from "../components/Card";
 import InteractiveRating from "../components/InteractiveRating";
 import CustomButton from "../components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
-import { addToReviews } from "../redux/action";
 import { addRating, addReviews, getRating } from "../firebase";
 import uuid from "react-native-uuid";
+import { add_Rating, add_Review } from "../redux/action";
 
 const RateProduct = ({ route, navigation }) => {
   const [comment, setComment] = useState(null);
@@ -26,7 +26,10 @@ const RateProduct = ({ route, navigation }) => {
     lastName,
     image: userImg,
   } = useSelector((state) => state.userReducer.user);
-  const { image, title, price, productId, userId } = route.params;
+  const demo = useSelector((state) => state.demoReducer.demo);
+  const { image, title, price, productId, userId, productRating } =
+    route.params;
+
   const dispatch = useDispatch();
 
   const handleRating = (r) => {
@@ -67,7 +70,31 @@ const RateProduct = ({ route, navigation }) => {
   };
 
   const handleSubmit = () => {
-    if (!demoLogin) createReviewsAndRating();
+    if (!demo) createReviewsAndRating();
+    else {
+      const newReviews = {
+        userImg: userImg ? userImg : null,
+        productId,
+        userId,
+        username: firstName + " " + lastName,
+        rating,
+        review: comment,
+      };
+      dispatch(add_Review(newReviews));
+
+      const newRating = {
+        productId,
+        star: productRating.star
+          ? (productRating.star * productRating.count + rating) /
+            (productRating.count + 1)
+          : rating,
+        count: productRating.count ? productRating.count + 1 : 1,
+      };
+      dispatch(add_Rating(newRating));
+
+      Alert.alert("your reviews submitted!");
+      navigation.goBack();
+    }
   };
   return (
     <View style={styles.container}>

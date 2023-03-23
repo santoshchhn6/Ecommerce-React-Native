@@ -21,6 +21,7 @@ import { addOrders, deleteAllCart } from "../firebase";
 
 const Payment = ({ route, navigation }) => {
   const user = useSelector((state) => state.userReducer.user);
+  const demo = useSelector((state) => state.demoReducer.demo);
   const payment = useSelector((state) => state.paymentReducer.payment);
   const cart = useSelector((state) => state.cartReducer.cart);
 
@@ -125,7 +126,7 @@ const Payment = ({ route, navigation }) => {
   };
 
   const handlePayPress = () => {
-    if (user) paymentAndOrder();
+    if (!demo) paymentAndOrder();
     else fakePayment();
   };
   return (

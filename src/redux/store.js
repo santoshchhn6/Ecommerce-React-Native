@@ -7,6 +7,8 @@ import {
   wishListReducer,
   paymentReducer,
   orderReducer,
+  demoReducer,
+  reviewReducer,
 } from "./reducer";
 const appReducer = combineReducers({
   productReducer,
@@ -15,11 +17,13 @@ const appReducer = combineReducers({
   wishListReducer,
   paymentReducer,
   orderReducer,
+  demoReducer,
+  reviewReducer,
 });
-const rootReducer=(state,action)=>{
-  if (action.type === 'USER_LOGOUT') {
-    return appReducer(undefined, action)
+const rootReducer = (state, action) => {
+  if (action.type === "USER_LOGOUT") {
+    return appReducer(undefined, action);
   }
-  return appReducer(state,action);
-}
+  return appReducer(state, action);
+};
 export const Store = createStore(rootReducer, applyMiddleware(thunk));

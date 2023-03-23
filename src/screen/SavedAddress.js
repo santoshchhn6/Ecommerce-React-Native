@@ -10,7 +10,7 @@ import { updateUser } from "../firebase";
 
 const SavedAddress = () => {
   const { user } = useSelector((state) => state.userReducer);
-  const { id, address, phone } = user;
+  const demo = useSelector((state) => state.demoReducer.demo);
   const [loading, setLoading] = useState(false);
   const PHONE_REGEX = /^\d{10}$/;
 
@@ -22,14 +22,14 @@ const SavedAddress = () => {
   } = useForm();
 
   useEffect(() => {
-    setValue("address", address);
-    setValue("phone", phone);
+    setValue("address", user ? user.address : null);
+    setValue("phone", user ? user.phone : null);
   }, []);
 
   const updateAddressAndPhone = async (data) => {
     try {
       setLoading(true);
-      const res = await updateUser(id, data);
+      const res = await updateUser(user.id, data);
       setLoading(false);
       console.log(res);
       Alert.alert(res);
@@ -40,7 +40,7 @@ const SavedAddress = () => {
   };
 
   const onSubmitPressed = (data) => {
-    if (!demoLogin) updateAddressAndPhone(data);
+    if (!demo) updateAddressAndPhone(data);
   };
 
   return (

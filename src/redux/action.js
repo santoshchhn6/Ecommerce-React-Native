@@ -22,12 +22,16 @@ export const types = {
   SET_ORDERS: "SET_ORDERS",
 
   SET_DEMO_LOGIN: "SET_DEMO_LOGIN",
-
-  RESET_DEMO_LOGIN: "RESET_DEMO_LOGIN",
+  ADD_REVIEW: "ADD_REVIEW",
+  ADD_RATING: "ADD_RATING",
 };
 
-export const resetDemoLogin = () => {
-  return { type: types.RESET_DEMO_LOGIN };
+export const add_Rating = (payload) => {
+  return { type: types.ADD_RATING, payload };
+};
+
+export const add_Review = (payload) => {
+  return { type: types.ADD_REVIEW, payload };
 };
 
 export const setDemoLogin = () => {

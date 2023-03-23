@@ -36,6 +36,8 @@ import {
 
 const ProductDetail = ({ route, navigation }) => {
   const { user } = useSelector((state) => state.userReducer);
+  const demo = useSelector((state) => state.demoReducer.demo);
+  const productReviews = useSelector((state) => state.reviewReducer.reviews);
   const wishList = useSelector((state) => state.wishListReducer.wishList);
 
   const [color, setColor] = useState(null);
@@ -43,8 +45,8 @@ const ProductDetail = ({ route, navigation }) => {
   const [quantity, setQuantity] = useState(1);
   const [visible, setVisible] = useState(false);
   const [reviews, setReviews] = useState(null);
-  const [rating, setRating] = useState(null);
-  const [count, setCount] = useState(null);
+  // const [rating, setRating] = useState(null);
+  // const [count, setCount] = useState(null);
   const dispatch = useDispatch();
 
   let { product } = route.params;
@@ -58,7 +60,10 @@ const ProductDetail = ({ route, navigation }) => {
     instock,
     sizes,
     colors,
+    rating,
   } = product[0];
+
+  console.log(rating);
 
   let liked =
     wishList.length !== 0 ? wishList.some((w) => w.productId === id) : null;
@@ -75,8 +80,8 @@ const ProductDetail = ({ route, navigation }) => {
     const doc = await getRating(id);
     let ratingData = { ...doc.data(), id: doc.id };
     console.log(ratingData);
-    setRating(ratingData.rating);
-    setCount(ratingData.count);
+    // setRating(ratingData.rating);
+    // setCount(ratingData.count);
   };
 
   useLayoutEffect(() => {
@@ -84,8 +89,12 @@ const ProductDetail = ({ route, navigation }) => {
   }, [id]);
 
   useEffect(() => {
-    fetchReviews();
-    fetchRating();
+    if (!demo) {
+      fetchReviews();
+      fetchRating();
+    } else {
+      setReviews(productReviews.filter((p) => p.productId === id));
+    }
 
     setColor(null);
     setSize(null);
@@ -115,7 +124,7 @@ const ProductDetail = ({ route, navigation }) => {
       console.log("liked");
       const newWishListId = uuid.v4();
       dispatch(addToWishList({ id: newWishListId, productId: id }));
-      if (user)
+      if (!demo)
         addWishList(newWishListId, { productId: id, userId: user.id })
           .then((res) => console.log(res))
           .catch((e) => console.log(e));
@@ -124,7 +133,7 @@ const ProductDetail = ({ route, navigation }) => {
       const wishListId = wishList.filter((w) => w.productId === id)[0].id;
       console.log(wishListId);
       dispatch(removeFromWishList(wishListId));
-      if (user)
+      if (!demo)
         deleteWishList(wishListId)
           .then((res) => console.log(res))
           .catch((e) => console.log(e));
@@ -136,7 +145,7 @@ const ProductDetail = ({ route, navigation }) => {
     dispatch(addToCart({ id: cartId, productId: id, quantity, color, size }));
     showFeedBack();
     //firebase
-    if (user)
+    if (!demo)
       addCart(cartId, { productId: id, userId: user.id, quantity, color, size })
         .then((res) => console.log(res))
         .catch((e) => console.log(e.message));
@@ -157,6 +166,7 @@ const ProductDetail = ({ route, navigation }) => {
       price,
       userId: user.id,
       productId: id,
+      productRating: rating,
     });
   };
 
@@ -204,7 +214,7 @@ const ProductDetail = ({ route, navigation }) => {
               </View>
             ) : null}
             {/* Rating */}
-            <Rating rate={rating} count={count} />
+            <Rating rate={rating.star} count={rating.count} />
             {/* Price */}
             <Text style={styles.price}>{toRupee(price)}</Text>
           </Panel>

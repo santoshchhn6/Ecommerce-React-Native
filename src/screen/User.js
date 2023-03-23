@@ -1,14 +1,13 @@
 import { StyleSheet, View } from "react-native";
 import CustomButton from "../components/CustomButton";
-import { COLORS } from "../constant/colors";
 import { app, logOut } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 
 const User = ({ navigation }) => {
-  const { user } = useSelector((state) => state.userReducer);
+  const demo = useSelector((state) => state.demoReducer.demo);
   const dispatch = useDispatch();
   const handleLogOut = async () => {
-    if (user) await logOut();
+    if (!demo) await logOut();
     dispatch({ type: "USER_LOGOUT" });
     navigation.navigate("Login");
   };
