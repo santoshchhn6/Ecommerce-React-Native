@@ -14,7 +14,7 @@ import Card from "../components/Card";
 import InteractiveRating from "../components/InteractiveRating";
 import CustomButton from "../components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
-import { addRating, addReviews, getRating } from "../firebase";
+import { addReviews, updateRating } from "../firebase";
 import uuid from "react-native-uuid";
 import { add_Rating, add_Review } from "../redux/action";
 
@@ -47,20 +47,23 @@ const RateProduct = ({ route, navigation }) => {
         review: comment,
       };
 
-      comment && (await addReviews(uuid.v4(), newReviews));
-
-      const doc = await getRating(productId);
-      const reviewData = { ...doc.data(), id: doc.id };
-
       const newRating = {
-        rating: reviewData.rating
-          ? (reviewData.rating * reviewData.count + rating) /
-            (reviewData.count + 1)
-          : rating,
-        count: reviewData.count ? reviewData.count + 1 : 1,
+        rating: {
+          star: productRating?.star
+            ? (productRating.star * productRating.count + rating) /
+              (productRating.count + 1)
+            : rating,
+          count: productRating?.count ? productRating.count + 1 : 1,
+        },
       };
 
-      await addRating(productId, newRating);
+      if (!demo) {
+        comment && (await addReviews(uuid.v4(), newReviews));
+        await updateRating(productId, newRating);
+      } else {
+        dispatch(add_Review(newReviews));
+        dispatch(add_Rating({ ...newRating, productId }));
+      }
 
       Alert.alert("your reviews submitted!");
       navigation.goBack();
@@ -70,31 +73,7 @@ const RateProduct = ({ route, navigation }) => {
   };
 
   const handleSubmit = () => {
-    if (!demo) createReviewsAndRating();
-    else {
-      const newReviews = {
-        userImg: userImg ? userImg : null,
-        productId,
-        userId,
-        username: firstName + " " + lastName,
-        rating,
-        review: comment,
-      };
-      dispatch(add_Review(newReviews));
-
-      const newRating = {
-        productId,
-        star: productRating.star
-          ? (productRating.star * productRating.count + rating) /
-            (productRating.count + 1)
-          : rating,
-        count: productRating.count ? productRating.count + 1 : 1,
-      };
-      dispatch(add_Rating(newRating));
-
-      Alert.alert("your reviews submitted!");
-      navigation.goBack();
-    }
+    createReviewsAndRating();
   };
   return (
     <View style={styles.container}>

@@ -264,20 +264,32 @@ export const getUserReviews = (id) =>
 const ratingCollectionRef = collection(db, "rating");
 
 //add rating
-export const addRating = async (id, rating) =>
+// export const addRating = async (id, rating) =>
+//   new Promise((resolve, reject) => {
+//     setDoc(doc(db, "products", id), rating)
+//       .then(() => resolve("rating Created!"))
+//       .catch((err) => reject(err));
+//   });
+
+export const updateRating = (id, rating) =>
   new Promise((resolve, reject) => {
-    setDoc(doc(db, "rating", id), rating)
-      .then(() => resolve("rating Created!"))
-      .catch((err) => reject(err));
+    //select doc to update using id
+    const docToUpdate = doc(db, "products", id);
+    //update
+    console.log(id);
+    console.log(rating);
+    updateDoc(docToUpdate, rating)
+      .then(() => resolve("Data Updated!"))
+      .catch((e) => reject(e));
   });
 
 //get rating
-export const getRating = (id) =>
-  new Promise((resolve, reject) => {
-    getDoc(doc(db, "rating", id))
-      .then((response) => resolve(response))
-      .catch((e) => reject(e));
-  });
+// export const getRating = (id) =>
+//   new Promise((resolve, reject) => {
+//     getDoc(doc(db, "rating", id))
+//       .then((response) => resolve(response))
+//       .catch((e) => reject(e));
+//   });
 
 //========================Storage======================
 import {

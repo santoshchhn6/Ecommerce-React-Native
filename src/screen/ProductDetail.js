@@ -26,13 +26,7 @@ import {
 import FeedBack from "../components/FeedBack";
 import uuid from "react-native-uuid";
 import toRupee from "../js/toRupee";
-import {
-  addCart,
-  addWishList,
-  deleteWishList,
-  getRating,
-  getReviews,
-} from "../firebase";
+import { addCart, addWishList, deleteWishList, getReviews } from "../firebase";
 
 const ProductDetail = ({ route, navigation }) => {
   const { user } = useSelector((state) => state.userReducer);
@@ -45,8 +39,7 @@ const ProductDetail = ({ route, navigation }) => {
   const [quantity, setQuantity] = useState(1);
   const [visible, setVisible] = useState(false);
   const [reviews, setReviews] = useState(null);
-  // const [rating, setRating] = useState(null);
-  // const [count, setCount] = useState(null);
+
   const dispatch = useDispatch();
 
   let { product } = route.params;
@@ -76,13 +69,6 @@ const ProductDetail = ({ route, navigation }) => {
     }));
     setReviews(reviewsData);
   };
-  const fetchRating = async () => {
-    const doc = await getRating(id);
-    let ratingData = { ...doc.data(), id: doc.id };
-    console.log(ratingData);
-    // setRating(ratingData.rating);
-    // setCount(ratingData.count);
-  };
 
   useLayoutEffect(() => {
     setQuantity(1);
@@ -91,7 +77,6 @@ const ProductDetail = ({ route, navigation }) => {
   useEffect(() => {
     if (!demo) {
       fetchReviews();
-      fetchRating();
     } else {
       setReviews(productReviews.filter((p) => p.productId === id));
     }
@@ -214,7 +199,7 @@ const ProductDetail = ({ route, navigation }) => {
               </View>
             ) : null}
             {/* Rating */}
-            <Rating rate={rating.star} count={rating.count} />
+            <Rating rate={rating?.star} count={rating?.count} />
             {/* Price */}
             <Text style={styles.price}>{toRupee(price)}</Text>
           </Panel>
