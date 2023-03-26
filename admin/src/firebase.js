@@ -20,31 +20,29 @@ import {
 } from "firebase/auth";
 const auth = getAuth();
 
-export const logIn = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
+export const logIn = ({ email, password }) =>
+  new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => resolve(userCredential))
+      .then((userCredential) => {
+        console.log("Successful Login");
+        resolve(userCredential);
+      })
       .catch((error) => reject(error));
   });
-  return await promise;
-};
-export const createAccount = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
+
+export const createAccount = ({ email, password }) =>
+  new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => resolve(userCredential))
       .catch((error) => reject(error));
   });
-  return await promise;
-};
 
-export const logOut = async (email, password) => {
-  const promise = new Promise((resolve, reject) => {
-    signOut(auth, email, password)
+export const logOut = () =>
+  new Promise((resolve, reject) => {
+    signOut(auth)
       .then((userCredential) => resolve(userCredential))
       .catch((error) => reject(error));
   });
-  return await promise;
-};
 
 //========================Database======================
 import {
