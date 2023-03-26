@@ -6,42 +6,38 @@ import { Link } from "react-router-dom";
 
 const Nav = () => {
   const [active, setActive] = useState("product");
+  const buttons = ["product", "cart", "user"];
   return (
-    <div className="bg-gray-900 w-14 h-screen flex flex-col items-center pt-5 gap-5">
-      <Link to="/product">
-        <BsShopWindow
+    <div className="bg-gray-900 w-14 min-h-screen flex flex-col items-center pt-5 gap-5">
+      {buttons.map((currentButton, i) => (
+        <Link
+          key={i}
+          to={`/${currentButton} `}
           onClick={() => {
-            setActive("product");
+            setActive(currentButton);
           }}
           className={`text-4xl text-blue-200  hover:cursor-pointer rounded-md p-1  ${
-            active === "product" ? "bg-blue-200 text-gray-900" : ""
+            active === currentButton ? "bg-blue-200 text-gray-800" : null
           }`}
-        />
-      </Link>
-
-      <Link to="/cart">
-        <TfiShoppingCart
-          onClick={() => {
-            setActive("cart");
-          }}
-          className={`text-4xl text-blue-200  hover:cursor-pointer rounded-md p-1  ${
-            active === "cart" ? "bg-blue-200 text-gray-900" : ""
-          }`}
-        />
-      </Link>
-
-      <Link to="/user">
-        <SlUser
-          onClick={() => {
-            setActive("user");
-          }}
-          className={`text-4xl text-blue-200  hover:cursor-pointer rounded-md p-1  ${
-            active === "user" ? "bg-blue-200 text-gray-900" : ""
-          }`}
-        />
-      </Link>
+        >
+          <Icon name={currentButton} />
+        </Link>
+      ))}
     </div>
   );
+};
+
+const Icon = ({ name }) => {
+  switch (name) {
+    case "product":
+      return <BsShopWindow />;
+    case "cart":
+      return <TfiShoppingCart />;
+    case "user":
+      return <SlUser />;
+    default:
+      return <p>No Icon</p>;
+  }
 };
 
 export default Nav;

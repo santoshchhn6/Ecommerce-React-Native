@@ -4,18 +4,30 @@ import { addProduct, addProductImage, getProduct } from "../firebase";
 import Loading from "./Loading";
 
 const Product = () => {
-  const [loading, setLoading] = useState(false);
-  const [inputs, setInputs] = useState({
-    category: null,
-    title: null,
-    price: null,
+  const initialInput = {
+    category: "category",
+    title: "",
+    price: "",
     instock: true,
-  });
+    sizes: "",
+    details: "",
+  };
+  const [loading, setLoading] = useState(false);
+  const [inputs, setInputs] = useState(initialInput);
   const [colors, setColors] = useState([]);
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [visible, setVisible] = useState(false);
   const [defaultImage, setDefaultImage] = useState(0);
+
+  const resetInput = () => {
+    setInputs(initialInput);
+    setColors([]);
+    setImages([]);
+    setPreviews([]);
+    setVisible(false);
+    setDefaultImage(0);
+  };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -73,10 +85,13 @@ const Product = () => {
     const pSizes = sizes ? sizes.split(",") : [];
 
     details &&
-      details.split("\n").forEach((element, i) => {
-        let d = element.split("\t");
-        detailObj[d[0]] = d[1];
-      });
+      details
+        .trim()
+        .split("\n")
+        .forEach((element, i) => {
+          let d = element.split("\t");
+          detailObj[d[0]] = d[1];
+        });
 
     console.log(detailObj);
 
@@ -92,9 +107,12 @@ const Product = () => {
       defaultImageIndex: defaultImage,
     };
 
+    console.log({ product });
+
     addProduct(product)
       .then((response) => {
         setLoading(false);
+        resetInput();
         console.log(response);
         alert(response);
       })
@@ -141,7 +159,7 @@ const Product = () => {
       <div className="w-80  m-5 flex flex-col gap-3">
         <h1 className="text-2xl  mb-5"> Add Product</h1>
         <select
-          defaultValue="category"
+          defaultValue={inputs.category}
           onChange={handleInput}
           name="category"
           className="w-full h-8 p-1 rounded text-gray-700 outline-none bg-white"
@@ -153,12 +171,14 @@ const Product = () => {
           <option value="appliances">Appliances</option>
           <option value="mobiles">Mobiles</option>
           <option value="fashion">Fashion</option>
+          <option value="furniture">Furniture</option>
           <option value="books">Books</option>
           <option value="sports">Sports</option>
           <option value="groceries">Groceries</option>
         </select>
 
         <input
+          value={inputs.title}
           onChange={handleInput}
           type="text"
           name="title"
@@ -167,6 +187,7 @@ const Product = () => {
         />
 
         <input
+          value={inputs.price}
           onChange={handleInput}
           type="number"
           name="price"
@@ -175,7 +196,7 @@ const Product = () => {
         />
 
         <select
-          defaultValue="stock"
+          defaultValue={inputs.instock}
           name="instock"
           onChange={handleInput}
           className="w-full h-8 p-1 rounded text-gray-700 outline-none bg-white"
@@ -214,6 +235,7 @@ const Product = () => {
         {visible && <SwatchesPicker onChangeComplete={handleChangeComplete} />}
 
         <input
+          value={inputs.sizes}
           onChange={handleInput}
           type="text"
           name="sizes"
@@ -222,6 +244,7 @@ const Product = () => {
         />
 
         <textarea
+          value={inputs.details}
           onChange={handleInput}
           type="text"
           name="details"
@@ -269,6 +292,12 @@ const Product = () => {
           className="w-full h-8 bg-white rounded text-gray-700 outline-none pl-2 flex items-center justify-center hover:text-gray-500 "
         >
           Add Product
+        </button>
+        <button
+          onClick={resetInput}
+          className="w-full h-8 bg-white rounded text-gray-700 outline-none pl-2 flex items-center justify-center hover:text-gray-500 "
+        >
+          Reset Input
         </button>
       </div>
     </div>
